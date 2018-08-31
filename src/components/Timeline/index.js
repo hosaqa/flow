@@ -7,6 +7,11 @@ const colorPinkLight = 'rgba(255, 112, 112, 0.50)'
 const colorPinkSoft = '#ff7070'
 const colorPinkGradient = 'linear-gradient(154deg, #f90dc9, #ff1d1d)'
 
+const TimerDisplay = styled.div`
+  display: inline-block;
+  width: 30px;
+`
+
 const ProgressBarWrapper = styled.div`
   width: 300px;
   height: 20px;
@@ -51,30 +56,35 @@ const ProgressBarSlider = styled.div`
 `
 
 const Timeline = (props) => {
-  const timelineRef = React.createRef();
+  const timelineRef = React.createRef()
 
   let {trackDuration, currentTrackPosition, nowPlaying, onSeek} = props
-  
+
   const progressBar = renderProgressBarSlider(currentTrackPosition, trackDuration)
   
   let {minutes, seconds} = trackDuration
   
-  currentTrackPosition = formateTimerValue(currentTrackPosition)
+  currentTrackPosition = (isNumeric(currentTrackPosition)) ? formateTimerValue(currentTrackPosition) : '0:00'
 
   if (countDigits(seconds) < 2) seconds = '0' + seconds
-  
+
   return (
     <div style={{display: 'flex', alignItems: 'center'}}>
-      <span>{currentTrackPosition || '0:00'}</span> - <span>{`${minutes}:${seconds}`}</span>
+      <TimerDisplay>{currentTrackPosition || '0:00'}</TimerDisplay>
       <div>
-        <ProgressBarWrapper ref={timelineRef} onClick={handleOnClick(timelineRef, onSeek)} onMouseDown={handleOnMouseDown}>
+        <ProgressBarWrapper ref={timelineRef} onClick={handleOnClick(timelineRef, trackDuration, onSeek)} onMouseDown={handleOnMouseDown}>
           <ProgressBarBody nowPlaying={nowPlaying}>
             { progressBar }
           </ProgressBarBody>
         </ProgressBarWrapper>
-      </div> 
+      </div>
+      <TimerDisplay>{`${minutes}:${seconds}`}</TimerDisplay>
     </div>
   )
+}
+
+const isNumeric = (n) => {
+  return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
 const countDigits = (number) => {
@@ -100,7 +110,7 @@ const renderProgressBarSlider = (currentTrackPosition, trackDuration) => {
   const {minutes, seconds} = trackDuration
 
   trackDuration = minutes * 60 + seconds
- 
+  currentTrackPosition = (isNumeric(currentTrackPosition)) ? currentTrackPosition : 0
   const width = currentTrackPosition / trackDuration * 100
 
   return (
@@ -110,13 +120,16 @@ const renderProgressBarSlider = (currentTrackPosition, trackDuration) => {
   )
 }
 
-const handleOnClick = (ref, callback) => (ev) => {
+const handleOnClick = (ref, trackDuration, callback) => (ev) => {
   const { left, right, width } = findDOMNode(ref.current).getBoundingClientRect()
 
   const touchedPosition = ev.clientX - Math.round(left)
-  const rewindTo = touchedPosition / width
 
-  callback(+rewindTo.toFixed(2))
+  trackDuration = trackDuration.minutes * 60 + trackDuration.seconds
+
+  const rewindTo = Math.round(touchedPosition / width * trackDuration)
+  
+  callback(rewindTo)
 } 
 
 const handleOnMouseDown = (ev) => {

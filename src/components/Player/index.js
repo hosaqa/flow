@@ -75,8 +75,15 @@ class Player extends Component {
     raf.cancel(this._raf)
   }
 
+  //test
+  test() {
+    
+  }
+
   setSeek (rewindTo) {
-    this.player.seek.bind(this, rewindTo)
+    this.setState({
+      currentTrackPosition: this.player.seek(rewindTo)
+    })
   }
 
   render() {
@@ -108,7 +115,7 @@ class Player extends Component {
             skip_next
           </i>        
         </button>
-        <Timeline onSeek={this.setSeek} trackDuration={track.duration} currentTrackPosition={this.state.currentTrackPosition} nowPlaying={this.state.nowPlaying} />
+        <Timeline player={this.player} onSeek={(rewindTo) => this.setSeek(rewindTo)} trackDuration={track.duration} currentTrackPosition={this.state.currentTrackPosition} nowPlaying={this.state.nowPlaying} />
         <div>
           <button onClick={() => this.letsSeek()}>GOGOGO</button>
         </div>
