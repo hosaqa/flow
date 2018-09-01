@@ -75,11 +75,6 @@ class Player extends Component {
     raf.cancel(this._raf)
   }
 
-  //test
-  test() {
-    
-  }
-
   setSeek (rewindTo) {
     this.setState({
       currentTrackPosition: this.player.seek(rewindTo)
