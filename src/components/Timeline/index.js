@@ -15,8 +15,8 @@ const TimerDisplay = styled.div`
 `
 
 const ProgressBarWrapper = styled.div`
-  width: 300px;
-  height: 20px;
+  width: 400px;
+  height: 40px;
   padding: 0 13px;
   display: flex;
   align-items: center;
@@ -61,7 +61,6 @@ export default class Timeline extends Component {
 
   state = {
     usersProgress: null,
-    mouseEntered: false,
     mouseDowned: false
   }
 
@@ -107,39 +106,42 @@ export default class Timeline extends Component {
   }
 
   handleOnMouseUp() {
-    this.setState({mouseDowned: false, usersProgress: null})
-  }
+    let trackDuration = this.props.trackDuration
+    trackDuration = trackDuration.minutes * 60 + trackDuration.seconds
 
-  handleOnMouseEnter() {
-    this.setState({mouseEntered: true})
+    this.props.onSeek(this.state.usersProgress / 100 * trackDuration)
+
+    this.setState({
+      mouseDowned: false,
+      usersProgress: null
+    })
   }
 
   handleOnMouseLeave() {
-    this.setState({mouseEntered: false, mouseDowned: false, usersProgress: null})
-  }
+    if (this.state.mouseDowned) this.setState({mouseDowned: false})
+  }  
 
   handleOnClick (ev, ref, trackDuration) {
-    const { left, right, width } = findDOMNode(ref.current).getBoundingClientRect()
-
-    const touchedPosition = ev.clientX - Math.round(left)
-
     trackDuration = trackDuration.minutes * 60 + trackDuration.seconds
 
-    const rewindTo = Math.round(touchedPosition / width * trackDuration)
+    const touchedPosition = this.getTouchedPosition(ev, ref)
+
+    const rewindTo = Math.round(touchedPosition * trackDuration)
     
     this.props.onSeek(rewindTo)
   }
 
   handleOnMouseMove (ev, ref) {
-    console.log(this.state.mouseEntered, this.state.mouseDowned)
-    if (this.state.mouseEntered && this.state.mouseDowned) {
-      const { left, right, width } = findDOMNode(ref.current).getBoundingClientRect()
-      const touchedPosition = ev.clientX - Math.round(left)
-      this.setState({usersProgress: touchedPosition * 100 / width})
-      let trackDuration = this.props.trackDuration
-      trackDuration = trackDuration.minutes * 60 + trackDuration.seconds
-      this.props.onSeek(this.state.usersProgress / 100 * trackDuration)
+    if (this.state.mouseDowned) {
+
+      const touchedPosition = this.getTouchedPosition(ev, ref)
+      this.setState({usersProgress: touchedPosition * 100})
     }
+  }
+
+  getTouchedPosition(ev, ref) {
+    const { left, width } = findDOMNode(ref.current).getBoundingClientRect()
+    return (ev.clientX - Math.round(left)) / width
   }
 
   render() {
@@ -164,7 +166,6 @@ export default class Timeline extends Component {
             onClick={(ev) => this.handleOnClick(ev, timelineRef, trackDuration)}
             onMouseDown={() => this.handleOnMouseDown()}
             onMouseUp={() => this.handleOnMouseUp()}
-            onMouseEnter={() => this.handleOnMouseEnter()}
             onMouseLeave={() => this.handleOnMouseLeave()}
             onMouseMove={(ev) => this.handleOnMouseMove(ev, timelineRef)}
           >
@@ -179,17 +180,6 @@ export default class Timeline extends Component {
   }
 }
 
-// const handleOnClick = (ref, trackDuration, callback) => (ev) => {
-//   const { left, right, width } = findDOMNode(ref.current).getBoundingClientRect()
-
-//   const touchedPosition = ev.clientX - Math.round(left)
-
-//   trackDuration = trackDuration.minutes * 60 + trackDuration.seconds
-
-//   const rewindTo = Math.round(touchedPosition / width * trackDuration)
-  
-//   callback(rewindTo)
-// }
 
 
 Timeline.propTypes = {
