@@ -65,6 +65,7 @@ class Player extends Component {
         nowPlaying: false,
         currentTrackPosition: null
       })
+
       this.clearRAF()
     } else {
       this.handleChangeTrack(1)
@@ -110,10 +111,12 @@ class Player extends Component {
             skip_next
           </i>        
         </button>
-        <Timeline player={this.player} onSeek={(rewindTo) => this.setSeek(rewindTo)} trackDuration={track.duration} currentTrackPosition={this.state.currentTrackPosition} nowPlaying={this.state.nowPlaying} />
-        <div>
-          <button onClick={() => this.letsSeek()}>GOGOGO</button>
-        </div>
+        <Timeline
+          nowPlaying={this.state.nowPlaying}
+          trackDuration={track.duration}
+          currentTrackPosition={this.state.currentTrackPosition}  
+          seek={(rewindTo) => this.setSeek(rewindTo)}
+        />
       </div> 
 
     );

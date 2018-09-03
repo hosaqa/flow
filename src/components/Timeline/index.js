@@ -9,21 +9,31 @@ const colorPinkLight = 'rgba(255, 112, 112, 0.50)'
 const colorPinkSoft = '#ff7070'
 const colorPinkGradient = 'linear-gradient(154deg, #f90dc9, #ff1d1d)'
 
+const TimeLineWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`
+
 const TimerDisplay = styled.div`
   display: inline-block;
   width: 30px;
 `
 
 const ProgressBarWrapper = styled.div`
+  padding: 0 12px;
+`
+
+const ProgressBarBody = styled.div`
   width: 400px;
   height: 40px;
-  padding: 0 13px;
+  padding: 0;
   display: flex;
   align-items: center;
   cursor: pointer;
 `
 
-const ProgressBarBody = styled.div`
+const ProgressBarLine = styled.div`
+  position: relative;
   width: 100%;
   height: 4px;
   background-color: ${colorPinkLight};
@@ -52,16 +62,47 @@ const ProgressBarSlider = styled.div`
   transition: transform .12s;
   transform: scale(0);
  
-  ${ProgressBarWrapper}:hover & {
+  ${ProgressBarBody}:hover & {
     transform: scale(1);
   }
 `
 
 export default class Timeline extends Component {
+  static propTypes = {
+    trackDuration: PropTypes.shape({
+      minutes: PropTypes.number,
+      seconds: PropTypes.number
+    }),
+    currentTrackPosition: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.object
+    ]),
+    seek: PropTypes.func
+  }
+
 
   state = {
-    usersProgress: null,
+    trackDurationInSeconds: null,
+    dummyLineProgress: null,
+    dummyTime: null,
     mouseDowned: false
+  }
+
+  componentWillMount() {
+    this.setState({
+      trackDurationInSeconds: this.convertDurationToSecond(this.props.trackDuration)
+    })
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      trackDurationInSeconds: this.convertDurationToSecond(nextProps.trackDuration)
+    })
+  }
+
+  convertDurationToSecond(trackDuration) {
+    const { minutes, seconds }= trackDuration
+    return minutes * 60 + seconds
   }
 
   isNumeric (n) {
@@ -95,48 +136,10 @@ export default class Timeline extends Component {
     const width = currentTrackPosition / trackDuration * 100
   
     return (
-      <ProgressBarMovable width = {(this.state.usersProgress)? `${this.state.usersProgress}%` : `${width}%`}>
+      <ProgressBarMovable width = {(this.state.dummyLineProgress)? `${this.state.dummyLineProgress}%` : `${width}%`}>
         <ProgressBarSlider />
       </ProgressBarMovable>
     )
-  }
-
-  handleOnMouseDown() {
-    this.setState({mouseDowned: true})
-  }
-
-  handleOnMouseUp() {
-    let trackDuration = this.props.trackDuration
-    trackDuration = trackDuration.minutes * 60 + trackDuration.seconds
-
-    this.props.onSeek(this.state.usersProgress / 100 * trackDuration)
-
-    this.setState({
-      mouseDowned: false,
-      usersProgress: null
-    })
-  }
-
-  handleOnMouseLeave() {
-    if (this.state.mouseDowned) this.setState({mouseDowned: false})
-  }  
-
-  handleOnClick (ev, ref, trackDuration) {
-    trackDuration = trackDuration.minutes * 60 + trackDuration.seconds
-
-    const touchedPosition = this.getTouchedPosition(ev, ref)
-
-    const rewindTo = Math.round(touchedPosition * trackDuration)
-    
-    this.props.onSeek(rewindTo)
-  }
-
-  handleOnMouseMove (ev, ref) {
-    if (this.state.mouseDowned) {
-
-      const touchedPosition = this.getTouchedPosition(ev, ref)
-      this.setState({usersProgress: touchedPosition * 100})
-    }
   }
 
   getTouchedPosition(ev, ref) {
@@ -144,51 +147,91 @@ export default class Timeline extends Component {
     return (ev.clientX - Math.round(left)) / width
   }
 
+  onMouseUpRewind() {
+    let trackDuration = this.state.trackDurationInSeconds
+
+    this.props.seek(this.state.dummyLineProgress / 100 * trackDuration)
+
+    this.setState({
+      mouseDowned: false,
+      dummyLineProgress: null,
+      dummyTime: null
+    })
+  }
+
+  handleOnMouseDown() {
+    this.setState({mouseDowned: true})
+  }
+
+  handleOnMouseUp() {
+    this.onMouseUpRewind()
+  }
+
+  handleOnMouseLeave() {  
+    if (this.state.mouseDowned && this.state.dummyLineProgress) {
+      this.onMouseUpRewind()
+    }
+  }
+
+  handleOnClick (ev, ref) {
+    let trackDuration = this.state.trackDurationInSeconds
+
+    const touchedPosition = this.getTouchedPosition(ev, ref)
+
+    const rewindTo = Math.round(touchedPosition * trackDuration)
+    
+    this.props.seek(rewindTo)
+  }
+
+  handleOnMouseMove (ev, ref) {
+    if (this.state.mouseDowned) {
+      let trackDuration = this.state.trackDurationInSeconds
+
+      const touchedPosition = this.getTouchedPosition(ev, ref)
+
+      if (touchedPosition > 0 && touchedPosition < 1) {
+        this.setState({
+          dummyLineProgress: touchedPosition * 100,
+          dummyTime: touchedPosition * trackDuration
+        })
+      }
+    }
+  }
+
   render() {
     const timelineRef = React.createRef()
 
-    let {trackDuration, nowPlaying, currentTrackPosition, onSeek} = this.props
+    let {trackDuration, nowPlaying, currentTrackPosition, seek} = this.props
 
     const progressBar = this.renderProgressBarSlider(currentTrackPosition, trackDuration)
     
     let {minutes, seconds} = trackDuration
     
+    currentTrackPosition = (this.state.dummyTime) ? this.state.dummyTime : currentTrackPosition
+
     currentTrackPosition = (this.isNumeric(currentTrackPosition)) ? this.formateTimerValue(currentTrackPosition) : '0:00'
   
     if (this.countDigits(seconds) < 2) seconds = '0' + seconds
   
     return (
-      <div style={{display: 'flex', alignItems: 'center'}}>
-        <TimerDisplay>{currentTrackPosition || '0:00'}</TimerDisplay>
-        <div>
-          <ProgressBarWrapper 
+      <TimeLineWrapper>
+        <TimerDisplay>{currentTrackPosition}</TimerDisplay>
+        <ProgressBarWrapper>
+          <ProgressBarBody 
             ref={timelineRef}
-            onClick={(ev) => this.handleOnClick(ev, timelineRef, trackDuration)}
+            onClick={(ev) => this.handleOnClick(ev, timelineRef)}
             onMouseDown={() => this.handleOnMouseDown()}
             onMouseUp={() => this.handleOnMouseUp()}
             onMouseLeave={() => this.handleOnMouseLeave()}
             onMouseMove={(ev) => this.handleOnMouseMove(ev, timelineRef)}
           >
-            <ProgressBarBody nowPlaying={nowPlaying}>
+            <ProgressBarLine nowPlaying={nowPlaying}>
               { progressBar }
-            </ProgressBarBody>
-          </ProgressBarWrapper>
-        </div>
+            </ProgressBarLine>
+          </ProgressBarBody>
+        </ProgressBarWrapper>
         <TimerDisplay>{`${minutes}:${seconds}`}</TimerDisplay>
-      </div>
+      </TimeLineWrapper>
     )
   }
-}
-
-
-
-Timeline.propTypes = {
-  trackDuration: PropTypes.shape({
-    minutes: PropTypes.number,
-    seconds: PropTypes.number
-  }),
-  currentTrackPosition: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.object
-  ])
 }
