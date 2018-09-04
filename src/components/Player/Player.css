@@ -21,3 +21,7 @@ button {
   -webkit-appearance: none;
   background: transparent;
 }
+
+* {
+  box-sizing: border-box;
+}

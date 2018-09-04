@@ -5,6 +5,7 @@ import raf from 'raf' // requestAnimationFrame polyfill
 import './Player.css'
 
 import Timeline from '../Timeline'
+import VolumeBar from '../VolumeBar'
 
 
 class Player extends Component {
@@ -12,6 +13,7 @@ class Player extends Component {
   state = {
     nowPlaying: false,
     volume: 1,
+    mute: false,
     currentTrack: 0,
     currentTrackPosition: null
   }
@@ -82,6 +84,18 @@ class Player extends Component {
     })
   }
 
+  setVolume(value) {
+    this.setState({
+      volume: value
+    })
+  }
+
+  muteToggle() {
+    this.setState({
+      mute: !this.state.mute
+    })
+  }
+
   render() {
     const track = this.props.playlist[this.state.currentTrack]
 
@@ -90,6 +104,8 @@ class Player extends Component {
         <ReactHowler
           src={track.src}
           playing={this.state.nowPlaying}
+          volume={this.state.volume}
+          mute={this.state.mute}
           ref={(ref) => (this.player = ref)}
 
           onPlay={() => this.handleOnPlay()}
@@ -116,6 +132,12 @@ class Player extends Component {
           trackDuration={track.duration}
           currentTrackPosition={this.state.currentTrackPosition}  
           seek={(rewindTo) => this.setSeek(rewindTo)}
+        />
+        <VolumeBar
+          volume = {this.state.volume}
+          mute = {this.state.mute}
+          muteToggle = {() => this.muteToggle()}
+          setVolume = {(value) => this.setVolume(value)}
         />
       </div> 
 
