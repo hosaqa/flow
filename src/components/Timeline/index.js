@@ -5,10 +5,6 @@ import styled from 'styled-components'
 
 
 
-const colorPinkLight = 'rgba(255, 112, 112, 0.50)'
-const colorPinkSoft = '#ff7070'
-const colorPinkGradient = 'linear-gradient(154deg, #f90dc9, #ff1d1d)'
-
 const TimeLineWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -36,7 +32,7 @@ const ProgressBarLine = styled.div`
   position: relative;
   width: 100%;
   height: 4px;
-  background-color: ${colorPinkLight};
+  background-color: ${props => props.theme.colorDraggableBg};
   border-radius: 2px;
   box-shadow: ${props => (props.nowPlaying) ? '2px 2px 4px rgba(0, 0, 0, 0.15)' : '1px 1px 1px rgba(0, 0, 0, 0.1)'};
   transition: box-shadow .25s;
@@ -46,7 +42,7 @@ const ProgressBarMovable = styled.div`
   position: relative;
   width: ${props => props.width};
   height: 4px;
-  background-image: ${colorPinkGradient};
+  background-image: linear-gradient(154deg, ${props => props.theme.colorGradientStart}, ${props => props.theme.colorGradientEnd});
   border-radius: 2px;
 `
 

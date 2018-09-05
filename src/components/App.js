@@ -1,18 +1,22 @@
 import React, { Component } from 'react'
-import './App.css'
+import { ThemeProvider } from 'styled-components'
 
 import Player from './Player'
+
+import { lightTheme } from '../theme/globalStyle'
+import './App.css'
+
 
 class App extends Component {
 
   render() {
     return (
-      <div>
-        <Player playlist = {this.props.data} />
-      </div> 
+      <ThemeProvider theme={lightTheme}>
+        <Player playlist={this.props.data} />
+      </ThemeProvider> 
 
     )
   }
 }
 
-export default App;
+export default App
