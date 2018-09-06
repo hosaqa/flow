@@ -140,6 +140,7 @@ export default class Timeline extends Component {
 
   getTouchedPosition(ev, ref) {
     const { left, width } = findDOMNode(ref.current).getBoundingClientRect()
+    console.log(left)
     return (ev.clientX - Math.round(left)) / width
   }
 

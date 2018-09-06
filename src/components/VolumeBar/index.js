@@ -2,14 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
+import {getMousePosition} from '../../utils'
 
 
-const VolumeBarWrapper = styled.div`
+
+const Volume = styled.div`
   padding: 0 7px;
   position: relative;
 `
 
-const VolumeSliderWrapper = styled.div`
+const VolumeSlider = styled.div`
   position: absolute;
   bottom: calc(100% + 15px);
   height: 110px;
@@ -17,10 +19,17 @@ const VolumeSliderWrapper = styled.div`
   border-radius: 3px;
   background-color: ${props => props.theme.colorBg};
   box-shadow: 1px 1px 2px rgba(0, 0, 0, .25);
-  padding: 8px;
+  padding: 8px 0;
 `
 
-const VolumeSlider = styled.div`
+const ProgressBar = styled.div`
+  height: 100%;
+  width: 100%;
+  position: relative;
+  cursor: pointer;
+`
+
+const ProgressBarEmpty = styled.div`
   height: 100%;
   width: 4px;
   margin: auto;
@@ -30,7 +39,7 @@ const VolumeSlider = styled.div`
   position: relative;
 `
 
-const VolumeSliderMovable = styled.div`
+const ProgressBarFill = styled.div`
   position: absolute;
   bottom: 0;
   left: 0;
@@ -41,7 +50,7 @@ const VolumeSliderMovable = styled.div`
   transition: height .12s;
 `
 
-const VolumeSliderDraggable = styled.div`
+const ProgressBarThumb = styled.div`
   position: absolute;
   right: -2px;
   top: -2px;
@@ -69,22 +78,41 @@ const VolumeBar = (props) => {
     }
   }
 
+  const handleOnClick = (ev, ref) => {
+    const {topPosition} = getMousePosition(ev, ref)
+
+    setVolume(1 - parseFloat(topPosition.toFixed(2)))
+  }
+
+  const handleOnMouseMove = (ev, ref) => {
+    const {topPosition} = getMousePosition(ev, ref)
+    
+    setVolume(1 - parseFloat(topPosition.toFixed(2)))
+  }
+
+  const volumeBarRef = React.createRef()
+  console.log(volume)
   return (
-    <VolumeBarWrapper>
+    <Volume>
       <button onClick={() => muteToggle()}>
         {!mute && volume !== 0
           ? <i className='material-icons'>volume_up</i>
           : <i className="material-icons">volume_off</i>
         }
       </button>
-      <VolumeSliderWrapper onWheel={handleOnWheel}>
-        <VolumeSlider>
-          <VolumeSliderMovable height={`${volume * 100}%`}>
-            <VolumeSliderDraggable/>
-          </VolumeSliderMovable>  
-        </VolumeSlider>
-      </VolumeSliderWrapper>
-    </VolumeBarWrapper>
+      <VolumeSlider ref={volumeBarRef} onWheel={handleOnWheel}
+      onClick={(ev) => handleOnClick(ev, volumeBarRef)}
+      onMouseMove={(ev) => handleOnMouseMove(ev, volumeBarRef)}
+      >
+        <ProgressBar>
+          <ProgressBarEmpty>
+            <ProgressBarFill height={`${volume * 100}%`}>
+              <ProgressBarThumb/>
+            </ProgressBarFill>
+          </ProgressBarEmpty>
+        </ProgressBar>
+      </VolumeSlider>
+    </Volume>
   )
 }
 
