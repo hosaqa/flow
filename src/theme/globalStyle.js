@@ -17,4 +17,8 @@ injectGlobal`
   body {
     font-family: 'Source Sans Pro', sans-serif;
   }
+
+  img {
+    max-width: 100%;
+  }
 `

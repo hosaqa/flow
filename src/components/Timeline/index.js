@@ -3,7 +3,7 @@ import {findDOMNode} from 'react-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-
+import ProgressBar from '../ProgressBar'
 
 const TimeLineWrapper = styled.div`
   display: flex;
@@ -26,41 +26,6 @@ const ProgressBarBody = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
-`
-
-const ProgressBarLine = styled.div`
-  position: relative;
-  width: 100%;
-  height: 4px;
-  background-color: ${props => props.theme.colorDraggableBg};
-  border-radius: 2px;
-  box-shadow: ${props => (props.nowPlaying) ? '2px 2px 4px rgba(0, 0, 0, 0.15)' : '1px 1px 1px rgba(0, 0, 0, 0.1)'};
-  transition: box-shadow .25s;
-`
-
-const ProgressBarMovable = styled.div`
-  position: relative;
-  width: ${props => props.width};
-  height: 4px;
-  background-image: linear-gradient(154deg, ${props => props.theme.colorGradientStart}, ${props => props.theme.colorGradientEnd});
-  border-radius: 2px;
-`
-
-const ProgressBarSlider = styled.div`
-  position: absolute;
-  right: -4px;
-  top: -4px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background-color: #fff;
-  box-shadow: 1px 1px 1px rgba(20, 20, 20, 0.4), -1px -1px 1px rgba(96, 96, 96, 0.25);
-  transition: transform .12s;
-  transform: scale(0);
- 
-  ${ProgressBarBody}:hover & {
-    transform: scale(1);
-  }
 `
 
 export default class Timeline extends Component {
@@ -130,17 +95,14 @@ export default class Timeline extends Component {
     trackDuration = minutes * 60 + seconds
     currentTrackPosition = (this.isNumeric(currentTrackPosition)) ? currentTrackPosition : 0
     const width = currentTrackPosition / trackDuration * 100
-  
+
     return (
-      <ProgressBarMovable width = {(this.state.dummyLineProgress)? `${this.state.dummyLineProgress}%` : `${width}%`}>
-        <ProgressBarSlider />
-      </ProgressBarMovable>
+      <ProgressBar thumbShowOnHover={true} thumbRadius={6} direction={'horizontal'} filled={(this.state.dummyLineProgress)? this.state.dummyLineProgress : width} />
     )
   }
 
   getTouchedPosition(ev, ref) {
     const { left, width } = findDOMNode(ref.current).getBoundingClientRect()
-    console.log(left)
     return (ev.clientX - Math.round(left)) / width
   }
 
@@ -222,9 +184,7 @@ export default class Timeline extends Component {
             onMouseLeave={() => this.handleOnMouseLeave()}
             onMouseMove={(ev) => this.handleOnMouseMove(ev, timelineRef)}
           >
-            <ProgressBarLine nowPlaying={nowPlaying}>
-              { progressBar }
-            </ProgressBarLine>
+            {progressBar}
           </ProgressBarBody>
         </ProgressBarWrapper>
         <TimerDisplay>{`${minutes}:${seconds}`}</TimerDisplay>

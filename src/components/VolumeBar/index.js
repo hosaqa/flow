@@ -1,10 +1,9 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import {getMousePosition} from '../../utils'
-
-
+import ProgressBar from '../ProgressBar'
+import { getMousePosition } from '../../utils'
 
 const Volume = styled.div`
   padding: 0 7px;
@@ -20,102 +19,109 @@ const VolumeSlider = styled.div`
   background-color: ${props => props.theme.colorBg};
   box-shadow: 1px 1px 2px rgba(0, 0, 0, .25);
   padding: 8px 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: .2s opacity, .2s visibility;
+  transition-delay: .5s;
+
+  ${Volume}:hover & {
+    opacity: 1;
+    visibility: visible;
+  }
 `
 
-const ProgressBar = styled.div`
-  height: 100%;
-  width: 100%;
-  position: relative;
-  cursor: pointer;
-`
+class VolumeBar extends Component {
 
-const ProgressBarEmpty = styled.div`
-  height: 100%;
-  width: 4px;
-  margin: auto;
-  border-radius: 2px;
-  background-color: ${props => props.theme.colorDraggableBg};
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, .05);
-  position: relative;
-`
+  state = {
+    mouseButtonPressed: false
+  }
 
-const ProgressBarFill = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: ${props => props.height};
-  background-image: linear-gradient(154deg, ${props => props.theme.colorGradientStart}, ${props => props.theme.colorGradientEnd});
-  border-radius: 2px;
-  transition: height .12s;
-`
+  setVolumeFromPosition(ev, ref) {
+    const { setVolume } = this.props
+    const { topPosition } = getMousePosition(ev, ref)
 
-const ProgressBarThumb = styled.div`
-  position: absolute;
-  right: -2px;
-  top: -2px;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: #fff;
-  box-shadow: 1px 1px 1px rgba(20, 20, 20, 0.4), -1px -1px 1px rgba(96, 96, 96, 0.25);
-  transition: transform .12s;
-`
+    setVolume(1 - parseFloat(topPosition.toFixed(2)))
+  }
 
-const VolumeBar = (props) => {
-  const { volume, setVolume, mute, muteToggle } = props
-  const height = 0
+  handleOnWheel(ev) {
+    const { volume, setVolume } = this.props
 
-  const handleOnWheel = (ev) => {
-    const ONE_SCROLL_DELTA = 53 // значение дельты по Y при одной прокрутке колесика
-    const volumeCoeff = Math.abs(ev.deltaY / ONE_SCROLL_DELTA)
-    const volumeDelta = volumeCoeff * 0.015
+    const oneScrollDelta = 53 // значение дельты по Y при одной прокрутке колесика
+    const volumeCoeff = Math.abs(ev.deltaY / oneScrollDelta)
+    
+    let volumeDelta = volumeCoeff * 0.025
+    volumeDelta = parseFloat(volumeDelta.toFixed(2))
+    console.log(volumeDelta, volume)
 
     if (ev.deltaY < 0) {
-      if (volume < 1) setVolume(volume + volumeDelta)
+      if (volume < 1) setVolume(parseFloat((volume + volumeDelta).toFixed(2)))
     } else {
-      if (volume > 0) setVolume(volume - volumeDelta)
+      if (volume > 0) setVolume(parseFloat((volume - volumeDelta).toFixed(2)))
     }
   }
 
-  const handleOnClick = (ev, ref) => {
-    const {topPosition} = getMousePosition(ev, ref)
-
-    setVolume(1 - parseFloat(topPosition.toFixed(2)))
+  handleOnClick(ev, ref) {
+    this.setVolumeFromPosition(ev, ref)
   }
 
-  const handleOnMouseMove = (ev, ref) => {
-    const {topPosition} = getMousePosition(ev, ref)
-    
-    setVolume(1 - parseFloat(topPosition.toFixed(2)))
+  handleOnMouseMove(ev, ref) {
+    if (this.state.mouseButtonPressed) this.setVolumeFromPosition(ev, ref)
   }
 
-  const volumeBarRef = React.createRef()
-  console.log(volume)
-  return (
-    <Volume>
-      <button onClick={() => muteToggle()}>
-        {!mute && volume !== 0
-          ? <i className='material-icons'>volume_up</i>
-          : <i className="material-icons">volume_off</i>
-        }
-      </button>
-      <VolumeSlider ref={volumeBarRef} onWheel={handleOnWheel}
-      onClick={(ev) => handleOnClick(ev, volumeBarRef)}
-      onMouseMove={(ev) => handleOnMouseMove(ev, volumeBarRef)}
-      >
-        <ProgressBar>
-          <ProgressBarEmpty>
-            <ProgressBarFill height={`${volume * 100}%`}>
-              <ProgressBarThumb/>
-            </ProgressBarFill>
-          </ProgressBarEmpty>
-        </ProgressBar>
-      </VolumeSlider>
-    </Volume>
-  )
+  handleOnMouseDown() {
+    this.setState({
+      mouseButtonPressed: true
+    })
+  }
+
+  handleOnMouseUp() {
+    this.setState({
+      mouseButtonPressed: false
+    })
+  }
+  
+  handleOnMouseLeave() {
+    this.setState({
+      mouseButtonPressed: false
+    })
+  }  
+
+  render() {
+    const { volume, setVolume, muted, muteToggle } = this.props
+    const volumeBarRef = React.createRef()
+    //console.log(volume)
+    return (
+      <Volume>
+        <button onClick={() => muteToggle()}>
+          {!muted && volume !== 0
+            ? <i className="material-icons">volume_up</i>
+            : <i className="material-icons">volume_off</i>
+          }
+        </button>
+        <VolumeSlider
+          ref={volumeBarRef}
+          onWheel={(ev) => this.handleOnWheel(ev)}
+          onClick={(ev) => this.handleOnClick(ev, volumeBarRef)}
+          onMouseMove={(ev) => this.handleOnMouseMove(ev, volumeBarRef)}
+          onMouseDown={() => this.handleOnMouseDown()}
+          onMouseUp={() => this.handleOnMouseUp()}
+          onMouseLeave={() => this.handleOnMouseLeave()}
+        >
+          <ProgressBar
+            direction={'vertical'}
+            filled={muted ? 0 : volume * 100}
+          />
+        </VolumeSlider>
+      </Volume>
+    )
+  }
 }
 
-
+VolumeBar.propTypes = {
+  volume: PropTypes.number,
+  setVolume: PropTypes.func,
+  muted: PropTypes.bool,
+  muteToggle: PropTypes.func,
+}
 
 export default VolumeBar

@@ -6,6 +6,7 @@ import './Player.css'
 
 import Timeline from '../Timeline'
 import VolumeBar from '../VolumeBar'
+import TrackInfo from '../TrackInfo'
 
 
 class Player extends Component {
@@ -13,7 +14,7 @@ class Player extends Component {
   state = {
     nowPlaying: false,
     volume: 1,
-    mute: false,
+    muted: false,
     currentTrack: 0,
     currentTrackPosition: null
   }
@@ -86,26 +87,26 @@ class Player extends Component {
 
   setVolume(value) {
     this.setState({
-      volume: value
+      volume: (value < 0) ? 0 : value
     })
   }
 
   muteToggle() {
     this.setState({
-      mute: !this.state.mute
+      muted: !this.state.muted
     })
   }
 
   render() {
     const track = this.props.playlist[this.state.currentTrack]
-
+    
     return (
       <div className='player'>
         <ReactHowler
           src={track.src}
           playing={this.state.nowPlaying}
           volume={this.state.volume}
-          mute={this.state.mute}
+          muted={this.state.muted}
           ref={(ref) => (this.player = ref)}
 
           onPlay={() => this.handleOnPlay()}
@@ -135,13 +136,18 @@ class Player extends Component {
         />
         <VolumeBar
           volume = {this.state.volume}
-          mute = {this.state.mute}
+          muted = {this.state.muted}
           muteToggle = {() => this.muteToggle()}
           setVolume = {(value) => this.setVolume(value)}
         />
+        <TrackInfo
+          track={track.track}
+          artist={track.artist}
+          album={track.album}
+          img={track.img}
+        />
       </div> 
-
-    );
+    )
   }
 }
 

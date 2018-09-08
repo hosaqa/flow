@@ -3,7 +3,9 @@ const data = [
     id: 0,
     artist: 'Lil Uzi Vert',
     track: 'XO Tour',
+    album: 'Lil Lol',
     src: 'lil_uzi-xo_tour.mp3',
+    img: 'img/lil-uzi.jpg',
     duration: {
       minutes: 3,
       seconds: 0
@@ -13,6 +15,8 @@ const data = [
     id: 1,
     artist: 'Lil Pump',
     track: 'Molly',
+    album: 'Rich',
+    img: 'img/lil-pump.jpg',
     src: 'lil_pump-molly.mp3',
     duration: {
       minutes: 1,
