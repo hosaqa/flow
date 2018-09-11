@@ -42,7 +42,7 @@ const Artist = styled.div`
 
 export default function TrackInfo(props) {
   const { track, artist, album, img } = props
-  console.log(props)
+
   return (
     <StyledTrackInfo>
       <ImgWrapper>

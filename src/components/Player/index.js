@@ -86,15 +86,20 @@ class Player extends Component {
   }
 
   setVolume(value) {
+    //(this.state.muted)
+
     this.setState({
+      muted: false,
       volume: (value < 0) ? 0 : value
     })
   }
 
   muteToggle() {
-    this.setState({
-      muted: !this.state.muted
-    })
+    if (this.state.volume) {
+      this.setState({
+        muted: !this.state.muted
+      })      
+    }
   }
 
   render() {

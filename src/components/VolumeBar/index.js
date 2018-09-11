@@ -13,16 +13,16 @@ const Volume = styled.div`
 const VolumeSlider = styled.div`
   position: absolute;
   bottom: calc(100% + 15px);
-  height: 110px;
+  height: 125px;
   width: 30px;
   border-radius: 3px;
-  background-color: ${props => props.theme.colorBg};
+  background-color: ${props => props.theme.colorAccentBg};
   box-shadow: 1px 1px 2px rgba(0, 0, 0, .25);
-  padding: 8px 0;
+  padding: 13px 0;
   opacity: 0;
   visibility: hidden;
   transition: .2s opacity, .2s visibility;
-  transition-delay: .5s;
+  transition-delay: .28s;
 
   ${Volume}:hover & {
     opacity: 1;
@@ -51,7 +51,6 @@ class VolumeBar extends Component {
     
     let volumeDelta = volumeCoeff * 0.025
     volumeDelta = parseFloat(volumeDelta.toFixed(2))
-    console.log(volumeDelta, volume)
 
     if (ev.deltaY < 0) {
       if (volume < 1) setVolume(parseFloat((volume + volumeDelta).toFixed(2)))
@@ -89,9 +88,9 @@ class VolumeBar extends Component {
   render() {
     const { volume, setVolume, muted, muteToggle } = this.props
     const volumeBarRef = React.createRef()
-    //console.log(volume)
+
     return (
-      <Volume>
+      <Volume onWheel={(ev) => this.handleOnWheel(ev)}>
         <button onClick={() => muteToggle()}>
           {!muted && volume !== 0
             ? <i className="material-icons">volume_up</i>
@@ -100,7 +99,6 @@ class VolumeBar extends Component {
         </button>
         <VolumeSlider
           ref={volumeBarRef}
-          onWheel={(ev) => this.handleOnWheel(ev)}
           onClick={(ev) => this.handleOnClick(ev, volumeBarRef)}
           onMouseMove={(ev) => this.handleOnMouseMove(ev, volumeBarRef)}
           onMouseDown={() => this.handleOnMouseDown()}

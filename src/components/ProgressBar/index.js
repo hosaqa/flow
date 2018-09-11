@@ -54,10 +54,7 @@ const ThumbHoverShown = Thumb.extend`
   }
 `
 
-export default function ProgressBar(props) {
-  const { direction, filled, thumbRadius, thumbShowOnHover } = props
-
-  return (
+const ProgressBar = ({ direction, filled, thumbRadius, thumbShowOnHover }) => (
     <StyledProgressBar>
       <ProgressBarEmpty direction={direction}>
         <ProgressBarFill direction={direction} filled={`${filled}%`}>
@@ -69,8 +66,10 @@ export default function ProgressBar(props) {
         </ProgressBarFill>
       </ProgressBarEmpty>
     </StyledProgressBar>
-  )
-}
+)
+
+
+export default ProgressBar
 
 ProgressBar.propTypes = {
   direction: PropTypes.string,

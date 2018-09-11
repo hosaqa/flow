@@ -2,7 +2,7 @@ import { injectGlobal } from 'styled-components'
 import styledNormalize from 'styled-normalize'
 
 export const lightTheme = {
-  colorBg: '#efefef',
+  colorAccentBg: '#efefef',
   colorAccent: '#ff7070',
   colorDraggableBg: 'rgba(255, 112, 112, 0.50)',
   colorGradientStart: '#f90dc9',
