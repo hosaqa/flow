@@ -21,7 +21,8 @@ const ProgressBarEmpty = styled.div`
   margin: auto;
   border-radius: 2px;
   background-color: ${props => props.theme.colorDraggableBg};
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, .05);
+  box-shadow: ${props => props.active ? '2px 2px 2px rgba(0, 0, 0, .1)' : 'none'};
+  transition: box-shadow .35s;
 `
 
 const ProgressBarFill = styled.div`
@@ -54,24 +55,24 @@ const ThumbHoverShown = Thumb.extend`
   }
 `
 
-const ProgressBar = ({ direction, filled, thumbRadius, thumbShowOnHover }) => (
-    <StyledProgressBar>
-      <ProgressBarEmpty direction={direction}>
-        <ProgressBarFill direction={direction} filled={`${filled}%`}>
-          {thumbShowOnHover
-            ? <ThumbHoverShown thumbRadius={thumbRadius}/>
-            : <Thumb thumbRadius={thumbRadius}/>
-          }
-          
-        </ProgressBarFill>
-      </ProgressBarEmpty>
-    </StyledProgressBar>
+const ProgressBar = ({ active, direction, filled, thumbRadius, thumbShowOnHover }) => (
+  <StyledProgressBar>
+    <ProgressBarEmpty active={active} direction={direction}>
+      <ProgressBarFill direction={direction} filled={`${filled}%`}>
+        {thumbShowOnHover
+          ? <ThumbHoverShown thumbRadius={thumbRadius}/>
+          : <Thumb thumbRadius={thumbRadius}/>
+        }
+      </ProgressBarFill>
+    </ProgressBarEmpty>
+  </StyledProgressBar>
 )
 
 
 export default ProgressBar
 
 ProgressBar.propTypes = {
+  active: PropTypes.bool,
   direction: PropTypes.string,
   filled: PropTypes.number,
   thumbRadius: PropTypes.number,

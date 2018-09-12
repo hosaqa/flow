@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import ProgressBar from '../ProgressBar'
+import { getMousePosition } from '../../utils'
 
 const TimeLineWrapper = styled.div`
   display: flex;
@@ -40,7 +41,6 @@ export default class Timeline extends Component {
     ]),
     seek: PropTypes.func
   }
-
 
   state = {
     trackDurationInSeconds: null,
@@ -97,12 +97,12 @@ export default class Timeline extends Component {
     const width = currentTrackPosition / trackDuration * 100
 
     return (
-      <ProgressBar thumbShowOnHover={true} thumbRadius={6} direction={'horizontal'} filled={(this.state.dummyLineProgress)? this.state.dummyLineProgress : width} />
+      <ProgressBar active={this.props.nowPlaying} thumbShowOnHover={true} thumbRadius={6} direction={'horizontal'} filled={(this.state.dummyLineProgress)? this.state.dummyLineProgress : width} />
     )
   }
 
   getTouchedPosition(ev, ref) {
-    const { left, width } = findDOMNode(ref.current).getBoundingClientRect()
+    const { left, width } = getMousePosition(ev, ref)
     return (ev.clientX - Math.round(left)) / width
   }
 

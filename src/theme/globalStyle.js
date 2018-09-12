@@ -21,4 +21,10 @@ injectGlobal`
   img {
     max-width: 100%;
   }
+
+  *,
+  *:after,
+  *:before, {
+    box-sizing: border-box;
+  }
 `

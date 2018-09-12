@@ -21,12 +21,15 @@ const VolumeSlider = styled.div`
   padding: 13px 0;
   opacity: 0;
   visibility: hidden;
-  transition: .2s opacity, .2s visibility;
+  transform: scale(0);
+  transform-origin: center bottom;
+  transition: .2s opacity, .2s visibility, .12s transform;
   transition-delay: .28s;
 
   ${Volume}:hover & {
     opacity: 1;
     visibility: visible;
+    transform: scale(1);
   }
 `
 

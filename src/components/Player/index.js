@@ -2,15 +2,51 @@ import ReactHowler from 'react-howler'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import raf from 'raf' // requestAnimationFrame polyfill
-import './Player.css'
+import styled from 'styled-components'
 
 import Timeline from '../Timeline'
 import VolumeBar from '../VolumeBar'
 import TrackInfo from '../TrackInfo'
 
 
-class Player extends Component {
+const PlayerWrapper = styled.div`
+  position: fixed;
+  background-color: #F2F2F2;
+  border-top: 1px solid #E6E6E6;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 15px 25px;
+`
 
+const PlayerInner = styled.div`
+  width: 1190px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+`
+
+const PlayerButton = styled.button`
+  -webkit-user-select: none;
+  -webkit-appearance: none;
+  padding: 0 8px;
+  border: 0;
+  outline: 0;
+  background-color: transparent;
+  color: #1F2023;
+  transition: color .15s, transform .15s;
+
+  &:active {
+    color: ${props => props.theme.colorAccent};
+  }
+`
+
+const PlayerTimeline = styled.div`
+  padding: 0 20px;
+`
+
+
+class Player extends Component {
   state = {
     nowPlaying: false,
     volume: 1,
@@ -55,20 +91,13 @@ class Player extends Component {
     })
   }
 
-  handleOnPlay () {
-    this.setState({
-      nowPlaying: true
-    })
-    this.renderSeekPos()
-  }
-
   handleOnEnd () {
     if (!this.props.playlist[this.state.currentTrack + 1]) {
       this.setState({
         nowPlaying: false,
         currentTrackPosition: null
       })
-
+      
       this.clearRAF()
     } else {
       this.handleChangeTrack(1)
@@ -86,8 +115,6 @@ class Player extends Component {
   }
 
   setVolume(value) {
-    //(this.state.muted)
-
     this.setState({
       muted: false,
       volume: (value < 0) ? 0 : value
@@ -106,52 +133,65 @@ class Player extends Component {
     const track = this.props.playlist[this.state.currentTrack]
     
     return (
-      <div className='player'>
-        <ReactHowler
-          src={track.src}
-          playing={this.state.nowPlaying}
-          volume={this.state.volume}
-          muted={this.state.muted}
-          ref={(ref) => (this.player = ref)}
-
-          onPlay={() => this.handleOnPlay()}
-          onEnd={() => this.handleOnEnd()}
-        />
-        <button onClick={() => this.handleChangeTrack(-1)}>
-          <i className="material-icons">
-            skip_previous
-          </i>        
-        </button>
-        <button onClick={() => this.handleToggle()}>
-          {!this.state.nowPlaying
-            ? <i className="material-icons">play_arrow</i>
-            : <i className="material-icons">pause</i>
-          }        
-        </button>
-        <button onClick={() => this.handleChangeTrack(1)}>
-          <i className="material-icons">
-            skip_next
-          </i>        
-        </button>
-        <Timeline
-          nowPlaying={this.state.nowPlaying}
-          trackDuration={track.duration}
-          currentTrackPosition={this.state.currentTrackPosition}  
-          seek={(rewindTo) => this.setSeek(rewindTo)}
-        />
-        <VolumeBar
-          volume = {this.state.volume}
-          muted = {this.state.muted}
-          muteToggle = {() => this.muteToggle()}
-          setVolume = {(value) => this.setVolume(value)}
-        />
-        <TrackInfo
-          track={track.track}
-          artist={track.artist}
-          album={track.album}
-          img={track.img}
-        />
-      </div> 
+      <PlayerWrapper>
+        <PlayerInner>
+          <ReactHowler
+            src={track.src}
+            playing={this.state.nowPlaying}
+            volume={this.state.volume}
+            muted={this.state.muted}
+            ref={(ref) => (this.player = ref)}
+            onPlay={() => this.renderSeekPos()}
+            onEnd={() => this.handleOnEnd()}
+          />
+          <PlayerButton onClick={() => this.handleChangeTrack(-1)}>
+            <i className="material-icons">
+              skip_previous
+            </i>        
+          </PlayerButton>
+          <PlayerButton onClick={() => this.handleToggle()}>
+            {!this.state.nowPlaying
+              ? <i className="material-icons">play_arrow</i>
+              : <i className="material-icons">pause</i>
+            }        
+          </PlayerButton>
+          <PlayerButton onClick={() => this.handleChangeTrack(1)}>
+            <i className="material-icons">
+              skip_next
+            </i>        
+          </PlayerButton>
+          <PlayerButton>
+            <i className="material-icons">
+              replay
+            </i>
+          </PlayerButton>
+          <PlayerButton>
+            <i className="material-icons">
+              shuffle
+            </i>
+          </PlayerButton>
+          <PlayerTimeline>
+            <Timeline
+              nowPlaying={this.state.nowPlaying}
+              trackDuration={track.duration}
+              currentTrackPosition={this.state.currentTrackPosition}  
+              seek={(rewindTo) => this.setSeek(rewindTo)}
+            />
+          </PlayerTimeline>
+          <VolumeBar
+            volume={this.state.volume}
+            muted={this.state.muted}
+            muteToggle={() => this.muteToggle()}
+            setVolume={(value) => this.setVolume(value)}
+          />
+          <TrackInfo
+            track={track.track}
+            artist={track.artist}
+            album={track.album}
+            img={track.img}
+          />
+        </PlayerInner>
+      </PlayerWrapper> 
     )
   }
 }
