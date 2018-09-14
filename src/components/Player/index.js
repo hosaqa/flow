@@ -4,9 +4,18 @@ import PropTypes from 'prop-types'
 import raf from 'raf' // requestAnimationFrame polyfill
 import styled from 'styled-components'
 
+import SkipPreviousIcon from '@material-ui/icons/SkipPrevious'
+import SkipNextIcon from '@material-ui/icons/SkipNext'
+import PlayArrowIcon from '@material-ui/icons/PlayArrow'
+import PauseIcon from '@material-ui/icons/Pause'
+import ReplayIcon from '@material-ui/icons/Replay'
+import ShuffleIcon from '@material-ui/icons/Shuffle'
+import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay'
+
 import Timeline from '../Timeline'
 import VolumeBar from '../VolumeBar'
 import TrackInfo from '../TrackInfo'
+import Playlist from './Playlist'
 
 
 const PlayerWrapper = styled.div`
@@ -33,7 +42,7 @@ const PlayerButton = styled.button`
   border: 0;
   outline: 0;
   background-color: transparent;
-  color: #1F2023;
+  color: ${props => props.active ? props.theme.colorAccent : '#1F2023'};
   transition: color .15s, transform .15s;
 
   &:active {
@@ -52,7 +61,9 @@ class Player extends Component {
     volume: 1,
     muted: false,
     currentTrack: 0,
-    currentTrackPosition: null
+    currentTrackPosition: null,
+    repeatTrack: false,
+    shufflePlaylist: false
   }
 
   componentWillUnmount () {
@@ -92,15 +103,17 @@ class Player extends Component {
   }
 
   handleOnEnd () {
-    if (!this.props.playlist[this.state.currentTrack + 1]) {
-      this.setState({
-        nowPlaying: false,
-        currentTrackPosition: null
-      })
-      
-      this.clearRAF()
-    } else {
-      this.handleChangeTrack(1)
+    if (!this.state.repeatTrack) {
+      if (!this.props.playlist[this.state.currentTrack + 1]) {
+        this.setState({
+          nowPlaying: false,
+          currentTrackPosition: null
+        })
+        
+        this.clearRAF()
+      } else {
+        this.handleChangeTrack(1)
+      }
     }
   }
 
@@ -129,6 +142,12 @@ class Player extends Component {
     }
   }
 
+  repeatToggle() {
+    this.setState({
+      repeatTrack: !this.state.repeatTrack
+    }) 
+  }
+
   render() {
     const track = this.props.playlist[this.state.currentTrack]
     
@@ -139,36 +158,31 @@ class Player extends Component {
             src={track.src}
             playing={this.state.nowPlaying}
             volume={this.state.volume}
-            muted={this.state.muted}
+            mute={this.state.muted}
             ref={(ref) => (this.player = ref)}
             onPlay={() => this.renderSeekPos()}
             onEnd={() => this.handleOnEnd()}
           />
-          <PlayerButton onClick={() => this.handleChangeTrack(-1)}>
-            <i className="material-icons">
-              skip_previous
-            </i>        
+          <PlayerButton onClick={() => this.handleChangeTrack(-1)}>       
+            <SkipPreviousIcon />
           </PlayerButton>
           <PlayerButton onClick={() => this.handleToggle()}>
             {!this.state.nowPlaying
-              ? <i className="material-icons">play_arrow</i>
-              : <i className="material-icons">pause</i>
+              ? <PlayArrowIcon /> 
+              : <PauseIcon /> 
             }        
           </PlayerButton>
           <PlayerButton onClick={() => this.handleChangeTrack(1)}>
-            <i className="material-icons">
-              skip_next
-            </i>        
+            <SkipNextIcon />
+          </PlayerButton>
+          <PlayerButton
+            onClick={() => this.repeatToggle()}
+            active={this.state.repeatTrack}
+          >
+            <ReplayIcon /> 
           </PlayerButton>
           <PlayerButton>
-            <i className="material-icons">
-              replay
-            </i>
-          </PlayerButton>
-          <PlayerButton>
-            <i className="material-icons">
-              shuffle
-            </i>
+            <ShuffleIcon /> 
           </PlayerButton>
           <PlayerTimeline>
             <Timeline
@@ -190,6 +204,10 @@ class Player extends Component {
             album={track.album}
             img={track.img}
           />
+          <PlayerButton>
+            <PlaylistPlayIcon />
+            <Playlist playlist={this.props.playlist} />
+          </PlayerButton>
         </PlayerInner>
       </PlayerWrapper> 
     )

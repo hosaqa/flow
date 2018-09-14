@@ -2,12 +2,23 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
+import VolumeUpIcon from '@material-ui/icons/VolumeUp'
+import VolumeOffIcon from '@material-ui/icons/VolumeOff'
+
 import ProgressBar from '../ProgressBar'
 import { getMousePosition } from '../../utils'
 
 const Volume = styled.div`
   padding: 0 7px;
   position: relative;
+`
+
+const VolumeToggle = styled.button`
+  -webkit-user-select: none;
+  -webkit-appearance: none;
+  border: 0;
+  outline: 0;
+  background-color: transparent;
 `
 
 const VolumeSlider = styled.div`
@@ -94,12 +105,12 @@ class VolumeBar extends Component {
 
     return (
       <Volume onWheel={(ev) => this.handleOnWheel(ev)}>
-        <button onClick={() => muteToggle()}>
+        <VolumeToggle onClick={() => muteToggle()}>
           {!muted && volume !== 0
-            ? <i className="material-icons">volume_up</i>
-            : <i className="material-icons">volume_off</i>
+            ? <VolumeUpIcon /> 
+            : <VolumeOffIcon />
           }
-        </button>
+        </VolumeToggle>
         <VolumeSlider
           ref={volumeBarRef}
           onClick={(ev) => this.handleOnClick(ev, volumeBarRef)}
