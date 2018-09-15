@@ -14,6 +14,7 @@ const TimeLineWrapper = styled.div`
 const TimerDisplay = styled.div`
   display: inline-block;
   width: 30px;
+  user-select: none;
 `
 
 const ProgressBarWrapper = styled.div`

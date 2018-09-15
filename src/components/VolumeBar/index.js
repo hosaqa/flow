@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import VolumeUpIcon from '@material-ui/icons/VolumeUp'
+import VolumeDownIcon from '@material-ui/icons/VolumeDown'
 import VolumeOffIcon from '@material-ui/icons/VolumeOff'
 
 import ProgressBar from '../ProgressBar'
@@ -106,8 +107,9 @@ class VolumeBar extends Component {
     return (
       <Volume onWheel={(ev) => this.handleOnWheel(ev)}>
         <VolumeToggle onClick={() => muteToggle()}>
-          {!muted && volume !== 0
-            ? <VolumeUpIcon /> 
+          {
+            !muted && volume > 0.4 ? <VolumeUpIcon />
+            : !muted && volume !== 0 ? <VolumeDownIcon />
             : <VolumeOffIcon />
           }
         </VolumeToggle>

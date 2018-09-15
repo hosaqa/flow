@@ -6,11 +6,14 @@ import styled from 'styled-components'
 
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious'
 import SkipNextIcon from '@material-ui/icons/SkipNext'
-import PlayArrowIcon from '@material-ui/icons/PlayArrow'
-import PauseIcon from '@material-ui/icons/Pause'
-import ReplayIcon from '@material-ui/icons/Replay'
+import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline'
+import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline'
+import RepeatIcon from '@material-ui/icons/Repeat'
 import ShuffleIcon from '@material-ui/icons/Shuffle'
+
+import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd'
 import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay'
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 
 import Timeline from '../Timeline'
 import VolumeBar from '../VolumeBar'
@@ -38,20 +41,40 @@ const PlayerInner = styled.div`
 const PlayerButton = styled.button`
   -webkit-user-select: none;
   -webkit-appearance: none;
-  padding: 0 8px;
+  padding: 0 6px;
   border: 0;
   outline: 0;
   background-color: transparent;
-  color: ${props => props.active ? props.theme.colorAccent : '#1F2023'};
+  color: ${props => props.active ? props.theme.colorAccent : props.theme.colorButtons};
   transition: color .15s, transform .15s;
 
+  & > svg {
+    font-size: ${props => props.iconSize ? props.iconSize : '24px'};
+  }
+
   &:active {
-    color: ${props => props.theme.colorAccent};
+    & > svg {
+      color: ${props => props.theme.colorAccent};
+    }
   }
 `
 
-const PlayerTimeline = styled.div`
-  padding: 0 20px;
+const PlayButtonsGroup = styled.div`
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  width: 25%;
+  max-width: 25%;
+  flex-basis: 25%;
+`
+
+const PlaylistElementsGroup = styled.div`
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  width: 25%;
+  max-width: 25%;
+  flex-basis: 25%;
 `
 
 
@@ -130,7 +153,7 @@ class Player extends Component {
   setVolume(value) {
     this.setState({
       muted: false,
-      volume: (value < 0) ? 0 : value
+      volume: value < 0 ? 0 : value > 1 ? 1  : value
     })
   }
 
@@ -154,6 +177,7 @@ class Player extends Component {
     return (
       <PlayerWrapper>
         <PlayerInner>
+          {/* PLAYER CORE REACT HOWLER */}
           <ReactHowler
             src={track.src}
             playing={this.state.nowPlaying}
@@ -163,51 +187,79 @@ class Player extends Component {
             onPlay={() => this.renderSeekPos()}
             onEnd={() => this.handleOnEnd()}
           />
-          <PlayerButton onClick={() => this.handleChangeTrack(-1)}>       
-            <SkipPreviousIcon />
-          </PlayerButton>
-          <PlayerButton onClick={() => this.handleToggle()}>
-            {!this.state.nowPlaying
-              ? <PlayArrowIcon /> 
-              : <PauseIcon /> 
-            }        
-          </PlayerButton>
-          <PlayerButton onClick={() => this.handleChangeTrack(1)}>
-            <SkipNextIcon />
-          </PlayerButton>
-          <PlayerButton
-            onClick={() => this.repeatToggle()}
-            active={this.state.repeatTrack}
-          >
-            <ReplayIcon /> 
-          </PlayerButton>
-          <PlayerButton>
-            <ShuffleIcon /> 
-          </PlayerButton>
-          <PlayerTimeline>
-            <Timeline
-              nowPlaying={this.state.nowPlaying}
-              trackDuration={track.duration}
-              currentTrackPosition={this.state.currentTrackPosition}  
-              seek={(rewindTo) => this.setSeek(rewindTo)}
-            />
-          </PlayerTimeline>
+          {/* /PLAYER CORE REACT HOWLER */}
+
+          {/* PLAY BUTTONS GROUP */}
+          <PlayButtonsGroup>
+            <PlayerButton
+              onClick={() => this.handleChangeTrack(-1)}
+              iconSize={'28px'}
+            >
+              <SkipPreviousIcon />
+            </PlayerButton>
+            <PlayerButton
+              onClick={() => this.handleToggle()}
+              iconSize={'32px'}  
+            >
+              {!this.state.nowPlaying
+                ? <PlayCircleOutlineIcon /> 
+                : <PauseCircleOutlineIcon /> 
+              }        
+            </PlayerButton>
+            <PlayerButton
+              onClick={() => this.handleChangeTrack(1)}
+              iconSize={'28px'}
+              style={{marginRight: '25px'}}
+            >
+              <SkipNextIcon />
+            </PlayerButton>
+            <PlayerButton
+              onClick={() => this.repeatToggle()}
+              active={this.state.repeatTrack}
+            >
+              <RepeatIcon /> 
+            </PlayerButton>
+            <PlayerButton>
+              <ShuffleIcon /> 
+            </PlayerButton>
+          </PlayButtonsGroup>
+          {/* /PLAY BUTTONS GROUP */}
+
+
+          <Timeline
+            nowPlaying={this.state.nowPlaying}
+            trackDuration={track.duration}
+            currentTrackPosition={this.state.currentTrackPosition}  
+            seek={(rewindTo) => this.setSeek(rewindTo)}
+          />
           <VolumeBar
             volume={this.state.volume}
             muted={this.state.muted}
             muteToggle={() => this.muteToggle()}
             setVolume={(value) => this.setVolume(value)}
           />
-          <TrackInfo
-            track={track.track}
-            artist={track.artist}
-            album={track.album}
-            img={track.img}
-          />
-          <PlayerButton>
-            <PlaylistPlayIcon />
-            <Playlist playlist={this.props.playlist} />
-          </PlayerButton>
+
+          {/* PLAYLIST ELEMENTS GROUP */}
+          <PlaylistElementsGroup>
+            <TrackInfo
+              track={track.track}
+              artist={track.artist}
+              album={track.album}
+              img={track.img}
+            />
+            <PlayerButton style={{marginLeft: 'auto'}}>
+              <FavoriteBorderIcon />
+            </PlayerButton>
+            <PlayerButton iconSize={'28px'}>
+              <PlaylistAddIcon />
+            </PlayerButton>
+            <PlayerButton iconSize={'28px'}>
+              <PlaylistPlayIcon />
+              <Playlist playlist={this.props.playlist} />
+            </PlayerButton>
+          </PlaylistElementsGroup>
+          {/* /PLAYLIST ELEMENTS GROUP */}
+
         </PlayerInner>
       </PlayerWrapper> 
     )

@@ -19,10 +19,8 @@ export default class Playlist extends Component {
   }
 
   render() {
-    console.log(this.props)
     const test = (playlist) => {
-      console.log(playlist)
-      return playlist.map((item, key) => <div>{item.track}</div>)
+      return playlist.map((item, key) => <div key={key}>{item.track}</div>)
     } 
 
     return (

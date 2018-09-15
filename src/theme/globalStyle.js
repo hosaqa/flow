@@ -2,6 +2,7 @@ import { injectGlobal } from 'styled-components'
 import styledNormalize from 'styled-normalize'
 
 export const lightTheme = {
+  colorButtons: '#1f2023',
   colorAccentBg: '#efefef',
   colorAccent: '#ff7070',
   colorDraggableBg: 'rgba(255, 112, 112, 0.50)',
@@ -24,7 +25,7 @@ injectGlobal`
 
   *,
   *:after,
-  *:before, {
+  *:before {
     box-sizing: border-box;
   }
 `

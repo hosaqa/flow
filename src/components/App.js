@@ -4,7 +4,6 @@ import { ThemeProvider } from 'styled-components'
 import Player from './Player'
 
 import { lightTheme } from '../theme/globalStyle'
-import './App.css'
 
 
 class App extends Component {
