@@ -4,11 +4,13 @@ import styled from 'styled-components'
 const StyledTrackInfo = styled.div`
   display: flex;
   align-items: center;
+  max-width: 180px;
 `
 const ImgWrapper = styled.div`
   width: 37px;
+  min-width: 37px;
   height: 37px;
-  box-shadow: 1px 1px 1px rgba(0, 0, 0, .32);
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, .18);
 `
 
 const ImgDefault = styled.div`
@@ -18,19 +20,19 @@ const ImgDefault = styled.div`
   text-align: center;
   font-size: 39px;
   font-weight: 700;
-  background-color: ${props => props.theme.colorAccent };
-  color: #fff;
+  background-image: linear-gradient(154deg, ${props => props.theme.colorGradientStart}, ${props => props.theme.colorGradientEnd});
   text-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
 `
 
 const Text = styled.div`
-  padding: 0 0 0 15px;
-  margin: 0 22px 0 0;
+  padding: 0 0 0 10px;
+  margin: 0 15px 0 0;
 `
 
 const Track = styled.div`
-  font-size: 16px;
-  line-height: 24px;
+  color: ${props => props.theme.colorFontPrimary};
+  font-size: 14px;
+  line-height: 22px;
   font-weight: 700;
   max-width: 130px;
   white-space: nowrap;
@@ -39,9 +41,9 @@ const Track = styled.div`
 `
 
 const Artist = styled.div`
-  font-size: 14px;
+  font-size: 12px;
   line-height: 18px;
-  color: #333;
+  color: ${props => props.theme.colorFontSecondary};
   max-width: 130px;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -59,7 +61,7 @@ export default function TrackInfo(props) {
               src={img || 'img/null.png'}
               alt={`${artist} - ${track}`}
             />
-          : <ImgDefault>?</ImgDefault>  
+          : <ImgDefault /> 
         }
       </ImgWrapper>
       <Text>

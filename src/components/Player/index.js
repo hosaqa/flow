@@ -250,10 +250,10 @@ class Player extends Component {
             <PlayerButton style={{marginLeft: 'auto'}}>
               <FavoriteBorderIcon />
             </PlayerButton>
-            <PlayerButton iconSize={'28px'}>
+            <PlayerButton >
               <PlaylistAddIcon />
             </PlayerButton>
-            <PlayerButton iconSize={'28px'}>
+            <PlayerButton >
               <PlaylistPlayIcon />
               <Playlist playlist={this.props.playlist} />
             </PlayerButton>

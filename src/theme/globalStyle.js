@@ -2,6 +2,8 @@ import { injectGlobal } from 'styled-components'
 import styledNormalize from 'styled-normalize'
 
 export const lightTheme = {
+  colorFontPrimary: '#1f2023',
+  colorFontSecondary: '#212121',
   colorButtons: '#1f2023',
   colorAccentBg: '#efefef',
   colorAccent: '#ff7070',
