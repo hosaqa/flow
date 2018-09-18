@@ -18,7 +18,7 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 import Timeline from '../Timeline'
 import VolumeBar from '../VolumeBar'
 import TrackInfo from '../TrackInfo'
-import Playlist from './Playlist'
+import Playlist from '../Playlist'
 
 
 const PlayerWrapper = styled.div`
@@ -255,7 +255,11 @@ class Player extends Component {
             </PlayerButton>
             <PlayerButton >
               <PlaylistPlayIcon />
-              <Playlist playlist={this.props.playlist} />
+              <Playlist
+                playlist={this.props.playlist}
+                currentTrackID={this.props.playlist[this.state.currentTrack].id}
+                play={() => console.log(111)}
+              />
             </PlayerButton>
           </PlaylistElementsGroup>
           {/* /PLAYLIST ELEMENTS GROUP */}
