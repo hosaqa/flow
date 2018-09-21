@@ -4,8 +4,6 @@ import styled from 'styled-components'
 import PlayListItem from './PlayListItem'
 
 const Playlist = ({playlist, currentTrackID, play}) => {
-  console.log(playlist)
-  //const 
   return playlist.map(item => (
     <PlayListItem track={item} key={item.id}>{item.track}</PlayListItem>
   ))

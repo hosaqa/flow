@@ -242,7 +242,7 @@ class Player extends Component {
           {/* PLAYLIST ELEMENTS GROUP */}
           <PlaylistElementsGroup>
             <TrackInfo
-              track={track.track}
+              track={track.name}
               artist={track.artist}
               album={track.album}
               img={track.img}
