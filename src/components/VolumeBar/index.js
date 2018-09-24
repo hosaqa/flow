@@ -27,9 +27,9 @@ const VolumeSlider = styled.div`
   bottom: calc(100% + 15px);
   height: 125px;
   width: 30px;
-  border-radius: 3px;
-  background-color: ${props => props.theme.colorAccentBg};
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, .25);
+  border-radius: ${props => props.theme.borderRadiusMain};
+  background-color: ${props => props.theme.colorMainBg};
+  box-shadow: ${props => props.theme.shadowMain};
   padding: 13px 0;
   opacity: 0;
   visibility: hidden;
@@ -51,11 +51,20 @@ class VolumeBar extends Component {
     mouseButtonPressed: false
   }
 
+  setVolume = value => {
+    const { setVolume } = this.props
+
+    value = value < 0 ? 0 : value > 1 ? 1  : value
+    setVolume(value)
+  }
+
   setVolumeFromPosition(ev, ref) {
     const { setVolume } = this.props
     const { topPosition } = getMousePosition(ev, ref)
 
-    setVolume(1 - parseFloat(topPosition.toFixed(2)))
+    let volumeValue = 1 - parseFloat(topPosition.toFixed(2))
+
+    this.setVolume(1 - parseFloat(topPosition.toFixed(2)))
   }
 
   handleOnWheel(ev) {
@@ -68,9 +77,9 @@ class VolumeBar extends Component {
     volumeDelta = parseFloat(volumeDelta.toFixed(2))
 
     if (ev.deltaY < 0) {
-      if (volume < 1) setVolume(parseFloat((volume + volumeDelta).toFixed(2)))
+      if (volume < 1) this.setVolume(parseFloat((volume + volumeDelta).toFixed(2)))
     } else {
-      if (volume > 0) setVolume(parseFloat((volume - volumeDelta).toFixed(2)))
+      if (volume > 0) this.setVolume(parseFloat((volume - volumeDelta).toFixed(2)))
     }
   }
 

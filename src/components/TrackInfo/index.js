@@ -50,24 +50,20 @@ const Artist = styled.div`
   overflow: hidden;
 `
 
-export default function TrackInfo(props) {
-  const { track, artist, album, img } = props
-
-  return (
-    <StyledTrackInfo>
-      <ImgWrapper>
-        { img
-          ? <img
-              src={img || 'img/null.png'}
-              alt={`${artist} - ${track}`}
-            />
-          : <ImgDefault /> 
-        }
-      </ImgWrapper>
-      <Text>
-        <Track>{track}</Track>
-        <Artist>{artist}</Artist>
-      </Text>
-    </StyledTrackInfo>
-  )
-}
+export default ({ track, artist, album, img }) => (
+  <StyledTrackInfo>
+    <ImgWrapper>
+      { img
+        ? <img
+            src={img}
+            alt={`${artist} - ${track}`}
+          />
+        : <ImgDefault /> 
+      }
+    </ImgWrapper>
+    <Text>
+      <Track>{track}</Track>
+      <Artist>{artist}</Artist>
+    </Text>
+  </StyledTrackInfo>
+)
