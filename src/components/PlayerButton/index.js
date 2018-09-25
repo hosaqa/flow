@@ -1,5 +1,6 @@
 import React from 'react'
-import styled from 'styled-components'
+import PropTypes from 'prop-types'
+import styled, {css} from 'styled-components'
 
 const StyledPlayerButton = styled.button`
   -webkit-user-select: none;
@@ -9,18 +10,35 @@ const StyledPlayerButton = styled.button`
   border: 0;
   outline: 0;
   background-color: transparent;
-  color: ${props => props.active ? props.theme.colorAccent : props.theme.colorButtons};
+  color: ${({active, theme}) => active ? theme.colorAccent : theme.colorButtons};
   transition: color .15s, transform .15s;
 
   & > svg {
-    font-size: ${props => props.iconSize ? props.iconSize : '24px'};
+    font-size: ${({iconSize}) => iconSize ? `${iconSize}px` : '24px'};
   }
 
-  &:active {
-    & > svg {
-      color: ${props => props.theme.colorAccent};
+  ${({pseudoSelActive}) => pseudoSelActive && css`
+    &:active {
+      & > svg {
+        color: ${({theme}) => theme.colorAccent};
+      }
     }
-  }
+  `}
 `
 
-export default ({children}) => <StyledPlayerButton>{children}</StyledPlayerButton>
+const PlayerButton = ({children, active, pseudoSelActive, iconSize, onClick}) => (
+  <StyledPlayerButton
+    onClick={onClick}
+    iconSize={iconSize}
+    active={active}
+    pseudoSelActive={pseudoSelActive}
+  >
+    {children}
+  </StyledPlayerButton>
+)
+
+PlayerButton.propTypes = {
+  iconSize: PropTypes.number
+}
+
+export default PlayerButton

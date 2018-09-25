@@ -10,10 +10,6 @@ const StyledHeader = styled.header`
   background-image: linear-gradient(154deg, ${props => props.theme.colorGradientStart}, ${props => props.theme.colorGradientEnd});
 `
 
-const Header = () => {
-  return (
-    <StyledHeader/>
-  )
-}
+const Header = () => <StyledHeader/>
 
 export default Header

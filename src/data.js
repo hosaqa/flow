@@ -2,7 +2,7 @@ const data = [
   {
     id: 0,
     artist: 'Lil Uzi Vert',
-    name: 'XO Tour',
+    trackname: 'XO Tour',
     album: 'Lil Lol',
     src: 'lil_uzi-xo_tour.mp3',
     img: 'img/lil-uzi.jpg',
@@ -14,7 +14,7 @@ const data = [
   {
     id: 1,
     artist: 'Lil Pump',
-    name: 'Molly',
+    trackname: 'Molly',
     album: 'Rich',
     img: 'img/lil-pump.jpg',
     src: 'lil_pump-molly.mp3',
@@ -26,7 +26,7 @@ const data = [
   {
     id: 2,
     artist: 'Гнойный & Смешарик',
-    name: 'Клетчатая сумка',
+    trackname: 'Клетчатая сумка',
     src: '2.mp3',
     duration: {
       minutes: 1,
@@ -36,7 +36,7 @@ const data = [
   {
     id: 3,
     artist: 'MGMT',
-    name: 'When you die',
+    trackname: 'When you die',
     src: '1.mp3',
     duration: {
       minutes: 4,

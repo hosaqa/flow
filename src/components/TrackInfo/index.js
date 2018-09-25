@@ -1,5 +1,8 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+
 import styled from 'styled-components'
+
 
 const StyledTrackInfo = styled.div`
   display: flex;
@@ -50,20 +53,32 @@ const Artist = styled.div`
   overflow: hidden;
 `
 
-export default ({ track, artist, album, img }) => (
+const TrackInfo = ({ withoutImage, trackname, artist, album, img }) => (
   <StyledTrackInfo>
-    <ImgWrapper>
-      { img
-        ? <img
-            src={img}
-            alt={`${artist} - ${track}`}
-          />
-        : <ImgDefault /> 
-      }
-    </ImgWrapper>
+    {
+      withoutImage ||
+      <ImgWrapper>
+        { img
+          ? <img
+              src={img}
+              alt={`${artist} - ${trackname}`}
+            />
+          : <ImgDefault /> 
+        }
+      </ImgWrapper>
+    }
     <Text>
-      <Track>{track}</Track>
+      <Track>{trackname}</Track>
       <Artist>{artist}</Artist>
     </Text>
   </StyledTrackInfo>
 )
+
+TrackInfo.propTypes = {
+  trackname: PropTypes.string,
+  artist: PropTypes.string,
+  album: PropTypes.string,
+  img: PropTypes.string
+}
+
+export default TrackInfo

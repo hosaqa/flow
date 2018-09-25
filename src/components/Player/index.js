@@ -15,6 +15,8 @@ import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd'
 import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 
+import PlayerButton from '../PlayerButton'
+
 import Timeline from '../Timeline'
 import VolumeBar from '../VolumeBar'
 import TrackInfo from '../TrackInfo'
@@ -36,28 +38,6 @@ const PlayerInner = styled.div`
   margin: auto;
   display: flex;
   align-items: center;
-`
-
-const PlayerButton = styled.button`
-  -webkit-user-select: none;
-  -webkit-appearance: none;
-  position: relative;
-  padding: 0 6px;
-  border: 0;
-  outline: 0;
-  background-color: transparent;
-  color: ${props => props.active ? props.theme.colorAccent : props.theme.colorButtons};
-  transition: color .15s, transform .15s;
-
-  & > svg {
-    font-size: ${props => props.iconSize ? props.iconSize : '24px'};
-  }
-
-  &:active {
-    & > svg {
-      color: ${props => props.theme.colorAccent};
-    }
-  }
 `
 
 const PlayButtonsGroup = styled.div`
@@ -94,18 +74,18 @@ class Player extends Component {
     this.clearRAF()
   }
 
-  handlePlay() {
-    this.setState({
-      nowPlaying: !this.state.nowPlaying
-    })
-    this.renderSeekPos()
-  }
+  // handlePlay() {
+  //   this.setState({
+  //     nowPlaying: !this.state.nowPlaying
+  //   })
+  //   this.renderSeekPos()
+  // }
 
-  handleChangeTrack = (id) => {
+  handleChangeTrack = (id, nowPlay) => {
     this.props.playlist.forEach((track, index) => {
       if (track.id === id) this.setState({
         currentTrack: index,
-        nowPlaying: this.state.nowPlaying,
+        nowPlaying: nowPlay ? nowPlay : this.state.nowPlaying,
         currentTrackPosition: null
       })
     })
@@ -198,13 +178,15 @@ class Player extends Component {
                   this.handleChangeTrack(this.props.playlist[this.state.currentTrack - 1].id)
                 }
               }}
-              iconSize={'28px'}
+              iconSize={28}
+              pseudoSelActive
             >
               <SkipPreviousIcon />
             </PlayerButton>
             <PlayerButton
               onClick={() => this.handleToggle()}
-              iconSize={'32px'}  
+              iconSize={32}
+              pseudoSelActive
             >
               {!this.state.nowPlaying
                 ? <PlayCircleOutlineIcon /> 
@@ -212,25 +194,27 @@ class Player extends Component {
               }        
             </PlayerButton>
             <PlayerButton
-              onClick={() => {
-                if (this.props.playlist[this.state.currentTrack + 1]) {
-                  this.handleChangeTrack(this.props.playlist[this.state.currentTrack + 1].id)
-                }
-              }}
-              iconSize={'28px'}
-              style={{marginRight: '25px'}}
-            >
-              <SkipNextIcon />
-            </PlayerButton>
-            <PlayerButton
-              onClick={() => this.repeatToggle()}
-              active={this.state.repeatTrack}
-            >
-              <RepeatIcon /> 
-            </PlayerButton>
-            <PlayerButton>
-              <ShuffleIcon /> 
-            </PlayerButton>
+                onClick={() => {
+                  if (this.props.playlist[this.state.currentTrack + 1]) {
+                    this.handleChangeTrack(this.props.playlist[this.state.currentTrack + 1].id)
+                  }
+                }}
+                iconSize={28}
+                pseudoSelActive
+              >
+                <SkipNextIcon />
+              </PlayerButton>
+            <div style={{marginLeft: '25px'}}>
+              <PlayerButton
+                onClick={() => this.repeatToggle()}
+                active={this.state.repeatTrack}
+              >
+                <RepeatIcon /> 
+              </PlayerButton>
+              <PlayerButton>
+                <ShuffleIcon /> 
+              </PlayerButton>
+            </div>
           </PlayButtonsGroup>
           {/* /PLAY BUTTONS GROUP */}
 
@@ -250,26 +234,24 @@ class Player extends Component {
 
           {/* PLAYLIST ELEMENTS GROUP */}
           <PlaylistElementsGroup>
-            <TrackInfo
-              track={track.name}
-              artist={track.artist}
-              album={track.album}
-              img={track.img}
-            />
-            <PlayerButton style={{marginLeft: 'auto'}}>
-              <FavoriteBorderIcon />
-            </PlayerButton>
-            <PlayerButton >
-              <PlaylistAddIcon />
-            </PlayerButton>
-            <PlayerButton >
-              <PlaylistPlayIcon />
-              <Playlist
-                playlist={this.props.playlist}
-                currentTrackID={this.props.playlist[this.state.currentTrack].id}
-                play={this.handleChangeTrack}
-              />
-            </PlayerButton>
+            <TrackInfo {...track}/>
+            <div style={{marginLeft: 'auto'}}>
+              <PlayerButton>
+                <FavoriteBorderIcon />
+              </PlayerButton>
+              <PlayerButton >
+                <PlaylistAddIcon />
+              </PlayerButton>
+              <PlayerButton >
+                <PlaylistPlayIcon />
+                <Playlist
+                  playlist={this.props.playlist}
+                  currentTrackID={this.props.playlist[this.state.currentTrack].id}
+                  play={this.handleChangeTrack}
+                  nowPlaying={this.state.nowPlaying}
+                />
+              </PlayerButton>
+            </div>
           </PlaylistElementsGroup>
           {/* /PLAYLIST ELEMENTS GROUP */}
 
