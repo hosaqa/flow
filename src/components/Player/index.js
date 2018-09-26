@@ -61,6 +61,7 @@ const PlaylistElementsGroup = styled.div`
 
 class Player extends Component {
   state = {
+    playlist: this.props.playlist,
     nowPlaying: false,
     volume: 1,
     muted: false,
@@ -74,15 +75,12 @@ class Player extends Component {
     this.clearRAF()
   }
 
-  // handlePlay() {
-  //   this.setState({
-  //     nowPlaying: !this.state.nowPlaying
-  //   })
-  //   this.renderSeekPos()
-  // }
+  setCurrentTrack = (id ) => {
+
+  }
 
   handleChangeTrack = (id, nowPlay) => {
-    this.props.playlist.forEach((track, index) => {
+    this.state.playlist.forEach((track, index) => {
       if (track.id === id) this.setState({
         currentTrack: index,
         nowPlaying: nowPlay ? nowPlay : this.state.nowPlaying,
@@ -108,7 +106,7 @@ class Player extends Component {
 
   handleOnEnd () {
     if (!this.state.repeatTrack) {
-      if (!this.props.playlist[this.state.currentTrack + 1]) {
+      if (!this.state.playlist[this.state.currentTrack + 1]) {
         this.setState({
           nowPlaying: false,
           currentTrackPosition: null
@@ -116,7 +114,7 @@ class Player extends Component {
         
         this.clearRAF()
       } else {
-        this.handleChangeTrack(this.props.playlist[this.state.currentTrack + 1].id)
+        this.handleChangeTrack(this.state.playlist[this.state.currentTrack + 1].id)
       }
     }
   }
@@ -131,6 +129,11 @@ class Player extends Component {
     })
   }
 
+  getCurrentTrackIndex(){
+
+  }
+
+  // ok
   setVolume(value) {
     this.setState({
       muted: false,
@@ -153,7 +156,8 @@ class Player extends Component {
   }
 
   render() {
-    const track = this.props.playlist[this.state.currentTrack]
+    console.log(1)
+    const track = this.state.playlist[this.state.currentTrack]
 
     return (
       <PlayerWrapper>
@@ -174,12 +178,15 @@ class Player extends Component {
           <PlayButtonsGroup>
             <PlayerButton
               onClick={() => {
-                if (this.props.playlist[this.state.currentTrack - 1]) {
-                  this.handleChangeTrack(this.props.playlist[this.state.currentTrack - 1].id)
+                if (this.state.playlist[this.state.currentTrack - 1]) {
+                  this.handleChangeTrack(this.state.playlist[this.state.currentTrack - 1].id)
                 }
               }}
               iconSize={28}
               pseudoSelActive
+              disabled={
+                this.state.playlist[this.state.currentTrack - 1] ? false : true
+              }
             >
               <SkipPreviousIcon />
             </PlayerButton>
@@ -195,12 +202,15 @@ class Player extends Component {
             </PlayerButton>
             <PlayerButton
                 onClick={() => {
-                  if (this.props.playlist[this.state.currentTrack + 1]) {
-                    this.handleChangeTrack(this.props.playlist[this.state.currentTrack + 1].id)
+                  if (this.state.playlist[this.state.currentTrack + 1]) {
+                    this.handleChangeTrack(this.state.playlist[this.state.currentTrack + 1].id)
                   }
                 }}
                 iconSize={28}
                 pseudoSelActive
+                disabled={
+                  this.state.playlist[this.state.currentTrack + 1] ? false : true
+                }
               >
                 <SkipNextIcon />
               </PlayerButton>
@@ -245,8 +255,8 @@ class Player extends Component {
               <PlayerButton >
                 <PlaylistPlayIcon />
                 <Playlist
-                  playlist={this.props.playlist}
-                  currentTrackID={this.props.playlist[this.state.currentTrack].id}
+                  playlist={this.state.playlist}
+                  currentTrackID={this.state.playlist[this.state.currentTrack].id}
                   play={this.handleChangeTrack}
                   nowPlaying={this.state.nowPlaying}
                 />

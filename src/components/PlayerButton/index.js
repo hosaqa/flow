@@ -5,12 +5,15 @@ import styled, {css} from 'styled-components'
 const StyledPlayerButton = styled.button`
   -webkit-user-select: none;
   -webkit-appearance: none;
+  cursor: ${({disabled}) => disabled ? 'default' : 'pointer'};
   position: relative;
   padding: 0 6px;
   border: 0;
   outline: 0;
   background-color: transparent;
-  color: ${({active, theme}) => active ? theme.colorAccent : theme.colorButtons};
+  color: ${({active, disabled, theme}) => (
+    disabled ? theme.colorButton : active ? theme.colorAccent : theme.colorButton
+  )};
   transition: color .15s, transform .15s;
 
   & > svg {
@@ -23,7 +26,7 @@ const StyledPlayerButton = styled.button`
     }
 `} 
 
-  ${({pseudoSelActive}) => pseudoSelActive && css`
+  ${({pseudoSelActive, disabled}) => pseudoSelActive && !disabled && css`
     &:active {
       & > svg {
         color: ${({theme}) => theme.colorAccent};
