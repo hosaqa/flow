@@ -17,6 +17,12 @@ const StyledPlayerButton = styled.button`
     font-size: ${({iconSize}) => iconSize ? `${iconSize}px` : '24px'};
   }
 
+  ${({disabled}) => !disabled && css`
+    &:hover {
+      color: ${({theme}) => theme.colorAccent};
+    }
+`} 
+
   ${({pseudoSelActive}) => pseudoSelActive && css`
     &:active {
       & > svg {
@@ -26,12 +32,13 @@ const StyledPlayerButton = styled.button`
   `}
 `
 
-const PlayerButton = ({children, active, pseudoSelActive, iconSize, onClick}) => (
+const PlayerButton = ({children, active, disabled, pseudoSelActive, iconSize, onClick}) => (
   <StyledPlayerButton
     onClick={onClick}
     iconSize={iconSize}
     active={active}
     pseudoSelActive={pseudoSelActive}
+    disabled={disabled}
   >
     {children}
   </StyledPlayerButton>

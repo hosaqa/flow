@@ -13,7 +13,7 @@ class App extends Component {
     return (
       <ThemeProvider theme={lightTheme}>
         <div>
-        <Header />
+        {/* <Header /> */}
         <Player playlist={this.props.data} />
         </div>
 
