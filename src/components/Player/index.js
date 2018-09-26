@@ -65,10 +65,22 @@ class Player extends Component {
     nowPlaying: false,
     volume: 1,
     muted: false,
-    currentTrack: 0,
+    currentTrack: this.props.playlist[0].id,
     currentTrackPosition: null,
     repeatTrack: false,
     shufflePlaylist: false
+  }
+
+  componentWillMount() {
+    let mapPlaylist = []
+
+    this.state.playlist.forEach((item, index) => {
+      mapPlaylist.push([item.id, {...item, index: index}])
+    })
+
+    mapPlaylist = new Map(mapPlaylist)
+    this.setState({playlist: mapPlaylist})
+    //console.log(mapPlaylist)
   }
 
   componentWillUnmount () {
@@ -80,12 +92,10 @@ class Player extends Component {
   }
 
   handleChangeTrack = (id, nowPlay) => {
-    this.state.playlist.forEach((track, index) => {
-      if (track.id === id) this.setState({
-        currentTrack: index,
-        nowPlaying: nowPlay ? nowPlay : this.state.nowPlaying,
-        currentTrackPosition: null
-      })
+    this.setState({
+      currentTrack: id,
+      nowPlaying: nowPlay ? nowPlay : this.state.nowPlaying,
+      currentTrackPosition: null
     })
   }
 
@@ -156,15 +166,14 @@ class Player extends Component {
   }
 
   render() {
-    console.log(1)
-    const track = this.state.playlist[this.state.currentTrack]
-
+    const currentTrack = this.state.playlist.get(this.state.currentTrack)
+    
     return (
       <PlayerWrapper>
         <PlayerInner>
           {/* PLAYER CORE REACT HOWLER */}
           <ReactHowler
-            src={track.src}
+            src={currentTrack.src}
             playing={this.state.nowPlaying}
             volume={this.state.volume}
             mute={this.state.muted}
@@ -174,9 +183,8 @@ class Player extends Component {
           />
           {/* /PLAYER CORE REACT HOWLER */}
 
-          {/* PLAY BUTTONS GROUP */}
           <PlayButtonsGroup>
-            <PlayerButton
+            {/* <PlayerButton
               onClick={() => {
                 if (this.state.playlist[this.state.currentTrack - 1]) {
                   this.handleChangeTrack(this.state.playlist[this.state.currentTrack - 1].id)
@@ -189,7 +197,7 @@ class Player extends Component {
               }
             >
               <SkipPreviousIcon />
-            </PlayerButton>
+            </PlayerButton> */}
             <PlayerButton
               onClick={() => this.handleToggle()}
               iconSize={32}
@@ -201,19 +209,19 @@ class Player extends Component {
               }        
             </PlayerButton>
             <PlayerButton
-                onClick={() => {
-                  if (this.state.playlist[this.state.currentTrack + 1]) {
-                    this.handleChangeTrack(this.state.playlist[this.state.currentTrack + 1].id)
-                  }
-                }}
-                iconSize={28}
-                pseudoSelActive
-                disabled={
-                  this.state.playlist[this.state.currentTrack + 1] ? false : true
+              onClick={() => {
+                if (this.state.playlist.get(this.state.currentTrack) !== this.state.playlist.size) {
+                  this.handleChangeTrack(this.state.playlist[this.state.currentTrack + 1].id)
                 }
-              >
-                <SkipNextIcon />
-              </PlayerButton>
+              }}
+              iconSize={28}
+              pseudoSelActive
+              disabled={
+                this.state.playlist.get(this.state.currentTrack) !== this.state.playlist.size  ? false : true
+              }
+            >
+              <SkipNextIcon />
+            </PlayerButton>
             <div style={{marginLeft: '25px'}}>
               <PlayerButton
                 onClick={() => this.repeatToggle()}
@@ -229,7 +237,7 @@ class Player extends Component {
           {/* /PLAY BUTTONS GROUP */}
 
 
-          <Timeline
+          {/* <Timeline
             nowPlaying={this.state.nowPlaying}
             trackDuration={track.duration}
             currentTrackPosition={this.state.currentTrackPosition}  
@@ -240,10 +248,10 @@ class Player extends Component {
             muted={this.state.muted}
             muteToggle={() => this.muteToggle()}
             setVolume={(value) => this.setVolume(value)}
-          />
+          /> */}
 
           {/* PLAYLIST ELEMENTS GROUP */}
-          <PlaylistElementsGroup>
+          {/* <PlaylistElementsGroup>
             <TrackInfo {...track}/>
             <div style={{marginLeft: 'auto'}}>
               <PlayerButton>
@@ -262,7 +270,7 @@ class Player extends Component {
                 />
               </PlayerButton>
             </div>
-          </PlaylistElementsGroup>
+          </PlaylistElementsGroup> */}
           {/* /PLAYLIST ELEMENTS GROUP */}
 
         </PlayerInner>
