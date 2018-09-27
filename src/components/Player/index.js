@@ -65,31 +65,42 @@ class Player extends Component {
     nowPlaying: false,
     volume: 1,
     muted: false,
-    currentTrack: this.props.playlist[0].id,
+    currentTrackID: this.props.playlist[0].id,
     currentTrackPosition: null,
-    repeatTrack: false,
+    repeatingTrack: false,
     shufflePlaylist: false
-  }
-
-  componentWillMount() {
-    let mapPlaylist = []
-
-    this.state.playlist.forEach((item, index) => {
-      mapPlaylist.push([item.id, {...item, index: index}])
-    })
-
-    mapPlaylist = new Map(mapPlaylist)
-    this.setState({playlist: mapPlaylist})
-    //console.log(mapPlaylist)
   }
 
   componentWillUnmount () {
     this.clearRAF()
   }
 
-  setCurrentTrack = (id ) => {
+  seachTrackByID = (id) => (
+    this.state.playlist.find(track => track.id === id)
+  )
 
+  searchTrackArrayIndex = (id) => (
+    this.state.playlist.indexOf(this.seachTrackByID(id))
+  )
+
+  setCurrentTrack = (id) => {
+    this.setState({
+      currentTrackID: id
+    })
   }
+
+  setCurrentTrackPrev = () => {
+    const currentTrackIndex = this.searchTrackArrayIndex(this.state.currentTrackID)
+
+    return (currentTrackIndex !== 0 ) ? this.setCurrentTrack(this.state.playlist[currentTrackIndex - 1].id) : false
+  }
+
+  setCurrentTrackNext = () => {
+    const currentTrackIndex = this.searchTrackArrayIndex(this.state.currentTrackID)
+    const { playlist } = this.state
+
+    return (currentTrackIndex !== playlist.length - 1) ? this.setCurrentTrack(playlist[currentTrackIndex + 1].id) : false
+  } 
 
   handleChangeTrack = (id, nowPlay) => {
     this.setState({
@@ -161,12 +172,14 @@ class Player extends Component {
 
   repeatToggle() {
     this.setState({
-      repeatTrack: !this.state.repeatTrack
+      repeatingTrack: !this.state.repeatingTrack
     }) 
   }
 
   render() {
-    const currentTrack = this.state.playlist.get(this.state.currentTrack)
+    const { playlist, nowPlaying, volume, muted, currentTrackID, currentTrackPosition, repeatingTrack, shufflePlaylist } = this.state
+
+    const currentTrack = this.seachTrackByID(currentTrackID)
     
     return (
       <PlayerWrapper>
@@ -174,9 +187,9 @@ class Player extends Component {
           {/* PLAYER CORE REACT HOWLER */}
           <ReactHowler
             src={currentTrack.src}
-            playing={this.state.nowPlaying}
-            volume={this.state.volume}
-            mute={this.state.muted}
+            playing={nowPlaying}
+            volume={volume}
+            mute={muted}
             ref={(ref) => (this.player = ref)}
             onPlay={() => this.renderSeekPos()}
             onEnd={() => this.handleOnEnd()}
@@ -184,48 +197,36 @@ class Player extends Component {
           {/* /PLAYER CORE REACT HOWLER */}
 
           <PlayButtonsGroup>
-            {/* <PlayerButton
-              onClick={() => {
-                if (this.state.playlist[this.state.currentTrack - 1]) {
-                  this.handleChangeTrack(this.state.playlist[this.state.currentTrack - 1].id)
-                }
-              }}
+            <PlayerButton
+              onClick={this.setCurrentTrackPrev}
               iconSize={28}
               pseudoSelActive
-              disabled={
-                this.state.playlist[this.state.currentTrack - 1] ? false : true
-              }
+              disabled={() => !this.setCurrentTrackPrev()}
             >
               <SkipPreviousIcon />
-            </PlayerButton> */}
+            </PlayerButton>
             <PlayerButton
               onClick={() => this.handleToggle()}
               iconSize={32}
               pseudoSelActive
             >
-              {!this.state.nowPlaying
+              {!nowPlaying
                 ? <PlayCircleOutlineIcon /> 
                 : <PauseCircleOutlineIcon /> 
               }        
             </PlayerButton>
             <PlayerButton
-              onClick={() => {
-                if (this.state.playlist.get(this.state.currentTrack) !== this.state.playlist.size) {
-                  this.handleChangeTrack(this.state.playlist[this.state.currentTrack + 1].id)
-                }
-              }}
+              onClick={this.setCurrentTrackNext}
               iconSize={28}
               pseudoSelActive
-              disabled={
-                this.state.playlist.get(this.state.currentTrack) !== this.state.playlist.size  ? false : true
-              }
+              disabled={() => !this.setCurrentTrackNext()}
             >
               <SkipNextIcon />
             </PlayerButton>
             <div style={{marginLeft: '25px'}}>
               <PlayerButton
                 onClick={() => this.repeatToggle()}
-                active={this.state.repeatTrack}
+                active={repeatingTrack}
               >
                 <RepeatIcon /> 
               </PlayerButton>
