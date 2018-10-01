@@ -21,12 +21,13 @@ const PlaylistBody = styled.div`
   box-shadow: ${props => props.theme.shadowMain};
 `
 
-const Playlist = ({playlist, currentTrackID, play, nowPlaying}) => (
+const Playlist = ({playlist, currentTrackID, playToggle, setTrack, nowPlaying}) => (
   <PlaylistWrapper>
     <PlaylistBody>
       {playlist.map(item => (
         <PlayListItem
-          play={play}
+          playToggle={playToggle}
+          setTrack={setTrack}
           track={item}
           currentTrackID={currentTrackID}
           nowPlaying={nowPlaying}
@@ -42,7 +43,8 @@ const Playlist = ({playlist, currentTrackID, play, nowPlaying}) => (
 Playlist.propTypes = {
   playlist: PropTypes.arrayOf(PropTypes.object),
   currentTrackID: PropTypes.number,
-  play: PropTypes.func,
+  playToggle: PropTypes.func,
+  setTrack: PropTypes.func,
   nowPlaying: PropTypes.bool
 }
 

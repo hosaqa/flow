@@ -29,10 +29,12 @@ const getTrackTime = ({minutes, seconds}) => {
   return `${minutes}:${seconds}`
 }
 
-const PlaylistItem = ({track, currentTrackID, play, nowPlaying}) => (
+const PlaylistItem = ({track, currentTrackID, playToggle, setTrack, nowPlaying}) => (
   <StyledPlaylistItem>
     <PlayerButton
-      onClick={() => play(track.id, true)}
+      onClick={() => {
+        (currentTrackID === track.id) ? playToggle() : setTrack(track.id, true)
+      }}
       active={currentTrackID === track.id ? true : false}
     >
       {nowPlaying && currentTrackID === track.id
@@ -51,7 +53,8 @@ const PlaylistItem = ({track, currentTrackID, play, nowPlaying}) => (
 PlaylistItem.propTypes = {
   track: PropTypes.object,
   currentTrackID: PropTypes.number,
-  play: PropTypes.func,
+  playToggle: PropTypes.func,
+  setTrack: PropTypes.func,
   nowPlaying: PropTypes.bool
 }
 

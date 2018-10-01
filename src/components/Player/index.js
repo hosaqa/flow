@@ -21,7 +21,7 @@ import Timeline from '../Timeline'
 import VolumeBar from '../VolumeBar'
 import TrackInfo from '../TrackInfo'
 import Playlist from '../Playlist'
-
+import Dropdown from '../Dropdown'
 
 const PlayerWrapper = styled.div`
   position: fixed;
@@ -61,7 +61,7 @@ const PlaylistElementsGroup = styled.div`
 
 class Player extends Component {
   state = {
-    playlist: this.props.playlist,
+    playlist: null,
     nowPlaying: false,
     volume: 1,
     muted: false,
@@ -69,6 +69,12 @@ class Player extends Component {
     currentTrackPosition: null,
     repeatingTrack: false,
     shufflePlaylist: false
+  }
+
+  componentWillMount() {
+    this.setState({
+      playlist: this.props.playlist.map((track, index) => ({...track, index}))
+    })
   }
 
   componentWillUnmount () {
@@ -89,22 +95,24 @@ class Player extends Component {
     })
   }
 
-  setCurrentTrackPrev = () => {
-    const currentTrackIndex = this.searchTrackArrayIndex(this.state.currentTrackID)
-
-    return (currentTrackIndex !== 0 ) ? this.setCurrentTrack(this.state.playlist[currentTrackIndex - 1].id) : false
-  }
-
-  setCurrentTrackNext = () => {
-    const currentTrackIndex = this.searchTrackArrayIndex(this.state.currentTrackID)
+  closestTrackExist = (index) => {
+    const currentTrack = this.seachTrackByID(this.state.currentTrackID)
     const { playlist } = this.state
 
-    return (currentTrackIndex !== playlist.length - 1) ? this.setCurrentTrack(playlist[currentTrackIndex + 1].id) : false
-  } 
+    return playlist.includes(playlist[currentTrack.index + index]) ? true : false
+  }
+
+  setCurrentTrackClosest = (index) => {
+    const currentTrack = this.seachTrackByID(this.state.currentTrackID)
+    const nextTrackIndex = currentTrack.index + index
+    const { playlist } = this.state
+
+    if (this.closestTrackExist(index)) this.handleChangeTrack(playlist[nextTrackIndex].id)
+  }
 
   handleChangeTrack = (id, nowPlay) => {
     this.setState({
-      currentTrack: id,
+      currentTrackID: id,
       nowPlaying: nowPlay ? nowPlay : this.state.nowPlaying,
       currentTrackPosition: null
     })
@@ -119,15 +127,16 @@ class Player extends Component {
     }
   }
 
-  handleToggle () {
+  handlePlayToggle = () => {
     this.setState({
       nowPlaying: !this.state.nowPlaying
     })
   }
 
   handleOnEnd () {
-    if (!this.state.repeatTrack) {
-      if (!this.state.playlist[this.state.currentTrack + 1]) {
+    if (!this.state.repeatingTrack) {
+      const nextTrackExist = this.closestTrackExist(1)
+      if (!nextTrackExist) {
         this.setState({
           nowPlaying: false,
           currentTrackPosition: null
@@ -135,7 +144,7 @@ class Player extends Component {
         
         this.clearRAF()
       } else {
-        this.handleChangeTrack(this.state.playlist[this.state.currentTrack + 1].id)
+        this.handleChangeTrack(this.setCurrentTrackClosest(1))
       }
     }
   }
@@ -180,7 +189,7 @@ class Player extends Component {
     const { playlist, nowPlaying, volume, muted, currentTrackID, currentTrackPosition, repeatingTrack, shufflePlaylist } = this.state
 
     const currentTrack = this.seachTrackByID(currentTrackID)
-    
+    const b = <PlayerButton ><PlaylistPlayIcon /></PlayerButton>
     return (
       <PlayerWrapper>
         <PlayerInner>
@@ -198,15 +207,15 @@ class Player extends Component {
 
           <PlayButtonsGroup>
             <PlayerButton
-              onClick={this.setCurrentTrackPrev}
+              onClick={() => this.setCurrentTrackClosest(-1)}
               iconSize={28}
               pseudoSelActive
-              disabled={() => !this.setCurrentTrackPrev()}
+              disabled={this.closestTrackExist(-1) ? false : true}
             >
               <SkipPreviousIcon />
             </PlayerButton>
             <PlayerButton
-              onClick={() => this.handleToggle()}
+              onClick={() => this.handlePlayToggle()}
               iconSize={32}
               pseudoSelActive
             >
@@ -216,10 +225,10 @@ class Player extends Component {
               }        
             </PlayerButton>
             <PlayerButton
-              onClick={this.setCurrentTrackNext}
+              onClick={() => this.setCurrentTrackClosest(1)}
               iconSize={28}
               pseudoSelActive
-              disabled={() => !this.setCurrentTrackNext()}
+              disabled={this.closestTrackExist(1) ? false : true}
             >
               <SkipNextIcon />
             </PlayerButton>
@@ -237,23 +246,22 @@ class Player extends Component {
           </PlayButtonsGroup>
           {/* /PLAY BUTTONS GROUP */}
 
-
-          {/* <Timeline
-            nowPlaying={this.state.nowPlaying}
-            trackDuration={track.duration}
-            currentTrackPosition={this.state.currentTrackPosition}  
+          <Timeline
+            nowPlaying={nowPlaying}
+            trackDuration={currentTrack.duration}
+            currentTrackPosition={currentTrackPosition}  
             seek={(rewindTo) => this.setSeek(rewindTo)}
           />
           <VolumeBar
-            volume={this.state.volume}
-            muted={this.state.muted}
+            volume={volume}
+            muted={muted}
             muteToggle={() => this.muteToggle()}
             setVolume={(value) => this.setVolume(value)}
-          /> */}
+          />
 
           {/* PLAYLIST ELEMENTS GROUP */}
-          {/* <PlaylistElementsGroup>
-            <TrackInfo {...track}/>
+          <PlaylistElementsGroup>
+            <TrackInfo {...currentTrack}/>
             <div style={{marginLeft: 'auto'}}>
               <PlayerButton>
                 <FavoriteBorderIcon />
@@ -261,17 +269,20 @@ class Player extends Component {
               <PlayerButton >
                 <PlaylistAddIcon />
               </PlayerButton>
-              <PlayerButton >
-                <PlaylistPlayIcon />
-                <Playlist
-                  playlist={this.state.playlist}
-                  currentTrackID={this.state.playlist[this.state.currentTrack].id}
-                  play={this.handleChangeTrack}
-                  nowPlaying={this.state.nowPlaying}
-                />
-              </PlayerButton>
+              <div style={{display: 'inline-block'}}>
+
+                <Dropdown selector={b}>
+                  <Playlist
+                    playlist={playlist}
+                    currentTrackID={currentTrackID}
+                    setTrack={this.handleChangeTrack}
+                    playToggle={this.handlePlayToggle}
+                    nowPlaying={nowPlaying}
+                  />
+                </Dropdown>
+              </div>
             </div>
-          </PlaylistElementsGroup> */}
+          </PlaylistElementsGroup>
           {/* /PLAYLIST ELEMENTS GROUP */}
 
         </PlayerInner>
