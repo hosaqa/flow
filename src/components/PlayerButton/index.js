@@ -17,6 +17,7 @@ const StyledPlayerButton = styled.button`
   transition: color .15s, transform .15s;
 
   & > svg {
+    pointer-events: none;
     font-size: ${({iconSize}) => iconSize ? `${iconSize}px` : '24px'};
   }
 

@@ -189,7 +189,8 @@ class Player extends Component {
     const { playlist, nowPlaying, volume, muted, currentTrackID, currentTrackPosition, repeatingTrack, shufflePlaylist } = this.state
 
     const currentTrack = this.seachTrackByID(currentTrackID)
-    const b = <PlayerButton ><PlaylistPlayIcon /></PlayerButton>
+    const playQueueButton = <PlayerButton ><PlaylistPlayIcon /></PlayerButton>
+
     return (
       <PlayerWrapper>
         <PlayerInner>
@@ -271,7 +272,7 @@ class Player extends Component {
               </PlayerButton>
               <div style={{display: 'inline-block'}}>
 
-                <Dropdown selector={b}>
+                <Dropdown selector={playQueueButton}>
                   <Playlist
                     playlist={playlist}
                     currentTrackID={currentTrackID}
