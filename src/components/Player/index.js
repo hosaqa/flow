@@ -21,7 +21,9 @@ import Timeline from '../Timeline'
 import VolumeBar from '../VolumeBar'
 import TrackInfo from '../TrackInfo'
 import Playlist from '../Playlist'
+import PlaylistQueue from './PlaylistQueue'
 import Dropdown from '../Dropdown'
+
 
 const PlayerWrapper = styled.div`
   position: fixed;
@@ -136,6 +138,7 @@ class Player extends Component {
   handleOnEnd () {
     if (!this.state.repeatingTrack) {
       const nextTrackExist = this.closestTrackExist(1)
+
       if (!nextTrackExist) {
         this.setState({
           nowPlaying: false,
@@ -144,7 +147,7 @@ class Player extends Component {
         
         this.clearRAF()
       } else {
-        this.handleChangeTrack(this.setCurrentTrackClosest(1))
+        this.setCurrentTrackClosest(1)
       }
     }
   }
@@ -159,10 +162,6 @@ class Player extends Component {
     })
   }
 
-  getCurrentTrackIndex(){
-
-  }
-
   // ok
   setVolume(value) {
     this.setState({
@@ -175,14 +174,14 @@ class Player extends Component {
     if (this.state.volume) {
       this.setState({
         muted: !this.state.muted
-      })      
+      })
     }
   }
 
   repeatToggle() {
     this.setState({
       repeatingTrack: !this.state.repeatingTrack
-    }) 
+    })
   }
 
   render() {
@@ -221,8 +220,8 @@ class Player extends Component {
               pseudoSelActive
             >
               {!nowPlaying
-                ? <PlayCircleOutlineIcon /> 
-                : <PauseCircleOutlineIcon /> 
+                ? <PlayCircleOutlineIcon />
+                : <PauseCircleOutlineIcon />
               }        
             </PlayerButton>
             <PlayerButton
@@ -250,7 +249,7 @@ class Player extends Component {
           <Timeline
             nowPlaying={nowPlaying}
             trackDuration={currentTrack.duration}
-            currentTrackPosition={currentTrackPosition}  
+            currentTrackPosition={currentTrackPosition}
             seek={(rewindTo) => this.setSeek(rewindTo)}
           />
           <VolumeBar
@@ -271,15 +270,16 @@ class Player extends Component {
                 <PlaylistAddIcon />
               </PlayerButton>
               <div style={{display: 'inline-block'}}>
-
                 <Dropdown selector={playQueueButton}>
-                  <Playlist
-                    playlist={playlist}
-                    currentTrackID={currentTrackID}
-                    setTrack={this.handleChangeTrack}
-                    playToggle={this.handlePlayToggle}
-                    nowPlaying={nowPlaying}
-                  />
+                  <PlaylistQueue>
+                    <Playlist
+                      playlist={playlist}
+                      currentTrackID={currentTrackID}
+                      setTrack={this.handleChangeTrack}
+                      playToggle={this.handlePlayToggle}
+                      nowPlaying={nowPlaying}
+                    />
+                  </PlaylistQueue>
                 </Dropdown>
               </div>
             </div>

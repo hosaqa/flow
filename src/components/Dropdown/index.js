@@ -23,7 +23,7 @@ const DropdownContentAnimated = transition(DropdownContent).attrs({
 
   &:enter {
     opacity: 0.01;
-    transform: scale(.92);
+    transform: scale(.97);
   }
 
   &:enter-active {
@@ -39,7 +39,7 @@ const DropdownContentAnimated = transition(DropdownContent).attrs({
   
   &:exit-active {
     opacity: 0.01;
-    transform: scale(.92);
+    transform: scale(.97);
     transition: opacity 150ms ease-in, transform 150ms ease-in;
   }
 `

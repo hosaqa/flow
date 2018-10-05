@@ -70,17 +70,20 @@ class VolumeBar extends Component {
   handleOnWheel(ev) {
     const { volume, setVolume } = this.props
 
-    const oneScrollDelta = 53 // значение дельты по Y при одной прокрутке колесика
-    const volumeCoeff = Math.abs(ev.deltaY / oneScrollDelta)
-    
-    let volumeDelta = volumeCoeff * 0.025
-    volumeDelta = parseFloat(volumeDelta.toFixed(2))
-
-    if (ev.deltaY < 0) {
-      if (volume < 1) this.setVolume(parseFloat((volume + volumeDelta).toFixed(2)))
-    } else {
-      if (volume > 0) this.setVolume(parseFloat((volume - volumeDelta).toFixed(2)))
+    if (!this.state.mouseButtonPressed) {
+      const oneScrollDelta = 53 // значение дельты по Y при одной прокрутке колесика
+      const volumeCoeff = Math.abs(ev.deltaY / oneScrollDelta)
+      
+      let volumeDelta = volumeCoeff * 0.025
+      volumeDelta = parseFloat(volumeDelta.toFixed(2))
+  
+      if (ev.deltaY < 0) {
+        if (volume < 1) this.setVolume(parseFloat((volume + volumeDelta).toFixed(2)))
+      } else {
+        if (volume > 0) this.setVolume(parseFloat((volume - volumeDelta).toFixed(2)))
+      }
     }
+
   }
 
   handleOnClick(ev, ref) {
