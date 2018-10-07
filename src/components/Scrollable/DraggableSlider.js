@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { findDOMNode } from 'react-dom'
 import styled from 'styled-components'
 
-const SliderWrapper = styled.div`
+const SliderLine = styled.div`
   position: absolute;
   right: 0;
   top: 0;
@@ -18,6 +18,7 @@ const Slider = styled.div`
   position: absolute;
   right: 0;
   top: ${({sliderPosition}) => sliderPosition}%;
+  /* transition: .2s all ease-in-out; */
   height: 20px;
   width: 100%;
   background-color: #ff7777;
@@ -25,10 +26,23 @@ const Slider = styled.div`
   border-radius: 5px;
 `
 
+const Test = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 20px);
+`
 
 export default class DraggableSlider extends Component {
   state = {
-    
+    sliderHeight: null
+  }
+
+  componentDidMount() {
+    this.setState({
+      sliderHeight: this.getSliderHeight()
+    })
   }
 
   getSliderRef = node => {
@@ -41,27 +55,35 @@ export default class DraggableSlider extends Component {
   
   getSliderPosition = () => {
     const { contentHeight, contentPosition, viewportHeight } = this.props
-    const sliderHeight = this.getSliderHeight()
 
-    return Math.abs((contentPosition + viewportHeight)  / contentHeight * 100)
+    return ((Math.abs(contentPosition))) / (viewportHeight) * 100
   }
 
   render() {
     const { contentHeight, contentPosition } = this.props
 
     return (
-      <SliderWrapper>
+      <SliderLine>
+        <Test>
         <Slider
           ref={this.getSliderRef}
           sliderPosition={this.getSliderPosition()}
         />
-      </SliderWrapper>
+        </Test>
+
+      </SliderLine>
     )
   }
 }
 
+// DraggableSlider.propTypes = {
+//   viewportHeight: PropTypes.number.isRequired, 
+//   contentHeight: PropTypes.number.isRequired,
+//   contentPosition: PropTypes.number.isRequired
+// }
+
 DraggableSlider.propTypes = {
-  viewportHeight: PropTypes.number.isRequired, 
-  contentHeight: PropTypes.number.isRequired,
-  contentPosition: PropTypes.number.isRequired
+  viewportHeight: PropTypes.number, 
+  contentHeight: PropTypes.number,
+  contentPosition: PropTypes.number
 }

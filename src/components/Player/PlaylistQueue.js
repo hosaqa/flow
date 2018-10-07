@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import Draggable from '../Draggable'
+import Scrollable from '../Scrollable'
 
 const PlaylistQueueWrapper = styled.div`
   position: absolute;
@@ -23,15 +23,15 @@ const PlaylistQueueBody = styled.div`
 const PlaylistQueue = ({children}) => (
   <PlaylistQueueWrapper>
     <PlaylistQueueBody>
-      <Draggable height={280}>
+      <Scrollable>
         { children }
-      </Draggable>
+      </Scrollable>
     </PlaylistQueueBody>
   </PlaylistQueueWrapper>
 )
 
 PlaylistQueue.propTypes = {
-
+  children: PropTypes.node
 }
 
 export default PlaylistQueue

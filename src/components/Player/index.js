@@ -70,7 +70,7 @@ class Player extends Component {
     currentTrackID: this.props.playlist[0].id,
     currentTrackPosition: null,
     repeatingTrack: false,
-    shufflePlaylist: false
+    playlistShuffled: false
   }
 
   componentWillMount() {
@@ -184,8 +184,49 @@ class Player extends Component {
     })
   }
 
+  shuffleToggle() {
+    this.setState({
+      playlistShuffled: !this.state.playlistShuffled
+    }, this.shufflePlaylist)
+  }
+
+  shufflePlaylist = () => {
+    const { playlist } = this.state
+    const playlistLength = playlist.length
+
+    let oldSequence = playlist.map(item => {
+      return item.index
+    })
+
+    //console.log(oldSequence.splice(4, 1))
+  
+    let newSequence = []
+
+    for (let i = 0; i < playlistLength; i++) {
+      let oldLength = oldSequence.length 
+      let randVal = this.getRandomInt(1, oldLength) - 1
+      console.log(oldSequence[randVal])
+      newSequence.push(playlist[oldSequence[randVal]])
+      oldSequence.splice(randVal, 1)
+    }
+    console.log(newSequence)
+    
+    // const newArr = playlist.map((item, index) => {
+    //   return {...item, index: newSequence[index]}
+    // })
+    
+    this.setState({
+      playlist: newSequence
+    })
+  }
+
+
+  getRandomInt = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1) + min)
+  }
+
   render() {
-    const { playlist, nowPlaying, volume, muted, currentTrackID, currentTrackPosition, repeatingTrack, shufflePlaylist } = this.state
+    const { playlist, nowPlaying, volume, muted, currentTrackID, currentTrackPosition, repeatingTrack, playlistShuffled } = this.state
 
     const currentTrack = this.seachTrackByID(currentTrackID)
     const playQueueButton = <PlayerButton ><PlaylistPlayIcon /></PlayerButton>
@@ -239,7 +280,10 @@ class Player extends Component {
               >
                 <RepeatIcon /> 
               </PlayerButton>
-              <PlayerButton>
+              <PlayerButton
+                onClick={() => this.shuffleToggle()}
+                active={playlistShuffled}
+              >
                 <ShuffleIcon /> 
               </PlayerButton>
             </div>

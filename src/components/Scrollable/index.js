@@ -6,17 +6,13 @@ import styled from 'styled-components'
 import DraggableSlider from './DraggableSlider'
 
 
-const StyledDraggable = styled.div`
-  display: block;
-`
-
-const DraggableViewport = styled.div`
+const Viewport = styled.div`
   height: ${({viewportHeight}) => viewportHeight ? `${viewportHeight}px` : 'auto'};
   overflow: hidden;
   position: relative;
 `
 
-const DraggableContentWrapper = styled.div`
+const ContentWrapper = styled.div`
   position: absolute;
   top: ${({contentPosition}) => contentPosition}px;
   left: 0;
@@ -24,12 +20,12 @@ const DraggableContentWrapper = styled.div`
   height: 100%;
 `
 
-const DraggableContent = styled.div`
+const Content = styled.div`
   position: relative;
   height: ${({contentHeight}) => contentHeight ? `${contentHeight}px` : 'auto'};
 `
 
-export default class Draggable extends Component {
+export default class Scrollable extends Component {
   state = {
     viewportHeight: null,
     contentHeight: null,
@@ -53,7 +49,6 @@ export default class Draggable extends Component {
   }
 
   getViewportHeight = () => {
-    console.log(findDOMNode(this.viewport).parentElement.offsetHeight)
     return findDOMNode(this.viewport).parentElement.clientHeight
   }
 
@@ -66,17 +61,17 @@ export default class Draggable extends Component {
     const scrollOccasions = ev.deltaY / oneScrollDelta
 
     const { viewportHeight, contentHeight, contentPosition } = this.state
-
+    console.log(scrollOccasions)
     if (scrollOccasions < 0) {
       if (contentPosition !== 0) {
         this.setState({
-          contentPosition: this.state.contentPosition + 20
+          contentPosition: this.state.contentPosition + (10 * Math.abs(scrollOccasions))
         })
       }
     } else {
       if (Math.abs(contentPosition) <= contentHeight - viewportHeight) {
         this.setState({
-          contentPosition: this.state.contentPosition - 20
+          contentPosition: this.state.contentPosition - (10 * Math.abs(scrollOccasions))
         })
       }
     }
@@ -87,29 +82,29 @@ export default class Draggable extends Component {
     const { viewportHeight, contentHeight, contentPosition } = this.state
 
     return (
-      <DraggableViewport
+      <Viewport
         ref={this.getViewportRef}
         onWheel={(ev) => this.handleOnWheel(ev)}
         viewportHeight={viewportHeight}
       >
-        <DraggableContentWrapper contentPosition={contentPosition}>
-          <DraggableContent
+        <ContentWrapper contentPosition={contentPosition}>
+          <Content
             ref={this.getContentRef}
             contentHeight={contentHeight}
           >
             { children }
-          </DraggableContent>
-        </DraggableContentWrapper>
+          </Content>
+        </ContentWrapper>
         <DraggableSlider
           viewportHeight={viewportHeight}
           contentHeight={contentHeight}
           contentPosition={contentPosition}
         />
-      </DraggableViewport>
+      </Viewport>
     )
   }
 }
 
-Draggable.propTypes = {
+Scrollable.propTypes = {
 
 }
