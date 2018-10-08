@@ -194,29 +194,30 @@ class Player extends Component {
     const { playlist } = this.state
     const playlistLength = playlist.length
 
-    let oldSequence = playlist.map(item => {
-      return item.index
-    })
+    let prevIndexesSequence = [...Array(playlistLength).keys()]
+    let shuffledPlaylist = []
 
-    //console.log(oldSequence.splice(4, 1))
-  
-    let newSequence = []
+    while (prevIndexesSequence.length > 0) {
+      let getRandomIndex = this.getRandomInt(1, prevIndexesSequence.length) - 1
 
-    for (let i = 0; i < playlistLength; i++) {
-      let oldLength = oldSequence.length 
-      let randVal = this.getRandomInt(1, oldLength) - 1
-      console.log(oldSequence[randVal])
-      newSequence.push(playlist[oldSequence[randVal]])
-      oldSequence.splice(randVal, 1)
+      shuffledPlaylist.push(playlist[prevIndexesSequence[getRandomIndex]])
+      prevIndexesSequence.splice(getRandomIndex, 1)
     }
-    console.log(newSequence)
+
+    // for (let i = 0; i < playlistLength; i++) {
+    //   let oldLength = prevIndexesSequence.length 
+    //   let randVal = this.getRandomInt(1, oldLength) - 1
+    //   newSequence.push(playlist[oldSequence[randVal]])
+    //   oldSequence.splice(randVal, 1)
+    // }
+
     
     // const newArr = playlist.map((item, index) => {
     //   return {...item, index: newSequence[index]}
     // })
     
     this.setState({
-      playlist: newSequence
+      playlist: shuffledPlaylist
     })
   }
 
