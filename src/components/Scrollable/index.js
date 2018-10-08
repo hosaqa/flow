@@ -3,7 +3,7 @@ import { findDOMNode } from 'react-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import DraggableSlider from './DraggableSlider'
+import ScrollBar from './ScrollBar'
 
 
 const Viewport = styled.div`
@@ -48,6 +48,10 @@ export default class Scrollable extends Component {
     this.content = node
   }
 
+  getContentRef = node => {
+    this.content = node
+  }
+
   getViewportHeight = () => {
     return findDOMNode(this.viewport).parentElement.clientHeight
   }
@@ -61,7 +65,7 @@ export default class Scrollable extends Component {
     const scrollOccasions = ev.deltaY / oneScrollDelta
 
     const { viewportHeight, contentHeight, contentPosition } = this.state
-    console.log(scrollOccasions)
+
     if (scrollOccasions < 0) {
       if (contentPosition !== 0) {
         this.setState({
@@ -95,7 +99,7 @@ export default class Scrollable extends Component {
             { children }
           </Content>
         </ContentWrapper>
-        <DraggableSlider
+        <ScrollBar
           viewportHeight={viewportHeight}
           contentHeight={contentHeight}
           contentPosition={contentPosition}

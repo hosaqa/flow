@@ -63,7 +63,7 @@ const PlaylistElementsGroup = styled.div`
 
 class Player extends Component {
   state = {
-    playlist: null,
+    playlist: this.props.playlist,
     nowPlaying: false,
     volume: 1,
     muted: false,
@@ -71,12 +71,6 @@ class Player extends Component {
     currentTrackPosition: null,
     repeatingTrack: false,
     playlistShuffled: false
-  }
-
-  componentWillMount() {
-    this.setState({
-      playlist: this.props.playlist.map((track, index) => ({...track, index}))
-    })
   }
 
   componentWillUnmount () {
@@ -98,16 +92,19 @@ class Player extends Component {
   }
 
   closestTrackExist = (index) => {
-    const currentTrack = this.seachTrackByID(this.state.currentTrackID)
-    const { playlist } = this.state
-
-    return playlist.includes(playlist[currentTrack.index + index]) ? true : false
+    const { playlist, currentTrackID } = this.state
+    const currentTrack = this.seachTrackByID(currentTrackID)
+    const currentTrackIndex = playlist.indexOf(currentTrack)
+    
+    return playlist.includes(playlist[currentTrackIndex + index]) ? true : false
   }
 
   setCurrentTrackClosest = (index) => {
-    const currentTrack = this.seachTrackByID(this.state.currentTrackID)
-    const nextTrackIndex = currentTrack.index + index
-    const { playlist } = this.state
+    const { playlist, currentTrackID } = this.state
+    const currentTrack = this.seachTrackByID(currentTrackID)
+    const currentTrackIndex = playlist.indexOf(currentTrack)
+
+    const nextTrackIndex = currentTrackIndex + index
 
     if (this.closestTrackExist(index)) this.handleChangeTrack(playlist[nextTrackIndex].id)
   }
@@ -186,11 +183,14 @@ class Player extends Component {
 
   shuffleToggle() {
     this.setState({
-      playlistShuffled: !this.state.playlistShuffled
-    }, this.shufflePlaylist)
+      playlistShuffled: !this.state.playlistShuffled,
+      playlist: this.shufflePlaylist()
+    })
   }
 
   shufflePlaylist = () => {
+    if (this.state.playlistShuffled) return this.props.playlist
+
     const { playlist } = this.state
     const playlistLength = playlist.length
 
@@ -203,22 +203,8 @@ class Player extends Component {
       shuffledPlaylist.push(playlist[prevIndexesSequence[getRandomIndex]])
       prevIndexesSequence.splice(getRandomIndex, 1)
     }
-
-    // for (let i = 0; i < playlistLength; i++) {
-    //   let oldLength = prevIndexesSequence.length 
-    //   let randVal = this.getRandomInt(1, oldLength) - 1
-    //   newSequence.push(playlist[oldSequence[randVal]])
-    //   oldSequence.splice(randVal, 1)
-    // }
-
     
-    // const newArr = playlist.map((item, index) => {
-    //   return {...item, index: newSequence[index]}
-    // })
-    
-    this.setState({
-      playlist: shuffledPlaylist
-    })
+    return shuffledPlaylist
   }
 
 
