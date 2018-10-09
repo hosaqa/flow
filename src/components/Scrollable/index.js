@@ -60,25 +60,49 @@ export default class Scrollable extends Component {
     return findDOMNode(this.content).offsetHeight
   }
 
+  slide = (scrollOccasions) => {
+    const { viewportHeight, contentHeight, contentPosition } = this.state
+    const extremeLimit = scrollOccasions > 0 ? viewportHeight - contentHeight : 0
+
+    if (scrollOccasions < 0) {
+ 
+      if (contentPosition !== extremeLimit) {
+        let scrollSteps = 10 * scrollOccasions
+
+        if (contentPosition - scrollSteps > extremeLimit) {
+          this.setState({
+            contentPosition: extremeLimit
+          })
+        } else {
+          this.setState({
+            contentPosition: this.state.contentPosition - scrollSteps
+          })
+        }
+      }
+    } else {
+      if (contentPosition !== extremeLimit) {
+        let scrollSteps = 10 * scrollOccasions
+        //console.log(contentPosition)
+        if (scrollSteps - contentPosition > extremeLimit) {
+          this.setState({
+            contentPosition: extremeLimit
+          })
+        } else {
+          this.setState({
+            contentPosition: this.state.contentPosition - scrollSteps
+          })
+        }
+      }
+    }
+  }
+
   handleOnWheel = (ev) => {
     const oneScrollDelta = 53
     const scrollOccasions = ev.deltaY / oneScrollDelta
 
     const { viewportHeight, contentHeight, contentPosition } = this.state
 
-    if (scrollOccasions < 0) {
-      if (contentPosition !== 0) {
-        this.setState({
-          contentPosition: this.state.contentPosition + (10 * Math.abs(scrollOccasions))
-        })
-      }
-    } else {
-      if (Math.abs(contentPosition) <= contentHeight - viewportHeight) {
-        this.setState({
-          contentPosition: this.state.contentPosition - (10 * Math.abs(scrollOccasions))
-        })
-      }
-    }
+    this.slide(scrollOccasions)
   }
 
   render() {
