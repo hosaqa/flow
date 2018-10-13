@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { findDOMNode } from 'react-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import raf from 'raf' // requestAnimationFrame polyfill
 
 import ScrollBar from './ScrollBar'
 
@@ -30,7 +31,9 @@ export default class Scrollable extends Component {
     viewportHeight: null,
     contentHeight: null,
     contentPosition: 0,
-    mouseButtonPressed: false
+    mouseButtonPressed: false,
+    animateTimeout: null,
+    animTime: null,
   }
 
   componentDidMount() {
@@ -38,6 +41,10 @@ export default class Scrollable extends Component {
       contentHeight: this.getContentHeight(),
       viewportHeight: this.getViewportHeight()
     })
+  }
+
+  componentWillUnmount() {
+    this.clearRAF()
   }
 
   getViewportRef = node => {
@@ -62,38 +69,48 @@ export default class Scrollable extends Component {
 
   slide = (scrollOccasions) => {
     const { viewportHeight, contentHeight, contentPosition } = this.state
+    const scrollSteps = 10 * scrollOccasions
+
     const extremeLimit = scrollOccasions > 0 ? viewportHeight - contentHeight : 0
 
-    if (scrollOccasions < 0) {
- 
-      if (contentPosition !== extremeLimit) {
-        let scrollSteps = 10 * scrollOccasions
+    const toExtremeLimitRewindContidion = scrollOccasions > 0 ? (contentPosition - scrollSteps < extremeLimit) : (contentPosition - scrollSteps > extremeLimit)
 
-        if (contentPosition - scrollSteps > extremeLimit) {
-          this.setState({
-            contentPosition: extremeLimit
-          })
-        } else {
-          this.setState({
-            contentPosition: this.state.contentPosition - scrollSteps
-          })
-        }
-      }
-    } else {
-      if (contentPosition !== extremeLimit) {
-        let scrollSteps = 10 * scrollOccasions
-        //console.log(contentPosition)
-        if (scrollSteps - contentPosition > extremeLimit) {
-          this.setState({
-            contentPosition: extremeLimit
-          })
-        } else {
-          this.setState({
-            contentPosition: this.state.contentPosition - scrollSteps
-          })
-        }
-      }
+    if (contentPosition !== extremeLimit) {
+      let to = toExtremeLimitRewindContidion ? extremeLimit : this.state.contentPosition - scrollSteps
+      this.smoothSlide(to)
     }
+  }
+
+  debounce = (fn, delay) => {
+    var timer = null;
+    return function () {
+      var context = this, args = arguments;
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        fn.apply(context, args);
+      }, delay);
+    };
+  }
+  smoothSlide = (to) => {
+    console.log(to)
+    this.clearRAF()
+
+    const { contentPosition } = this.state
+    const gap = contentPosition > to ? 1 : -1
+
+    this.setState({
+      contentPosition: contentPosition - gap
+    })
+
+    if (contentPosition !== to) {
+      this._raf = raf(() => this.smoothSlide(to))
+    } else {
+      this.clearRAF()
+    }
+  }
+
+  clearRAF = () => {
+    raf.cancel(this._raf)
   }
 
   handleOnWheel = (ev) => {
@@ -112,7 +129,7 @@ export default class Scrollable extends Component {
     return (
       <Viewport
         ref={this.getViewportRef}
-        onWheel={(ev) => this.handleOnWheel(ev)}
+        onWheel={(ev) => this.debounce(this.handleOnWheel(ev), 100)}
         viewportHeight={viewportHeight}
       >
         <ContentWrapper contentPosition={contentPosition}>
