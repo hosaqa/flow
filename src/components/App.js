@@ -11,30 +11,45 @@ import Scrollable from './Scrollable'
 import 'react-perfect-scrollbar/dist/css/styles.css';
 
 import PerfectScrollbar from 'react-perfect-scrollbar'
-
+import SimpleExample from './Lol'
 class App extends Component {
 
   render() {
+    let scrollbarStyles = {borderRadius: 5};
     return (
       <ThemeProvider theme={lightTheme}>
         <div>
+          <div style={{
+            display: 'flex'
+          }}>
           <div style={
-            {
-              margin: '50px',
-              width: '350px',
-              height: '250px',
-              background: '#f5f5f5',
-              border: '1px solid #333'
-            }
+          {
+          margin: '50px',
+          width: '350px',
+          height: '250px',
+          background: '#f5f5f5',
+          border: '1px solid #333'
+          }
           }>
-    <Scrollable>
-        ... SCROLLBAR CONTENT HERE ...
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Asperiores quos blanditiis veniam, dolor facilis sed ullam totam. Velit, accusamus illo! Maiores sequi ratione facere. Mollitia aspernatur itaque ab maiores non?
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus, cumque in eum voluptate fugit mollitia dolores repellat veniam! Harum tempora mollitia dignissimos veritatis asperiores officiis provident ipsam unde minus ullam.
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas mollitia hic reiciendis dignissimos voluptate pariatur nihil delectus ducimus cumque at quo assumenda blanditiis, laboriosam aliquam magnam eum tempora provident ex!
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae sit dicta eius minima blanditiis, harum commodi? Molestiae incidunt maiores itaque voluptatem odio assumenda numquam facilis cum unde ipsum, autem ducimus.
-    </Scrollable>
+          <SimpleExample />
           </div>
+          <div style={
+          {
+          margin: '50px',
+          width: '350px',
+          height: '250px',
+          background: '#f5f5f5',
+          border: '1px solid #333'
+          }
+          }>
+            <Scrollable>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Enim culpa beatae non delectus cupiditate officiis dolorum eos blanditiis, amet maiores ab consequatur architecto ducimus libero alias natus perferendis magnam Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quasi ducimus eum repellendus, modi libero magnam nobis sequi architecto sapiente consectetur nam ratione sed atque aliquam quod tempora porro voluptatibus hic!
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsa qui beatae laboriosam expedita doloribus nemo, repellat, totam illo ipsum magni recusandae aperiam corporis mollitia, voluptas consectetur omnis? Fugiat, excepturi nobis?
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam mollitia modi ab repellendus magnam fugiat expedita nesciunt laborum, quaerat quam ipsa perspiciatis, inventore rerum eius nihil harum maiores error possimus.
+            </Scrollable>
+          </div>
+          </div>
+
         
         <Player playlist={this.props.data} />
         </div>
