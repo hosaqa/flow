@@ -1,24 +1,21 @@
-import React, { Component } from 'react'
-import { findDOMNode } from 'react-dom'
+import React, {Component} from 'react'
+import {findDOMNode} from 'react-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { TransitionGroup } from 'react-transition-group'
+import {TransitionGroup} from 'react-transition-group'
 import transition from "styled-transition-group"
 
-const DropdownWrapper = styled.div`
+const DropdownWrapper = styled.div `
+  position: relative;
+`
+const DropdownSelector = styled.div `
   position: relative;
 `
 
-const DropdownSelector = styled.div`
-  position: relative;
-`
-
-const DropdownContent = styled.div`
+const DropdownContent = styled.div `
   display: block;
 `
-const DropdownContentAnimated = transition(DropdownContent).attrs({
-  timeout: 200
-})`
+const DropdownContentAnimated = transition(DropdownContent).attrs({timeout: 200})`
   transform-origin: right bottom;
 
   &:enter {
@@ -63,30 +60,24 @@ export default class Dropdown extends Component {
       isOpen: !this.state.isOpen
     }, () => {
       this.state.isOpen
-      ? document.addEventListener('click', this.handleClickOutside)
-      : document.removeEventListener('click', this.handleClickOutside)
+        ? document.addEventListener('click', this.handleClickOutside)
+        : document.removeEventListener('click', this.handleClickOutside)
     })
   }
 
-
   render() {
-    const { selector, children } = this.props
-    const { isOpen } = this.state
+    const {selector, children} = this.props
+    const {isOpen} = this.state
 
     return (
-      <DropdownWrapper
-        ref={this.getDropdownRef}
-      >
+      <DropdownWrapper ref={this.getDropdownRef}>
         <DropdownSelector onClick={this.handleSelectorClick}>
           {selector}
         </DropdownSelector>
         <TransitionGroup>
-          {
-            isOpen &&
-            <DropdownContentAnimated>
-              {children}
-            </DropdownContentAnimated>
-          }
+          {isOpen && <DropdownContentAnimated>
+            {children}
+          </DropdownContentAnimated>}
         </TransitionGroup>
       </DropdownWrapper>
     )

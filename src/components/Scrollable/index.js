@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import raf from 'raf' // requestAnimationFrame polyfill
 
 import ScrollBar from './ScrollBar'
-import throttle from 'lodash'
 
 
 const Viewport = styled.div`
@@ -16,11 +15,14 @@ const Viewport = styled.div`
 
 const ContentWrapper = styled.div`
   position: absolute;
-  /* top: ${({contentPosition}) => contentPosition}px; */
   transform: translateY(${({contentPosition}) => contentPosition}px);
   left: 0;
   width: calc(100% - 10px);
   height: 100%;
+
+  &:hover {
+    will-change: transform;
+  }
 `
 
 const Content = styled.div`
@@ -31,7 +33,6 @@ const Content = styled.div`
 export default class Scrollable extends Component {
   constructor(props){
     super(props)
-    this.teste = throttle(1000, this.teste)
   }
 
   state = {
@@ -42,8 +43,6 @@ export default class Scrollable extends Component {
     starttime: null
   }
 
-
-
   componentDidMount() {
     this.setState({
       contentHeight: this.getContentHeight(),
@@ -52,7 +51,7 @@ export default class Scrollable extends Component {
   }
 
   componentWillUnmount() {
-    this.clearRAF()
+    //this.clearRAF()
   }
 
   getViewportRef = node => {
@@ -87,15 +86,21 @@ export default class Scrollable extends Component {
     if (contentPosition !== extremeLimit) {
       let to = toExtremeLimitRewindCondition ? extremeLimit : this.state.contentPosition - scrollSteps
 
-      this._raf = raf((timestamp) => {
-        this.setState({
-          starttime: timestamp
-        })
-        const  b = Math.abs(to - contentPosition) / 53 * 200
-        const dur = parseFloat(b.toFixed(0))
-        this.animMove(timestamp, contentPosition, to, dur)
-      })
+      this.scrollTo(to)
+      // this._raf = raf((timestamp) => {
+      //   this.setState({
+      //     starttime: timestamp
+      //   })
+      //   const duration = parseFloat((Math.abs(to - contentPosition) / 53 * 350).toFixed(0))
+      //   this.animMove(timestamp, contentPosition, to, duration)
+      // })
     }
+  }
+
+  scrollTo = (to) => {
+    this.setState({
+      contentPosition: to
+    })
   }
 
   animMove = (timestamp, from, to, duration) => {
@@ -114,50 +119,31 @@ export default class Scrollable extends Component {
 
     if (runtime < duration) {
       raf((timestamp) => {
-          this.animMove(timestamp, from, to, duration)
+        this.animMove(timestamp, from, to, duration)
       })
     }
   }
 
-  move = (to) => {
-    this.setState({
-      contentPosition: to
-    })
-  }
-
   clearRAF = () => {
+    console.log('clear raf')
     raf.cancel(this._raf)
   }
 
   handleOnWheel = (ev) => {
-    console.log(1)
-    const { viewportHeight, contentHeight, contentPosition } = this.state
-
-    this.clearRAF()
-
+    // this.clearRAF()
     const scrollOccasions = ev.deltaY
 
     this.slide(scrollOccasions)
   }
 
-  thrro = (ev) => {
-    throttle(this.handleOnWheel(ev), 1000)
-  }
-
-  teste = () => {
-    console.log(111)
-  }
-
   render() {
     const { children } = this.props
     const { viewportHeight, contentHeight, contentPosition } = this.state
-    console.log(this.teste)
+
     return (
       <Viewport
         ref={this.getViewportRef}
-        onWheel={this.teste}
-        // onWheel={throttle(()=>console.log(555), 1000)}
-        // onWheel={(ev) => throttle(this.handleOnWheel(ev), 1000)}
+        onWheel={this.handleOnWheel}
         viewportHeight={viewportHeight}
       >
         <ContentWrapper contentPosition={contentPosition}>
@@ -179,5 +165,5 @@ export default class Scrollable extends Component {
 }
 
 Scrollable.propTypes = {
-
+  children: PropTypes.element.isRequired
 }
