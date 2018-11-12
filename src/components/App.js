@@ -4,7 +4,11 @@ import {ThemeProvider} from 'styled-components'
 import Player from './Player'
 import Scrollable from './Scrollable'
 
+<<<<<<< HEAD
 import {lightTheme} from '../theme/globalStyle'
+=======
+import { lightTheme } from '../theme/globalStyle'
+>>>>>>> 43ad77b8f59e5043e48da830562773f5c09275b7
 
 class App extends Component {
 
@@ -12,6 +16,7 @@ class App extends Component {
     return (
       <ThemeProvider theme={lightTheme}>
         <div>
+<<<<<<< HEAD
           <div
             style={{
             margin: '50px',
@@ -20,6 +25,17 @@ class App extends Component {
             background: '#f5f5f5',
             border: '1px solid #333'
           }}>
+=======
+          <div style={
+          {
+          margin: '50px',
+          width: '350px',
+          height: '250px',
+          background: '#f5f5f5',
+          border: '1px solid #333'
+          }
+          }>
+>>>>>>> 43ad77b8f59e5043e48da830562773f5c09275b7
             <Scrollable>
               Lorem ipsum dolor, sit amet consectetur adipisicing elit. Enim culpa beatae non
               delectus cupiditate officiis dolorum eos blanditiis, amet maiores ab consequatur

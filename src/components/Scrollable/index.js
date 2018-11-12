@@ -137,6 +137,7 @@ export default class Scrollable extends Component {
   }
 
   render() {
+    console.log(1)
     const { children } = this.props
     const { viewportHeight, contentHeight, contentPosition } = this.state
 
