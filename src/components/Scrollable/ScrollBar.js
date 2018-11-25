@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import {findDOMNode} from 'react-dom'
 import styled from 'styled-components'
+import {Motion, spring} from 'react-motion'
+
+import { getMousePosition } from '../../utils'
 
 const Wrapper = styled.div`
   position: absolute;
@@ -24,17 +28,24 @@ const Track = styled.div`
 const Thumb = styled.div`
   position: absolute;
   right: 0;
-  top: ${({sliderPosition}) => sliderPosition}%;
+  top: ${({thumbPosition}) => thumbPosition}%;
   height: ${({thumbHeight}) => thumbHeight}px;
   width: 100%;
   background-color: #ff7777;
+  transition: background-color .2s;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, .1);
   border-radius: 5px;
+
+  &:hover {
+    background-color: red;
+  }
 `
 
 export default class ScrollBar extends Component {
   state = {
-    thumbHeight: null
+    thumbHeight: null,
+    dragged: false,
+    pointStartDrag: null
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -45,6 +56,47 @@ export default class ScrollBar extends Component {
     }
   }
 
+  componentDidMount() {
+    document.addEventListener('mousedown', this.handler)
+
+    document.addEventListener('mouseup', () => {
+      
+      if (this.state.dragged){
+        document.removeEventListener('mousedown', this.handler)
+        console.log('CLOS')
+      } 
+    })
+  }
+
+  handler = ev => {
+    //console.log(ev.target === findDOMNode(this._thumbNode))
+    if (ev.target === findDOMNode(this._thumbNode)) {
+      this.drag(ev)
+    }
+  }
+
+  drag = (ev) => {
+    if (!this.state.dragged) return false
+    if (!this.state.pointStartDrag) {
+      this.setState({
+        pointStartDrag: ev.screenY
+      })
+    } else {
+      const delta = (this.state.pointStartDrag - ev.screenY) * this.props.contentHeight / this.state.thumbHeight
+      
+      this.dragMove(delta)
+    }
+  }
+
+  dragMove = (delta) => {
+    this.setState({
+      pointStartDrag: null
+    })
+    this.props.scrollTo(this.props.contentPosition - delta)
+  }
+
+  //getThumbNode = 
+
   getThumbHeight = () => {
     const { viewportHeight, contentHeight } = this.props
 
@@ -53,23 +105,70 @@ export default class ScrollBar extends Component {
   
   getThumbPosition = () => {
     const { viewportHeight, contentPosition, contentHeight } = this.props
-
+    
     return (Math.abs(contentPosition) / (contentHeight - viewportHeight) * 100).toFixed(2)
+  }
+
+  thumbClickHandler = ev => {
+    ev.stopPropagation()
+  }
+
+  BarClickHandler = (ev, ref) => {
+    const { contentPosition, contentHeight, scrollTo } = this.props
+
+    const { topPosition } = getMousePosition(ev, ref)
+    const scrollDown = parseFloat(topPosition * 100).toFixed(2) > parseFloat(this.getThumbPosition())
+    
+    const delta = scrollDown ? contentHeight / 10 : contentHeight / - 10
+
+    scrollTo(contentPosition + delta)
+  }
+
+  handleOnMouseDown = (ev) => {
+    window.addEventListener('mousemove', this.drag)
+    
+    this.setState({
+      dragged: true
+    })
+  }
+
+  handleOnMouseUp = (ev) => {
+    window.removeEventListener('mousemove', this.drag)
+    this.setState({
+      dragged: false,
+      pointStartDrag: null
+    })
   }
 
   render() {
     const { viewportHeight } = this.props
     const { thumbHeight } = this.state
 
+    const barRef = React.createRef()
+
     return (
-      <Wrapper>
+      <Wrapper
+        ref={barRef}
+        onClick={(ev) => this.BarClickHandler(ev, barRef)}
+      >
         <Track
           trackHeight={viewportHeight - thumbHeight}
         >
-          <Thumb
-            thumbHeight={thumbHeight}
-            sliderPosition={this.getThumbPosition()}
-          />
+          <Motion
+            defaultStyle={{ top: 0 }}
+            style={{ top: spring(parseFloat(this.getThumbPosition())) }}
+          >
+            {interpolatedStyle => (
+              <Thumb
+                ref={(node) => { this._thumbNode = node }}
+                onClick={this.thumbClickHandler}
+                onMouseDown={this.handleOnMouseDown}
+                onMouseUp={this.handleOnMouseUp}
+                thumbHeight={thumbHeight}
+                thumbPosition={interpolatedStyle.top}
+              />
+            )}
+          </Motion>
         </Track>
       </Wrapper>
     )

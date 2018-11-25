@@ -1,9 +1,10 @@
-import {findDOMNode} from 'react-dom'
-
+import { findDOMNode } from 'react-dom';
 
 export const getMousePosition = (ev, ref) => {
-  const { top, left, bottom, width, height } = findDOMNode(ref.current).getBoundingClientRect()
-  
+  const { top, left, bottom, width, height } = findDOMNode(
+    ref.current
+  ).getBoundingClientRect();
+
   return {
     top,
     left,
@@ -13,5 +14,5 @@ export const getMousePosition = (ev, ref) => {
     mouseY: ev.clientY,
     leftPosition: (ev.clientX - left) / width,
     topPosition: (ev.clientY - top) / height
-  }
-}
+  };
+};

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { findDOMNode } from 'react-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import raf from 'raf' // requestAnimationFrame polyfill
+import {Motion, spring} from 'react-motion'
 
 import ScrollBar from './ScrollBar'
 
@@ -15,7 +15,8 @@ const Viewport = styled.div`
 
 const ContentWrapper = styled.div`
   position: absolute;
-  transform: translateY(${({contentPosition}) => contentPosition}px);
+  transform: translate3d(0, ${({contentPosition}) => contentPosition}px, 0);
+  top: 0;
   left: 0;
   width: calc(100% - 10px);
   height: 100%;
@@ -24,17 +25,12 @@ const ContentWrapper = styled.div`
     will-change: transform;
   }
 `
-
 const Content = styled.div`
   position: relative;
   height: ${({contentHeight}) => contentHeight ? `${contentHeight}px` : 'auto'};
 `
 
 export default class Scrollable extends Component {
-  constructor(props){
-    super(props)
-  }
-
   state = {
     viewportHeight: null,
     contentHeight: null,
@@ -50,16 +46,8 @@ export default class Scrollable extends Component {
     })
   }
 
-  componentWillUnmount() {
-    //this.clearRAF()
-  }
-
   getViewportRef = node => {
     this.viewport = node
-  }
-
-  getContentRef = node => {
-    this.content = node
   }
 
   getContentRef = node => {
@@ -74,70 +62,29 @@ export default class Scrollable extends Component {
     return findDOMNode(this.content).offsetHeight
   }
 
-  slide = (scrollOccasions) => {
+  scrollTo = (to) => {
     const { viewportHeight, contentHeight, contentPosition } = this.state
+
+    const delta = to - contentPosition
  
-    const scrollSteps = scrollOccasions
+    const extremeLimit = delta > 0 ? viewportHeight - contentHeight : 0
 
-    const extremeLimit = scrollOccasions > 0 ? viewportHeight - contentHeight : 0
-
-    const toExtremeLimitRewindCondition = scrollOccasions > 0 ? (contentPosition - scrollSteps < extremeLimit) : (contentPosition - scrollSteps > extremeLimit)
+    const toExtremeLimitRewindCondition = delta > 0 ? (contentPosition - delta < extremeLimit) : (contentPosition - delta > extremeLimit)
 
     if (contentPosition !== extremeLimit) {
-      let to = toExtremeLimitRewindCondition ? extremeLimit : this.state.contentPosition - scrollSteps
+      let to = toExtremeLimitRewindCondition ? extremeLimit : this.state.contentPosition - delta
 
-      this.scrollTo(to)
-      // this._raf = raf((timestamp) => {
-      //   this.setState({
-      //     starttime: timestamp
-      //   })
-      //   const duration = parseFloat((Math.abs(to - contentPosition) / 53 * 350).toFixed(0))
-      //   this.animMove(timestamp, contentPosition, to, duration)
-      // })
-    }
-  }
-
-  scrollTo = (to) => {
-    this.setState({
-      contentPosition: to
-    })
-  }
-
-  animMove = (timestamp, from, to, duration) => {
-    timestamp = timestamp || new Date().getTime()
-    
-    const runtime = timestamp - this.state.starttime
-    
-    let progress = runtime / duration
-    progress = Math.min(progress, 1)
-
-    const intermediate = (to - from) * progress
-
-    this.setState({
-      contentPosition: from + parseFloat((intermediate * progress).toFixed(2))
-    })
-
-    if (runtime < duration) {
-      raf((timestamp) => {
-        this.animMove(timestamp, from, to, duration)
+      this.setState({
+        contentPosition: to
       })
     }
   }
 
-  clearRAF = () => {
-    console.log('clear raf')
-    raf.cancel(this._raf)
-  }
-
   handleOnWheel = (ev) => {
-    // this.clearRAF()
-    const scrollOccasions = ev.deltaY
-
-    this.slide(scrollOccasions)
+    this.scrollTo(this.state.contentPosition + ev.deltaY)
   }
 
   render() {
-    console.log(1)
     const { children } = this.props
     const { viewportHeight, contentHeight, contentPosition } = this.state
 
@@ -147,18 +94,26 @@ export default class Scrollable extends Component {
         onWheel={this.handleOnWheel}
         viewportHeight={viewportHeight}
       >
-        <ContentWrapper contentPosition={contentPosition}>
-          <Content
-            ref={this.getContentRef}
-            contentHeight={contentHeight}
-          >
-            { children }
-          </Content>
-        </ContentWrapper>
+        <Motion
+          defaultStyle={{ top: 0 }}
+          style={{ top: spring(contentPosition) }}
+        >
+          {interpolatedStyle => (
+            <ContentWrapper contentPosition={interpolatedStyle.top}>
+              <Content
+                ref={this.getContentRef}
+                contentHeight={contentHeight}
+              >
+                { children }
+              </Content>
+            </ContentWrapper>
+          )}
+        </Motion>
         <ScrollBar
           viewportHeight={viewportHeight}
           contentHeight={contentHeight}
           contentPosition={contentPosition}
+          scrollTo={this.scrollTo}
         />
       </Viewport>
     )
