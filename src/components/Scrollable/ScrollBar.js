@@ -82,7 +82,7 @@ export default class ScrollBar extends Component {
         pointStartDrag: ev.screenY
       })
     } else {
-      const delta = (this.state.pointStartDrag - ev.screenY) * this.props.contentHeight / this.state.thumbHeight
+      const delta = (this.state.pointStartDrag - ev.screenY) * ((this.props.contentHeight - this.props.viewportHeight) / this.props.viewportHeight) 
       
       this.dragMove(delta)
     }

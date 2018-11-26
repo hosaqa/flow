@@ -3,9 +3,10 @@ import {ThemeProvider} from 'styled-components'
 
 import Player from './Player'
 import Scrollable from './Scrollable'
+import Playlist from './Playlist'
 
 import { lightTheme } from '../theme/globalStyle'
-import Test from './Test'
+
 class App extends Component {
 
   render() {
@@ -48,7 +49,8 @@ class App extends Component {
               lorem
             </Scrollable>
           </div>
-          <Player playlist={this.props.data}/>
+          <Playlist playlist={this.props.data} />
+          <Player playlist={this.props.data} />
         </div>
       </ThemeProvider>
     )
