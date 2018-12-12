@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-
-import Scrollable from '../Scrollable'
+import ScrollArea from 'react-scrollbar'
+import './style.css'
 
 const PlaylistQueueWrapper = styled.div`
   position: absolute;
@@ -23,9 +23,15 @@ const PlaylistQueueBody = styled.div`
 const PlaylistQueue = ({children}) => (
   <PlaylistQueueWrapper>
     <PlaylistQueueBody>
-      <Scrollable>
+      <ScrollArea
+        speed={0.8}
+        smoothScrolling={true}
+        className="area"
+        contentClassName="content"
+        horizontal={false}
+      >
         { children }
-      </Scrollable>
+      </ScrollArea>
     </PlaylistQueueBody>
   </PlaylistQueueWrapper>
 )

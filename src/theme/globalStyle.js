@@ -1,21 +1,20 @@
-import { injectGlobal } from 'styled-components'
-import styledNormalize from 'styled-normalize'
+import { injectGlobal } from 'styled-components';
+import styledNormalize from 'styled-normalize';
 
 export const lightTheme = {
   colorFontPrimary: '#1f2023',
   colorFontSecondary: '#212121',
   colorButton: '#1f2023',
   colorButtonDisabled: '#797979',
-  colorMainBg: '#efefef',
+  colorMainBg: '#f9f9f9',
+  // colorMainBg: '#efefef',
   colorAccent: '#ff7070',
   colorDraggableBg: 'rgba(255, 112, 112, 0.50)',
   colorGradientStart: '#f90dc9',
   colorGradientEnd: '#ff1d1d',
   borderRadiusMain: '3px',
-  shadowMain: '1px 1px 2px rgba(0, 0, 0, .25)',
-}
-
-
+  shadowMain: '1px 1px 2px rgba(0, 0, 0, .25)'
+};
 
 injectGlobal`
   ${styledNormalize}
@@ -33,4 +32,4 @@ injectGlobal`
   *:before {
     box-sizing: border-box;
   }
-`
+`;

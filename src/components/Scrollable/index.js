@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { findDOMNode } from 'react-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import {Motion, spring} from 'react-motion'
+import { Motion, spring } from 'react-motion'
 
 import ScrollBar from './ScrollBar'
 
@@ -26,6 +26,7 @@ const ContentWrapper = styled.div`
   }
 `
 const Content = styled.div`
+  user-select: none;
   position: relative;
   height: ${({contentHeight}) => contentHeight ? `${contentHeight}px` : 'auto'};
 `

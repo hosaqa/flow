@@ -294,12 +294,6 @@ class Player extends Component {
           <PlaylistElementsGroup>
             <TrackInfo {...currentTrack}/>
             <div style={{marginLeft: 'auto'}}>
-              <PlayerButton>
-                <FavoriteBorderIcon />
-              </PlayerButton>
-              <PlayerButton >
-                <PlaylistAddIcon />
-              </PlayerButton>
               <div style={{display: 'inline-block'}}>
                 <Dropdown selector={playQueueButton}>
                   <PlaylistQueue>

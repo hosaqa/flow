@@ -113,6 +113,7 @@ class VolumeBar extends Component {
   }  
 
   render() {
+    console.log('volume bar rendered')
     const { volume, setVolume, muted, muteToggle } = this.props
     const volumeBarRef = React.createRef()
 

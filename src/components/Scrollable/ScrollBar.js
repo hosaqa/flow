@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {findDOMNode} from 'react-dom'
+import { findDOMNode } from 'react-dom'
 import styled from 'styled-components'
-import {Motion, spring} from 'react-motion'
+import { Motion, spring } from 'react-motion'
 
 import { getMousePosition } from '../../utils'
 
@@ -63,13 +63,11 @@ export default class ScrollBar extends Component {
       
       if (this.state.dragged){
         document.removeEventListener('mousedown', this.handler)
-        console.log('CLOS')
       } 
     })
   }
 
   handler = ev => {
-    //console.log(ev.target === findDOMNode(this._thumbNode))
     if (ev.target === findDOMNode(this._thumbNode)) {
       this.drag(ev)
     }
@@ -82,9 +80,12 @@ export default class ScrollBar extends Component {
         pointStartDrag: ev.screenY
       })
     } else {
-      const delta = (this.state.pointStartDrag - ev.screenY) * ((this.props.contentHeight - this.props.viewportHeight) / this.props.viewportHeight) 
+      this.setState({
+        pointStartDrag: null
+      })
       
-      this.dragMove(delta)
+      console.log( parseFloat(this.getThumbPosition()) / 100 )
+      //this.props.scrollTo
     }
   }
 
@@ -94,8 +95,6 @@ export default class ScrollBar extends Component {
     })
     this.props.scrollTo(this.props.contentPosition - delta)
   }
-
-  //getThumbNode = 
 
   getThumbHeight = () => {
     const { viewportHeight, contentHeight } = this.props
@@ -140,6 +139,10 @@ export default class ScrollBar extends Component {
     })
   }
 
+  getTrackRef = node => {
+    this.track = node
+  }
+
   render() {
     const { viewportHeight } = this.props
     const { thumbHeight } = this.state
@@ -152,6 +155,7 @@ export default class ScrollBar extends Component {
         onClick={(ev) => this.BarClickHandler(ev, barRef)}
       >
         <Track
+          ref={this.getTrackRef}
           trackHeight={viewportHeight - thumbHeight}
         >
           <Motion
