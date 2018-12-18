@@ -1,16 +1,21 @@
-import React, {Component} from 'react'
-import {ThemeProvider} from 'styled-components'
-import Player from './Player'
+import React, { Component } from 'react'
+import { ThemeProvider } from 'styled-components'
+import { Provider } from 'react-redux'
 
+import { store } from '../store/configureStore'
+import Player from './Player'
 import { lightTheme } from '../theme/globalStyle'
+
 
 class App extends Component {
 
   render() {
     return (
-      <ThemeProvider theme={lightTheme}>
-        <Player playlist={this.props.data} />
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={lightTheme}>
+          <Player playlist={this.props.data} />
+        </ThemeProvider>
+      </Provider>
     )
   }
 }

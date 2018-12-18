@@ -15,6 +15,8 @@ import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd'
 import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 
+import PlayerCore from './PlayerCore'
+
 import PlayerButton from '../PlayerButton'
 
 import Timeline from '../Timeline'
@@ -231,6 +233,7 @@ class Player extends Component {
             onPlay={() => this.renderSeekPos()}
             onEnd={() => this.handleOnEnd()}
           />
+          <PlayerCore />
           {/* /PLAYER CORE REACT HOWLER */}
 
           <PlayButtonsGroup>

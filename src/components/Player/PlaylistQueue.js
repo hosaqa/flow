@@ -29,6 +29,12 @@ const PlaylistQueue = ({children}) => (
         className="area"
         contentClassName="content"
         horizontal={false}
+        style={{
+          padding: '0 10px 0 0'
+        }}
+        verticalScrollbarStyle={{
+          borderRadius: '4px'
+        }}
       >
         { children }
       </ScrollArea>
