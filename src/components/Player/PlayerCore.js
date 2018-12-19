@@ -3,34 +3,30 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import ReactHowler from 'react-howler'
 
-import { toggle, fetchPlaylist } from '../../actions/PlayerActions'
+import { toggle, playlistFetch } from '../../actions/PlayerActions'
 
 class PlayerCore extends Component {
 
 
 
   render() {
-    const { playingNow, playlist, track, time } = this.props
-
-    const getSrc = () => {
-      if (playlist) {
-        return playlist[1].src
-      } else {
-        return 'lil_uzi-xo_tour.mp3'
-      }
-    }
-    console.log(getSrc())
+    const { playlistIsLoading, playlistFetchFailed, trackIsLoading, playingNow, playlist, track, time } = this.props
     return (
       <div>
-        <button onClick={this.props.fetchPlaylist}>
+        {
+          playlistIsLoading && 'playlist loading...'
+        }
+        <button onClick={this.props.playlistFetch}>
           Click
         </button>
-        <ReactHowler
-          src={getSrc()}
-          playing={playingNow}
-        />
+        {
+          playlist &&
+          <ReactHowler
+            src={playlist[0].src}
+            playing={playingNow}
+          />
+        }
       </div>
-
     );
   }
 }
@@ -42,4 +38,4 @@ PlayerCore.propTypes = {
   time: PropTypes.number
 }
 
-export default connect(({player}) => player, {toggle, fetchPlaylist})(PlayerCore)
+export default connect(({player}) => player, {toggle, playlistFetch})(PlayerCore)
