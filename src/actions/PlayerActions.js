@@ -1,4 +1,6 @@
 export const TOGGLE_PLAYER = 'TOGGLE_PLAYER';
+export const SET_CURRENT_TRACK = 'SET_CURRENT_TRACK';
+
 export const PLAYLIST_IS_LOADING = 'PLAYLIST_IS_LOADING';
 export const PLAYLIST_FETCH_SUCCESS = 'PLAYLIST_FETCH_SUCCESS';
 export const PLAYLIST_FETCH_FAILED = 'PLAYLIST_FETCH_FAILED';
@@ -51,5 +53,16 @@ export function playlistFetchFailed(bool) {
   return {
     type: PLAYLIST_FETCH_FAILED,
     payload: bool
+  };
+}
+
+export function setCurrentTrack(id, playingNow) {
+  return {
+    type: SET_CURRENT_TRACK,
+    payload: {
+      id,
+      playingNow,
+      trackPosition: null
+    }
   };
 }
