@@ -1,6 +1,7 @@
 import ReactHowler from 'react-howler'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import raf from 'raf' // requestAnimationFrame polyfill
 import styled from 'styled-components'
 
@@ -26,6 +27,11 @@ import Playlist from '../Playlist'
 import PlaylistQueue from './PlaylistQueue'
 import Dropdown from '../Dropdown'
 
+
+import { playToggle, playlistFetch, setCurrentTrack } from '../../actions/PlayerActions'
+import { searchTrackByID } from '../../utils'
+
+import PlayerControls from './PlayerControls'
 
 const PlayerWrapper = styled.div`
   position: fixed;
@@ -64,51 +70,8 @@ const PlaylistElementsGroup = styled.div`
 
 
 class Player extends Component {
-  state = {
-    playlist: this.props.playlist,
-    nowPlaying: false,
-    volume: 1,
-    muted: false,
-    currentTrackID: this.props.playlist[0].id,
-    currentTrackPosition: null,
-    repeatingTrack: false,
-    playlistShuffled: false
-  }
-
   componentWillUnmount () {
     this.clearRAF()
-  }
-
-  seachTrackByID = (id) => (
-    this.state.playlist.find(track => track.id === id)
-  )
-
-  searchTrackArrayIndex = (id) => (
-    this.state.playlist.indexOf(this.seachTrackByID(id))
-  )
-
-  setCurrentTrack = (id) => {
-    this.setState({
-      currentTrackID: id
-    })
-  }
-
-  closestTrackExist = (index) => {
-    const { playlist, currentTrackID } = this.state
-    const currentTrack = this.seachTrackByID(currentTrackID)
-    const currentTrackIndex = playlist.indexOf(currentTrack)
-    
-    return playlist.includes(playlist[currentTrackIndex + index]) ? true : false
-  }
-
-  setCurrentTrackClosest = (index) => {
-    const { playlist, currentTrackID } = this.state
-    const currentTrack = this.seachTrackByID(currentTrackID)
-    const currentTrackIndex = playlist.indexOf(currentTrack)
-
-    const nextTrackIndex = currentTrackIndex + index
-
-    if (this.closestTrackExist(index)) this.handleChangeTrack(playlist[nextTrackIndex].id)
   }
 
   handleChangeTrack = (id, nowPlay) => {
@@ -214,17 +177,18 @@ class Player extends Component {
     return Math.floor(Math.random() * (max - min + 1) + min)
   }
 
-  render() {
-    const { playlist, nowPlaying, volume, muted, currentTrackID, currentTrackPosition, repeatingTrack, playlistShuffled } = this.state
 
-    const currentTrack = this.seachTrackByID(currentTrackID)
+  render() {
+
     const playQueueButton = <PlayerButton ><PlaylistPlayIcon /></PlayerButton>
+    console.log(this.props)
+    const { playlist, playToggle, playingNow } = this.props
 
     return (
       <PlayerWrapper>
         <PlayerInner>
           {/* PLAYER CORE REACT HOWLER */}
-          <ReactHowler
+          {/* <ReactHowler
             src={currentTrack.src}
             playing={nowPlaying}
             volume={volume}
@@ -232,25 +196,26 @@ class Player extends Component {
             ref={(ref) => (this.player = ref)}
             onPlay={() => this.renderSeekPos()}
             onEnd={() => this.handleOnEnd()}
-          />
+          /> */}
           <PlayerCore />
           {/* /PLAYER CORE REACT HOWLER */}
 
           <PlayButtonsGroup>
-            <PlayerButton
+            <PlayerControls />
+            {/* <PlayerButton
               onClick={() => this.setCurrentTrackClosest(-1)}
               iconSize={28}
               pseudoSelActive
-              disabled={this.closestTrackExist(-1) ? false : true}
+              disabled={this.closestTrackIsExist(-1) ? false : true}
             >
               <SkipPreviousIcon />
             </PlayerButton>
             <PlayerButton
-              onClick={() => this.handlePlayToggle()}
+              onClick={() => playToggle()}
               iconSize={32}
               pseudoSelActive
             >
-              {!nowPlaying
+              {!playingNow
                 ? <PlayCircleOutlineIcon />
                 : <PauseCircleOutlineIcon />
               }        
@@ -259,11 +224,11 @@ class Player extends Component {
               onClick={() => this.setCurrentTrackClosest(1)}
               iconSize={28}
               pseudoSelActive
-              disabled={this.closestTrackExist(1) ? false : true}
+              disabled={this.closestTrackIsExist(1) ? false : true}
             >
               <SkipNextIcon />
-            </PlayerButton>
-            <div style={{marginLeft: '25px'}}>
+            </PlayerButton> */}
+            {/* <div style={{marginLeft: '25px'}}>
               <PlayerButton
                 onClick={() => this.repeatToggle()}
                 active={repeatingTrack}
@@ -276,11 +241,11 @@ class Player extends Component {
               >
                 <ShuffleIcon /> 
               </PlayerButton>
-            </div>
+            </div> */}
           </PlayButtonsGroup>
           {/* /PLAY BUTTONS GROUP */}
 
-          <Timeline
+          {/* <Timeline
             nowPlaying={nowPlaying}
             trackDuration={currentTrack.duration}
             currentTrackPosition={currentTrackPosition}
@@ -291,10 +256,10 @@ class Player extends Component {
             muted={muted}
             muteToggle={() => this.muteToggle()}
             setVolume={(value) => this.setVolume(value)}
-          />
+          /> */}
 
           {/* PLAYLIST ELEMENTS GROUP */}
-          <PlaylistElementsGroup>
+          {/* <PlaylistElementsGroup>
             <TrackInfo {...currentTrack}/>
             <div style={{marginLeft: 'auto'}}>
               <div style={{display: 'inline-block'}}>
@@ -311,7 +276,7 @@ class Player extends Component {
                 </Dropdown>
               </div>
             </div>
-          </PlaylistElementsGroup>
+          </PlaylistElementsGroup> */}
           {/* /PLAYLIST ELEMENTS GROUP */}
 
         </PlayerInner>
@@ -324,4 +289,4 @@ Player.propTypes = {
   playlist: PropTypes.arrayOf(PropTypes.object)
 }
 
-export default Player
+export default connect(({player}) => player, {playToggle, playlistFetch, setCurrentTrack})(Player)

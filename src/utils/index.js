@@ -16,3 +16,6 @@ export const getMousePosition = (ev, ref) => {
     topPosition: (ev.clientY - top) / height
   };
 };
+
+export const searchTrackByID = (playlist, id) =>
+  playlist.find(track => track.id === id);

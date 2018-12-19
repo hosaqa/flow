@@ -1,7 +1,8 @@
+import { searchTrackByID } from '../utils';
+
 import {
-  TOGGLE_PLAYER,
+  PLAY_TOGGLE,
   SET_CURRENT_TRACK,
-  PLAYLIST_FETCH,
   PLAYLIST_IS_LOADING,
   PLAYLIST_FETCH_SUCCESS,
   PLAYLIST_FETCH_FAILED
@@ -23,7 +24,7 @@ export const initialState = {
 
 export function playerReducer(state = initialState, action) {
   switch (action.type) {
-    case TOGGLE_PLAYER:
+    case PLAY_TOGGLE:
       return { ...state, playingNow: !state.playingNow };
 
     case SET_CURRENT_TRACK:
@@ -31,7 +32,7 @@ export function playerReducer(state = initialState, action) {
 
       return {
         ...state,
-        track: state.playlist.find(track => track.id === id).src,
+        track: searchTrackByID(state.playlist, id).id,
         playingNow: playingNow || state.playingNow,
         trackPosition: null
       };
@@ -40,7 +41,8 @@ export function playerReducer(state = initialState, action) {
       return { ...state, playlistIsLoading: action.payload };
 
     case PLAYLIST_FETCH_SUCCESS:
-      return { ...state, playlist: action.payload };
+      const playlist = action.payload;
+      return { ...state, playlist, track: playlist[0].id };
 
     case PLAYLIST_FETCH_FAILED:
       return { ...state, playlistFetchFailed: action.payload };
