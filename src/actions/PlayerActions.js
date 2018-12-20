@@ -2,6 +2,7 @@ export const PLAY_TOGGLE = 'PLAY_TOGGLE';
 export const SET_CURRENT_TRACK = 'SET_CURRENT_TRACK';
 export const CLOSEST_TRACK_IS_EXIST = 'CLOSEST_TRACK_IS_EXIST';
 export const SET_CURRENT_TRACK_CLOSEST = 'SET_CURRENT_TRACK_CLOSEST';
+export const REPEAT_TOGGLE = 'REPEAT_TOGGLE';
 
 export const PLAYLIST_IS_LOADING = 'PLAYLIST_IS_LOADING';
 export const PLAYLIST_FETCH_SUCCESS = 'PLAYLIST_FETCH_SUCCESS';
@@ -10,6 +11,12 @@ export const PLAYLIST_FETCH_FAILED = 'PLAYLIST_FETCH_FAILED';
 export function playToggle() {
   return {
     type: PLAY_TOGGLE
+  };
+}
+
+export function repeatToggle() {
+  return {
+    type: REPEAT_TOGGLE
   };
 }
 

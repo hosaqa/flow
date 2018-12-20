@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import ProgressBar from '../ProgressBar'
@@ -29,19 +30,7 @@ const ProgressBarBody = styled.div`
   cursor: pointer;
 `
 
-export default class Timeline extends Component {
-  static propTypes = {
-    trackDuration: PropTypes.shape({
-      minutes: PropTypes.number,
-      seconds: PropTypes.number
-    }),
-    currentTrackPosition: PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.object
-    ]),
-    seek: PropTypes.func
-  }
-
+class Timeline extends Component {
   state = {
     trackDurationInSeconds: null,
     dummyLineProgress: null,
@@ -192,3 +181,18 @@ export default class Timeline extends Component {
     )
   }
 }
+
+Timeline.propTypes = {
+  trackDuration: PropTypes.shape({
+    minutes: PropTypes.number,
+    seconds: PropTypes.number
+  }),
+  currentTrackPosition: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.object
+  ]),
+  seek: PropTypes.func
+}
+
+
+export default connect(({player}) => player, {})(Timeline)

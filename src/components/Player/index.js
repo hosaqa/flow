@@ -24,7 +24,7 @@ import Timeline from '../Timeline'
 import VolumeBar from '../VolumeBar'
 import TrackInfo from '../TrackInfo'
 import Playlist from '../Playlist'
-import PlaylistQueue from './PlaylistQueue'
+import PlayerQueue from './PlayerQueue'
 import Dropdown from '../Dropdown'
 
 
@@ -201,46 +201,6 @@ class Player extends Component {
 
           <PlayButtonsGroup>
             <PlayerControls />
-            {/* <PlayerButton
-              onClick={() => this.setCurrentTrackClosest(-1)}
-              iconSize={28}
-              pseudoSelActive
-              disabled={this.closestTrackIsExist(-1) ? false : true}
-            >
-              <SkipPreviousIcon />
-            </PlayerButton>
-            <PlayerButton
-              onClick={() => playToggle()}
-              iconSize={32}
-              pseudoSelActive
-            >
-              {!playingNow
-                ? <PlayCircleOutlineIcon />
-                : <PauseCircleOutlineIcon />
-              }        
-            </PlayerButton>
-            <PlayerButton
-              onClick={() => this.setCurrentTrackClosest(1)}
-              iconSize={28}
-              pseudoSelActive
-              disabled={this.closestTrackIsExist(1) ? false : true}
-            >
-              <SkipNextIcon />
-            </PlayerButton> */}
-            {/* <div style={{marginLeft: '25px'}}>
-              <PlayerButton
-                onClick={() => this.repeatToggle()}
-                active={repeatingTrack}
-              >
-                <RepeatIcon /> 
-              </PlayerButton>
-              <PlayerButton
-                onClick={() => this.shuffleToggle()}
-                active={playlistShuffled}
-              >
-                <ShuffleIcon /> 
-              </PlayerButton>
-            </div> */}
           </PlayButtonsGroup>
           {/* /PLAY BUTTONS GROUP */}
 
@@ -258,24 +218,16 @@ class Player extends Component {
           /> */}
 
           {/* PLAYLIST ELEMENTS GROUP */}
-          {/* <PlaylistElementsGroup>
-            <TrackInfo {...currentTrack}/>
+          <PlaylistElementsGroup>
+            {/* <TrackInfo {...currentTrack}/> */}
             <div style={{marginLeft: 'auto'}}>
               <div style={{display: 'inline-block'}}>
                 <Dropdown selector={playQueueButton}>
-                  <PlaylistQueue>
-                    <Playlist
-                      playlist={playlist}
-                      currentTrackID={currentTrackID}
-                      setTrack={this.handleChangeTrack}
-                      playToggle={this.handlePlayToggle}
-                      nowPlaying={nowPlaying}
-                    />
-                  </PlaylistQueue>
+                  <PlayerQueue />
                 </Dropdown>
               </div>
             </div>
-          </PlaylistElementsGroup> */}
+          </PlaylistElementsGroup>
           {/* /PLAYLIST ELEMENTS GROUP */}
 
         </PlayerInner>

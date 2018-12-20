@@ -9,7 +9,7 @@ const PlaylistWrapper = styled.div`
   position: relative;
 `
 
-const Playlist = ({playlist, currentTrackID, playToggle, setTrack, nowPlaying}) => (
+const Playlist = ({playlist, currentTrackID, playToggle, setTrack, playingNow}) => (
   <PlaylistWrapper>
     {playlist.map(item => (
       <PlayListItem
@@ -17,7 +17,7 @@ const Playlist = ({playlist, currentTrackID, playToggle, setTrack, nowPlaying}) 
         setTrack={setTrack}
         track={item}
         currentTrackID={currentTrackID}
-        nowPlaying={nowPlaying}
+        playingNow={playingNow}
         key={item.id}
       >
         {item.track}
@@ -31,7 +31,7 @@ Playlist.propTypes = {
   currentTrackID: PropTypes.number,
   playToggle: PropTypes.func,
   setTrack: PropTypes.func,
-  nowPlaying: PropTypes.bool
+  playingNow: PropTypes.bool
 }
 
 export default Playlist

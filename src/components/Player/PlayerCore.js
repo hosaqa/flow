@@ -12,16 +12,26 @@ class PlayerCore extends Component {
     this.props.playlistFetch()
   }
 
+  setSeek (rewindTo) {
+    this.player.seek(rewindTo)
+  }
+
   render() {
     const { playlistIsLoading, playlistFetchFailed, trackIsLoading, playingNow, playlist, track, trackPosition } = this.props
   
     if (!playlist) return null
 
     return (
+      <div>
       <ReactHowler
+        ref={(ref) => (this.player = ref)}
         src={searchTrackByID(playlist, track).src}
         playing={playingNow}
       />
+      <button onClick={() => this.setSeek(25)}
+      >click</button>
+      </div>
+
     );
   }
 }

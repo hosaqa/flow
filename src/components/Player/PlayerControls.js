@@ -4,12 +4,14 @@ import SkipPreviousIcon from '@material-ui/icons/SkipPrevious'
 import SkipNextIcon from '@material-ui/icons/SkipNext'
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline'
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline'
-import { playToggle, setCurrentTrack } from '../../actions/PlayerActions'
+import RepeatIcon from '@material-ui/icons/Repeat'
+import ShuffleIcon from '@material-ui/icons/Shuffle'
+import { playToggle, setCurrentTrack, repeatToggle } from '../../actions/PlayerActions'
 import { searchTrackByID } from '../../utils'
 import PlayerButton from '../PlayerButton'
 
 
-function PlayerControls({ playlistIsLoading, playlistFetchFailed, trackIsLoading, playingNow, playlist, track, trackPosition, playToggle, setCurrentTrack }) {
+function PlayerControls({ playingNow, playlist, track, repeating, playlistShuffled, playToggle, repeatToggle, setCurrentTrack }) {
   const closestTrackIsExist = (index) => {
     if (!playlist) return false
 
@@ -26,7 +28,7 @@ function PlayerControls({ playlistIsLoading, playlistFetchFailed, trackIsLoading
     const nextTrackIndex = currentTrackIndex + index
     if (closestTrackIsExist(index)) setCurrentTrack(playlist[nextTrackIndex].id)
   }
-  console.log('render')
+
   return (
     <div>
       <PlayerButton
@@ -55,9 +57,21 @@ function PlayerControls({ playlistIsLoading, playlistFetchFailed, trackIsLoading
       >
         <SkipNextIcon />
       </PlayerButton>
+      <PlayerButton
+        onClick={repeatToggle}
+        active={repeating}
+      >
+        <RepeatIcon /> 
+      </PlayerButton>
+      <PlayerButton
+        onClick={() => this.shuffleToggle()}
+        active={playlistShuffled}
+      >
+        <ShuffleIcon /> 
+      </PlayerButton>
     </div>
   )
 }
 
 
-export default connect(({player}) => player, {playToggle, setCurrentTrack})(PlayerControls);
+export default connect(({player}) => player, {playToggle, setCurrentTrack, repeatToggle})(PlayerControls);

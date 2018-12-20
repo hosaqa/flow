@@ -3,6 +3,7 @@ import { searchTrackByID } from '../utils';
 import {
   PLAY_TOGGLE,
   SET_CURRENT_TRACK,
+  REPEAT_TOGGLE,
   PLAYLIST_IS_LOADING,
   PLAYLIST_FETCH_SUCCESS,
   PLAYLIST_FETCH_FAILED
@@ -18,12 +19,15 @@ export const initialState = {
   trackPosition: null,
   volume: 1,
   muted: false,
-  repeatingTrack: false,
+  repeating: false,
   playlistShuffled: false
 };
 
 export function playerReducer(state = initialState, action) {
   switch (action.type) {
+    case REPEAT_TOGGLE:
+      return { ...state, repeating: !state.repeating };
+
     case PLAY_TOGGLE:
       return { ...state, playingNow: !state.playingNow };
 
