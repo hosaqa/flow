@@ -181,7 +181,6 @@ class Player extends Component {
   render() {
 
     const playQueueButton = <PlayerButton ><PlaylistPlayIcon /></PlayerButton>
-    console.log(this.props)
     const { playlist, playToggle, playingNow } = this.props
 
     return (

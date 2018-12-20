@@ -4,15 +4,13 @@ import SkipPreviousIcon from '@material-ui/icons/SkipPrevious'
 import SkipNextIcon from '@material-ui/icons/SkipNext'
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline'
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline'
-import { playToggle, playlistFetch, setCurrentTrack } from '../../actions/PlayerActions'
+import { playToggle, setCurrentTrack } from '../../actions/PlayerActions'
 import { searchTrackByID } from '../../utils'
 import PlayerButton from '../PlayerButton'
 
 
-function _PlayerControls(props) {
+function PlayerControls({ playlistIsLoading, playlistFetchFailed, trackIsLoading, playingNow, playlist, track, trackPosition, playToggle, setCurrentTrack }) {
   const closestTrackIsExist = (index) => {
-    const { playlist, track } = props
-
     if (!playlist) return false
 
     const currentTrack = searchTrackByID(playlist, track)
@@ -22,14 +20,13 @@ function _PlayerControls(props) {
   }
 
   const setCurrentTrackClosest = (index) => {
-    const { playlist, track, setCurrentTrack } = props
     const currentTrack = searchTrackByID(playlist, track)
     const currentTrackIndex = playlist.indexOf(currentTrack)
 
     const nextTrackIndex = currentTrackIndex + index
     if (closestTrackIsExist(index)) setCurrentTrack(playlist[nextTrackIndex].id)
   }
-  const { playlistIsLoading, playlistFetchFailed, trackIsLoading, playingNow, playlist, track, trackPosition } = this.props
+  console.log('render')
   return (
     <div>
       <PlayerButton
@@ -62,8 +59,5 @@ function _PlayerControls(props) {
   )
 }
 
-// export default connect(({player}) => player, {playToggle, playlistFetch, setCurrentTrack})(PlayerControls)
 
-const PlayerControls = connect(({player}) => player, {playToggle, playlistFetch, setCurrentTrack})(_PlayerControls);
-
-export default PlayerControls;
+export default connect(({player}) => player, {playToggle, setCurrentTrack})(PlayerControls);
