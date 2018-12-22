@@ -4,6 +4,8 @@ export const CLOSEST_TRACK_IS_EXIST = 'CLOSEST_TRACK_IS_EXIST';
 export const SET_CURRENT_TRACK_CLOSEST = 'SET_CURRENT_TRACK_CLOSEST';
 export const REPEAT_TOGGLE = 'REPEAT_TOGGLE';
 
+export const SET_TRACK_POSITION = 'SET_TRACK_POSITION';
+
 export const PLAYLIST_IS_LOADING = 'PLAYLIST_IS_LOADING';
 export const PLAYLIST_FETCH_SUCCESS = 'PLAYLIST_FETCH_SUCCESS';
 export const PLAYLIST_FETCH_FAILED = 'PLAYLIST_FETCH_FAILED';
@@ -87,5 +89,12 @@ export function setCurrentTrackClosest(index) {
   return {
     type: SET_CURRENT_TRACK_CLOSEST,
     payload: index
+  };
+}
+
+export function setTrackPosition(position) {
+  return {
+    type: SET_TRACK_POSITION,
+    payload: position
   };
 }

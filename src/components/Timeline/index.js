@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import ProgressBar from '../ProgressBar'
-import { getMousePosition } from '../../utils'
+import { getMousePosition, searchTrackByID } from '../../utils'
 
 const TimeLineWrapper = styled.div`
   display: flex;
@@ -32,26 +32,21 @@ const ProgressBarBody = styled.div`
 
 class Timeline extends Component {
   state = {
-    trackDurationInSeconds: null,
     dummyLineProgress: null,
     dummyTime: null,
     mouseDowned: false
   }
 
-  componentWillMount() {
-    this.setState({
-      trackDurationInSeconds: this.convertDurationToSecond(this.props.trackDuration)
-    })
-  }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      trackDurationInSeconds: this.convertDurationToSecond(nextProps.trackDuration)
-    })
+  getTrackDuration() {
+    const { playlist, track } = this.props
+
+    return searchTrackByID(playlist, track).duration
   }
 
   convertDurationToSecond(trackDuration) {
-    const { minutes, seconds }= trackDuration
+    const { minutes, seconds } = trackDuration
+    
     return minutes * 60 + seconds
   }
 
@@ -78,15 +73,21 @@ class Timeline extends Component {
     return `${minutes}:${seconds}`
   }
   
-  renderProgressBarSlider (currentTrackPosition, trackDuration) {
+  renderProgressBarSlider (trackPosition, trackDuration) {
     const {minutes, seconds} = trackDuration
   
     trackDuration = minutes * 60 + seconds
-    currentTrackPosition = (this.isNumeric(currentTrackPosition)) ? currentTrackPosition : 0
-    const width = currentTrackPosition / trackDuration * 100
+    trackPosition = (this.isNumeric(trackPosition)) ? trackPosition : 0
+    const width = trackPosition / trackDuration * 100
 
     return (
-      <ProgressBar active={this.props.nowPlaying} thumbShowOnHover={true} thumbRadius={6} direction={'horizontal'} filled={(this.state.dummyLineProgress)? this.state.dummyLineProgress : width} />
+      <ProgressBar
+        active={this.props.nowPlaying}
+        thumbShowOnHover={true}
+        thumbRadius={6}
+        direction={'horizontal'}
+        filled={(this.state.dummyLineProgress)? this.state.dummyLineProgress : width}
+      />
     )
   }
 
@@ -149,21 +150,23 @@ class Timeline extends Component {
   render() {
     const timelineRef = React.createRef()
 
-    let {trackDuration, nowPlaying, currentTrackPosition, seek} = this.props
+    let { nowPlaying, trackPosition, playlist, track } = this.props
 
-    const progressBar = this.renderProgressBarSlider(currentTrackPosition, trackDuration)
+    const trackDuration = searchTrackByID(playlist, track).duration
+
+    const progressBar = this.renderProgressBarSlider(trackPosition, trackDuration)
     
     let {minutes, seconds} = trackDuration
     
-    currentTrackPosition = (this.state.dummyTime) ? this.state.dummyTime : currentTrackPosition
+    trackPosition = (this.state.dummyTime) ? this.state.dummyTime : trackPosition
 
-    currentTrackPosition = (this.isNumeric(currentTrackPosition)) ? this.formateTimerValue(currentTrackPosition) : '0:00'
+    trackPosition = (this.isNumeric(trackPosition)) ? this.formateTimerValue(trackPosition) : '0:00'
   
     if (this.countDigits(seconds) < 2) seconds = '0' + seconds
   
     return (
       <TimeLineWrapper>
-        <TimerDisplay>{currentTrackPosition}</TimerDisplay>
+        <TimerDisplay>{trackPosition}</TimerDisplay>
         <ProgressBarWrapper>
           <ProgressBarBody 
             ref={timelineRef}
@@ -187,7 +190,7 @@ Timeline.propTypes = {
     minutes: PropTypes.number,
     seconds: PropTypes.number
   }),
-  currentTrackPosition: PropTypes.oneOfType([
+  trackPosition: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.object
   ]),

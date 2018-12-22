@@ -4,6 +4,7 @@ import {
   PLAY_TOGGLE,
   SET_CURRENT_TRACK,
   REPEAT_TOGGLE,
+  SET_TRACK_POSITION,
   PLAYLIST_IS_LOADING,
   PLAYLIST_FETCH_SUCCESS,
   PLAYLIST_FETCH_FAILED
@@ -41,11 +42,15 @@ export function playerReducer(state = initialState, action) {
         trackPosition: null
       };
 
+    case SET_TRACK_POSITION:
+      return { ...state, trackPosition: action.payload };
+
     case PLAYLIST_IS_LOADING:
       return { ...state, playlistIsLoading: action.payload };
 
     case PLAYLIST_FETCH_SUCCESS:
       const playlist = action.payload;
+
       return { ...state, playlist, track: playlist[0].id };
 
     case PLAYLIST_FETCH_FAILED:

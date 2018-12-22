@@ -28,7 +28,7 @@ function PlayerControls({ playingNow, playlist, track, repeating, playlistShuffl
     const nextTrackIndex = currentTrackIndex + index
     if (closestTrackIsExist(index)) setCurrentTrack(playlist[nextTrackIndex].id)
   }
-
+  console.log('11111')
   return (
     <div>
       <PlayerButton

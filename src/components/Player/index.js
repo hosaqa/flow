@@ -203,14 +203,10 @@ class Player extends Component {
             <PlayerControls />
           </PlayButtonsGroup>
           {/* /PLAY BUTTONS GROUP */}
-
-          {/* <Timeline
-            nowPlaying={nowPlaying}
-            trackDuration={currentTrack.duration}
-            currentTrackPosition={currentTrackPosition}
-            seek={(rewindTo) => this.setSeek(rewindTo)}
-          />
-          <VolumeBar
+          {
+            playlist && <Timeline />
+          }
+          {/* <VolumeBar
             volume={volume}
             muted={muted}
             muteToggle={() => this.muteToggle()}
