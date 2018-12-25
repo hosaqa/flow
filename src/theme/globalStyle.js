@@ -2,6 +2,13 @@ import { injectGlobal } from 'styled-components';
 import styledNormalize from 'styled-normalize';
 
 export const lightTheme = {
+  breakpoints: {
+    xs: 0,
+    sm: 576,
+    md: 768,
+    lg: 992,
+    xl: 1200
+  },
   colorFontPrimary: '#1f2023',
   colorFontSecondary: '#212121',
   colorButton: '#1f2023',

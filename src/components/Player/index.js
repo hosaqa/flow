@@ -4,34 +4,15 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import raf from 'raf' // requestAnimationFrame polyfill
 import styled from 'styled-components'
-
-import SkipPreviousIcon from '@material-ui/icons/SkipPrevious'
-import SkipNextIcon from '@material-ui/icons/SkipNext'
-import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline'
-import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline'
-import RepeatIcon from '@material-ui/icons/Repeat'
-import ShuffleIcon from '@material-ui/icons/Shuffle'
-
-import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd'
-import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay'
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
-
-import PlayerCore from './PlayerCore'
-
-import PlayerButton from '../PlayerButton'
-
-import Timeline from '../Timeline'
-import VolumeBar from '../VolumeBar'
-import TrackInfo from '../TrackInfo'
-import Playlist from '../Playlist'
-import PlayerQueue from './PlayerQueue'
-import Dropdown from '../Dropdown'
-
-
-import { playToggle, playlistFetch, setCurrentTrack } from '../../actions/PlayerActions'
-import { searchTrackByID } from '../../utils'
+import Grid from 'styled-components-grid';
 
 import PlayerControls from './PlayerControls'
+import Timeline from '../Timeline'
+import VolumeBar from '../VolumeBar'
+import PlayerQueue from './PlayerQueue'
+import { playToggle, playlistFetch, setCurrentTrack, setTrackPosition } from '../../actions/PlayerActions'
+import { searchTrackByID, getRandomInt } from '../../utils'
+
 
 const PlayerWrapper = styled.div`
   position: fixed;
@@ -43,58 +24,33 @@ const PlayerWrapper = styled.div`
   padding: 15px 25px;
 `
 
-const PlayerInner = styled.div`
-  width: 1190px;
+const Dashboard = styled.div`
+  width: 1024px;
   margin: auto;
-  display: flex;
-  align-items: center;
 `
-
-const PlayButtonsGroup = styled.div`
-  margin-right: auto;
-  display: flex;
-  align-items: center;
-  width: 25%;
-  max-width: 25%;
-  flex-basis: 25%;
-`
-
-const PlaylistElementsGroup = styled.div`
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  width: 25%;
-  max-width: 25%;
-  flex-basis: 25%;
-`
-
 
 class Player extends Component {
+  componentDidMount() {
+    this.props.playlistFetch()
+  }
+
   componentWillUnmount () {
     this.clearRAF()
   }
 
-  handleChangeTrack = (id, nowPlay) => {
-    this.setState({
-      currentTrackID: id,
-      nowPlaying: nowPlay ? nowPlay : this.state.nowPlaying,
-      currentTrackPosition: null
-    })
+  setSeek (rewindTo) {
+    this.props.setTrackPosition(rewindTo)
+    this.player.seek(rewindTo)
   }
 
-  renderSeekPos () {
-    this.setState({
-      currentTrackPosition: this.player.seek()
-    })
-    if (this.state.nowPlaying) {
-      this._raf = raf(() => this.renderSeekPos())
+  setSeekPos () {
+    const { playingNow, setTrackPosition } = this.props
+
+    setTrackPosition(this.player.seek())
+
+    if (playingNow) {
+      this._raf = raf(() => this.setSeekPos())
     }
-  }
-
-  handlePlayToggle = () => {
-    this.setState({
-      nowPlaying: !this.state.nowPlaying
-    })
   }
 
   handleOnEnd () {
@@ -116,12 +72,6 @@ class Player extends Component {
 
   clearRAF () {
     raf.cancel(this._raf)
-  }
-
-  setSeek (rewindTo) {
-    this.setState({
-      currentTrackPosition: this.player.seek(rewindTo)
-    })
   }
 
   // ok
@@ -163,7 +113,7 @@ class Player extends Component {
     let shuffledPlaylist = []
 
     while (prevIndexesSequence.length > 0) {
-      let getRandomIndex = this.getRandomInt(1, prevIndexesSequence.length) - 1
+      let getRandomIndex = getRandomInt(1, prevIndexesSequence.length) - 1
 
       shuffledPlaylist.push(playlist[prevIndexesSequence[getRandomIndex]])
       prevIndexesSequence.splice(getRandomIndex, 1)
@@ -173,60 +123,39 @@ class Player extends Component {
   }
 
 
-  getRandomInt = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1) + min)
-  }
-
 
   render() {
+    const { playlistIsLoading, playlistFetchFailed, trackIsLoading, playingNow, playlist, track, trackPosition } = this.props
 
-    const playQueueButton = <PlayerButton ><PlaylistPlayIcon /></PlayerButton>
-    const { playlist, playToggle, playingNow } = this.props
+    if (!playlist) return null
+
+    
+
 
     return (
       <PlayerWrapper>
-        <PlayerInner>
-          {/* PLAYER CORE REACT HOWLER */}
-          {/* <ReactHowler
-            src={currentTrack.src}
-            playing={nowPlaying}
-            volume={volume}
-            mute={muted}
-            ref={(ref) => (this.player = ref)}
-            onPlay={() => this.renderSeekPos()}
-            onEnd={() => this.handleOnEnd()}
-          /> */}
-          <PlayerCore />
-          {/* /PLAYER CORE REACT HOWLER */}
-
-          <PlayButtonsGroup>
-            <PlayerControls />
-          </PlayButtonsGroup>
-          {/* /PLAY BUTTONS GROUP */}
-          {
-            playlist && <Timeline />
-          }
-          {/* <VolumeBar
-            volume={volume}
-            muted={muted}
-            muteToggle={() => this.muteToggle()}
-            setVolume={(value) => this.setVolume(value)}
-          /> */}
-
-          {/* PLAYLIST ELEMENTS GROUP */}
-          <PlaylistElementsGroup>
-            {/* <TrackInfo {...currentTrack}/> */}
-            <div style={{marginLeft: 'auto'}}>
-              <div style={{display: 'inline-block'}}>
-                <Dropdown selector={playQueueButton}>
-                  <PlayerQueue />
-                </Dropdown>
-              </div>
-            </div>
-          </PlaylistElementsGroup>
-          {/* /PLAYLIST ELEMENTS GROUP */}
-
-        </PlayerInner>
+        <ReactHowler
+          ref={(ref) => (this.player = ref)}
+          src={searchTrackByID(playlist, track).src}
+          playing={playingNow}
+          onPlay={() => this.setSeekPos()}
+        />
+        <Dashboard>
+          <Grid
+            verticalAlign={'center'}
+          >
+            <Grid.Unit size={1/4}>
+              <PlayerControls />
+            </Grid.Unit>
+            <Grid.Unit size={1/2}>
+              <Timeline setTrackPosition={(value) => this.setSeek(value)} />
+              <VolumeBar />
+            </Grid.Unit>
+            <Grid.Unit size={1/4}>
+              <PlayerQueue />
+            </Grid.Unit>
+          </Grid>
+        </Dashboard>
       </PlayerWrapper> 
     )
   }
@@ -236,4 +165,4 @@ Player.propTypes = {
   playlist: PropTypes.arrayOf(PropTypes.object)
 }
 
-export default connect(({player}) => player, {playToggle, playlistFetch, setCurrentTrack})(Player)
+export default connect(({player}) => player, {playToggle, playlistFetch, setCurrentTrack, setTrackPosition})(Player)

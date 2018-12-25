@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import ProgressBar from '../ProgressBar'
 import { getMousePosition, searchTrackByID } from '../../utils'
 
+
 const TimeLineWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -97,9 +98,9 @@ class Timeline extends Component {
   }
 
   onMouseUpRewind() {
-    let trackDuration = this.state.trackDurationInSeconds
-
-    this.props.seek(this.state.dummyLineProgress / 100 * trackDuration)
+    const trackDuration = this.convertDurationToSecond(this.getTrackDuration())
+    //console.log(this.state.dummyLineProgress, trackDuration)
+    this.props.setTrackPosition(this.state.dummyLineProgress / 100 * trackDuration)
 
     this.setState({
       mouseDowned: false,
@@ -123,18 +124,17 @@ class Timeline extends Component {
   }
 
   handleOnClick (ev, ref) {
-    let trackDuration = this.state.trackDurationInSeconds
+    const trackDuration = this.convertDurationToSecond(this.getTrackDuration())
 
     const touchedPosition = this.getTouchedPosition(ev, ref)
 
     const rewindTo = Math.round(touchedPosition * trackDuration)
-    
-    this.props.seek(rewindTo)
+    this.props.setTrackPosition(rewindTo)
   }
 
   handleOnMouseMove (ev, ref) {
     if (this.state.mouseDowned) {
-      let trackDuration = this.state.trackDurationInSeconds
+      const trackDuration = this.convertDurationToSecond(this.getTrackDuration())
 
       const touchedPosition = this.getTouchedPosition(ev, ref)
 
@@ -149,14 +149,13 @@ class Timeline extends Component {
 
   render() {
     const timelineRef = React.createRef()
+    const trackDuration = this.getTrackDuration()
 
-    let { nowPlaying, trackPosition, playlist, track } = this.props
-
-    const trackDuration = searchTrackByID(playlist, track).duration
-
+    let { trackPosition } = this.props
+    
     const progressBar = this.renderProgressBarSlider(trackPosition, trackDuration)
     
-    let {minutes, seconds} = trackDuration
+    let { minutes, seconds } = trackDuration
     
     trackPosition = (this.state.dummyTime) ? this.state.dummyTime : trackPosition
 
@@ -194,8 +193,8 @@ Timeline.propTypes = {
     PropTypes.number,
     PropTypes.object
   ]),
-  seek: PropTypes.func
+  setTrackPosition: PropTypes.func
 }
 
 
-export default connect(({player}) => player, {})(Timeline)
+export default connect(({player}) => player)(Timeline)

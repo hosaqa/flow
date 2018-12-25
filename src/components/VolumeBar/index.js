@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { connect } from 'react-redux'
 
 import VolumeUpIcon from '@material-ui/icons/VolumeUp'
 import VolumeDownIcon from '@material-ui/icons/VolumeDown'
@@ -113,7 +114,6 @@ class VolumeBar extends Component {
   }  
 
   render() {
-    //console.log('volume bar rendered')
     const { volume, setVolume, muted, muteToggle } = this.props
     const volumeBarRef = React.createRef()
 
@@ -151,4 +151,4 @@ VolumeBar.propTypes = {
   muteToggle: PropTypes.func,
 }
 
-export default VolumeBar
+export default connect(({player}) => player, {})(VolumeBar)

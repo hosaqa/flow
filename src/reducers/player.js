@@ -43,6 +43,7 @@ export function playerReducer(state = initialState, action) {
       };
 
     case SET_TRACK_POSITION:
+      console.log(action.payload);
       return { ...state, trackPosition: action.payload };
 
     case PLAYLIST_IS_LOADING:

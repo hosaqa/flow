@@ -19,3 +19,5 @@ export const getMousePosition = (ev, ref) => {
 
 export const searchTrackByID = (playlist, id) =>
   playlist.find(track => track.id === id);
+
+export const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
