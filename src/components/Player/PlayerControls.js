@@ -11,24 +11,8 @@ import { searchTrackByID } from '../../utils'
 import PlayerButton from '../PlayerButton'
 
 
-function PlayerControls({ playingNow, playlist, track, repeating, playlistShuffled, playToggle, repeatToggle, setCurrentTrack }) {
-  const closestTrackIsExist = (index) => {
-    if (!playlist) return false
+function PlayerControls({ playingNow, playlist, track, repeating, playlistShuffled, playToggle, repeatToggle, setCurrentTrack, closestTrackIsExist, setCurrentTrackClosest}) {
 
-    const currentTrack = searchTrackByID(playlist, track)
-    const currentTrackIndex = playlist.indexOf(currentTrack)
-    
-    return playlist.includes(playlist[currentTrackIndex + index]) ? true : false
-  }
-
-  const setCurrentTrackClosest = (index) => {
-    const currentTrack = searchTrackByID(playlist, track)
-    const currentTrackIndex = playlist.indexOf(currentTrack)
-
-    const nextTrackIndex = currentTrackIndex + index
-    if (closestTrackIsExist(index)) setCurrentTrack(playlist[nextTrackIndex].id)
-  }
-  
   return (
     <div>
       <PlayerButton

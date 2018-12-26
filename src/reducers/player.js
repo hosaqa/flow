@@ -7,7 +7,9 @@ import {
   SET_TRACK_POSITION,
   PLAYLIST_IS_LOADING,
   PLAYLIST_FETCH_SUCCESS,
-  PLAYLIST_FETCH_FAILED
+  PLAYLIST_FETCH_FAILED,
+  SET_VOLUME,
+  MUTE_TOGGLE
 } from '../actions/PlayerActions';
 
 export const initialState = {
@@ -43,8 +45,13 @@ export function playerReducer(state = initialState, action) {
       };
 
     case SET_TRACK_POSITION:
-      console.log(action.payload);
       return { ...state, trackPosition: action.payload };
+
+    case SET_VOLUME:
+      return { ...state, volume: action.payload };
+
+    case MUTE_TOGGLE:
+      return { ...state, muted: !state.muted };
 
     case PLAYLIST_IS_LOADING:
       return { ...state, playlistIsLoading: action.payload };

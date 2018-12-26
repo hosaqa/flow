@@ -8,7 +8,9 @@ import ScrollArea from 'react-scrollbar'
 import Dropdown from '../Dropdown'
 import PlayerButton from '../PlayerButton'
 import Playlist from '../Playlist'
+import TrackInfo from '../TrackInfo'
 import { playToggle, setCurrentTrack } from '../../actions/PlayerActions'
+import { searchTrackByID } from '../../utils'
 
 const PlayerQueueWrapper = styled.div`
   position: absolute;
@@ -28,36 +30,44 @@ const PlayerQueueBody = styled.div`
 
 const playQueueButton = <PlayerButton ><PlaylistPlayIcon /></PlayerButton>
 
-const PlayerQueue = ({playlist, track, playingNow, playToggle, setCurrentTrack}) => (
-  <Dropdown selector={playQueueButton}>
-    <PlayerQueueWrapper>
-      <PlayerQueueBody>
-        <ScrollArea
-          speed={0.8}
-          smoothScrolling={true}
-          className="area"
-          contentClassName="content"
-          horizontal={false}
-          style={{
-            padding: '0 10px 0 0',
-            height: '300px'
-          }}
-          verticalScrollbarStyle={{
-            borderRadius: '4px'
-          }}
-        >
-          <Playlist
-            playlist={playlist}
-            currentTrackID={track}
-            playToggle={playToggle}
-            setTrack={setCurrentTrack}
-            playingNow={playingNow}
-          />
-        </ScrollArea>
-      </PlayerQueueBody>
-    </PlayerQueueWrapper>
-  </Dropdown>
-)
+
+const PlayerQueue = ({playlist, track, playingNow, playToggle, setCurrentTrack}) => {
+  const currentTrack = searchTrackByID(playlist, track)
+
+  return (
+    <div>
+      <TrackInfo {...currentTrack}></TrackInfo>
+      <Dropdown selector={playQueueButton}>
+        <PlayerQueueWrapper>
+          <PlayerQueueBody>
+            <ScrollArea
+              speed={0.8}
+              smoothScrolling={true}
+              className="area"
+              contentClassName="content"
+              horizontal={false}
+              style={{
+                padding: '0 10px 0 0',
+                height: '300px'
+              }}
+              verticalScrollbarStyle={{
+                borderRadius: '4px'
+              }}
+            >
+              <Playlist
+                playlist={playlist}
+                currentTrackID={track}
+                playToggle={playToggle}
+                setTrack={setCurrentTrack}
+                playingNow={playingNow}
+              />
+            </ScrollArea>
+          </PlayerQueueBody>
+        </PlayerQueueWrapper>
+      </Dropdown>
+    </div>
+  )
+}
 
 PlayerQueue.propTypes = {
   children: PropTypes.node

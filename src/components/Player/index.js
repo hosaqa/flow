@@ -10,7 +10,7 @@ import PlayerControls from './PlayerControls'
 import Timeline from '../Timeline'
 import VolumeBar from '../VolumeBar'
 import PlayerQueue from './PlayerQueue'
-import { playToggle, playlistFetch, setCurrentTrack, setTrackPosition } from '../../actions/PlayerActions'
+import { playToggle, playlistFetch, setCurrentTrack, setTrackPosition, setVolume, muteToggle } from '../../actions/PlayerActions'
 import { searchTrackByID, getRandomInt } from '../../utils'
 
 
@@ -53,47 +53,41 @@ class Player extends Component {
     }
   }
 
+  closestTrackIsExist (index) {
+    const { playlist, track } = this.props
+
+    if (!playlist) return false
+
+    const currentTrack = searchTrackByID(playlist, track)
+    const currentTrackIndex = playlist.indexOf(currentTrack)
+    
+    return playlist.includes(playlist[currentTrackIndex + index]) ? true : false
+  }
+
+  setCurrentTrackClosest (index) {
+    const { playlist, track, setCurrentTrack } = this.props
+
+    const currentTrack = searchTrackByID(playlist, track)
+    const currentTrackIndex = playlist.indexOf(currentTrack)
+
+    const nextTrackIndex = currentTrackIndex + index
+    if (this.closestTrackIsExist(index)) setCurrentTrack(playlist[nextTrackIndex].id)
+  }
+
   handleOnEnd () {
-    if (!this.state.repeatingTrack) {
-      const nextTrackExist = this.closestTrackExist(1)
+    const { playToggle, repeating } = this.props
+
+    if (!repeating) {
+      const nextTrackExist = this.closestTrackIsExist(1)
 
       if (!nextTrackExist) {
-        this.setState({
-          nowPlaying: false,
-          currentTrackPosition: null
-        })
+        playToggle()
         
         this.clearRAF()
       } else {
         this.setCurrentTrackClosest(1)
       }
     }
-  }
-
-  clearRAF () {
-    raf.cancel(this._raf)
-  }
-
-  // ok
-  setVolume(value) {
-    this.setState({
-      muted: false,
-      volume: value
-    })
-  }
-
-  muteToggle() {
-    if (this.state.volume) {
-      this.setState({
-        muted: !this.state.muted
-      })
-    }
-  }
-
-  repeatToggle() {
-    this.setState({
-      repeatingTrack: !this.state.repeatingTrack
-    })
   }
 
   shuffleToggle() {
@@ -122,15 +116,14 @@ class Player extends Component {
     return shuffledPlaylist
   }
 
-
+  clearRAF () {
+    raf.cancel(this._raf)
+  }
 
   render() {
-    const { playlistIsLoading, playlistFetchFailed, trackIsLoading, playingNow, playlist, track, trackPosition } = this.props
+    const { playingNow, playlist, track,  volume, muted } = this.props
 
     if (!playlist) return null
-
-    
-
 
     return (
       <PlayerWrapper>
@@ -139,13 +132,19 @@ class Player extends Component {
           src={searchTrackByID(playlist, track).src}
           playing={playingNow}
           onPlay={() => this.setSeekPos()}
+          onEnd={() => this.handleOnEnd()}
+          volume={volume}
+          mute={muted}
         />
         <Dashboard>
           <Grid
             verticalAlign={'center'}
           >
             <Grid.Unit size={1/4}>
-              <PlayerControls />
+              <PlayerControls
+                closestTrackIsExist={this.closestTrackIsExist.bind(this)}
+                setCurrentTrackClosest={this.setCurrentTrackClosest.bind(this)}
+              />
             </Grid.Unit>
             <Grid.Unit size={1/2}>
               <Timeline setTrackPosition={(value) => this.setSeek(value)} />

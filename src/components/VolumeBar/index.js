@@ -8,6 +8,7 @@ import VolumeDownIcon from '@material-ui/icons/VolumeDown'
 import VolumeOffIcon from '@material-ui/icons/VolumeOff'
 
 import ProgressBar from '../ProgressBar'
+import { setVolume, muteToggle } from '../../actions/PlayerActions'
 import { getMousePosition } from '../../utils'
 
 const Volume = styled.div`
@@ -114,7 +115,7 @@ class VolumeBar extends Component {
   }  
 
   render() {
-    const { volume, setVolume, muted, muteToggle } = this.props
+    const { volume, muted, muteToggle } = this.props
     const volumeBarRef = React.createRef()
 
     return (
@@ -151,4 +152,4 @@ VolumeBar.propTypes = {
   muteToggle: PropTypes.func,
 }
 
-export default connect(({player}) => player, {})(VolumeBar)
+export default connect(({player}) => player, {setVolume, muteToggle})(VolumeBar)

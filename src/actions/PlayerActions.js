@@ -6,6 +6,9 @@ export const REPEAT_TOGGLE = 'REPEAT_TOGGLE';
 
 export const SET_TRACK_POSITION = 'SET_TRACK_POSITION';
 
+export const SET_VOLUME = 'SET_VOLUME';
+export const MUTE_TOGGLE = 'MUTE_TOGGLE';
+
 export const PLAYLIST_IS_LOADING = 'PLAYLIST_IS_LOADING';
 export const PLAYLIST_FETCH_SUCCESS = 'PLAYLIST_FETCH_SUCCESS';
 export const PLAYLIST_FETCH_FAILED = 'PLAYLIST_FETCH_FAILED';
@@ -96,5 +99,18 @@ export function setTrackPosition(position) {
   return {
     type: SET_TRACK_POSITION,
     payload: position
+  };
+}
+
+export function setVolume(value) {
+  return {
+    type: SET_VOLUME,
+    payload: value
+  };
+}
+
+export function muteToggle() {
+  return {
+    type: MUTE_TOGGLE
   };
 }
