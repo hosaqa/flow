@@ -12,13 +12,16 @@ import TrackInfo from '../TrackInfo'
 import { playToggle, setCurrentTrack } from '../../actions/PlayerActions'
 import { searchTrackByID } from '../../utils'
 
-const PlayerQueueWrapper = styled.div`
-  position: absolute;
-  bottom: 90px;
-  right: 0;
+const StyledQueue = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `
 
 const PlayerQueueBody = styled.div`
+  position: absolute;
+  bottom: 90px;
+  right: 0;
   width: 450px;
   height: 300px;
   padding: 0;
@@ -35,42 +38,42 @@ const PlayerQueue = ({playlist, track, playingNow, playToggle, setCurrentTrack})
   const currentTrack = searchTrackByID(playlist, track)
 
   return (
-    <div>
+    <StyledQueue>
       <TrackInfo {...currentTrack}></TrackInfo>
       <Dropdown selector={playQueueButton}>
-        <PlayerQueueWrapper>
-          <PlayerQueueBody>
-            <ScrollArea
-              speed={0.8}
-              smoothScrolling={true}
-              className="area"
-              contentClassName="content"
-              horizontal={false}
-              style={{
-                padding: '0 10px 0 0',
-                height: '300px'
-              }}
-              verticalScrollbarStyle={{
-                borderRadius: '4px'
-              }}
-            >
-              <Playlist
-                playlist={playlist}
-                currentTrackID={track}
-                playToggle={playToggle}
-                setTrack={setCurrentTrack}
-                playingNow={playingNow}
-              />
-            </ScrollArea>
-          </PlayerQueueBody>
-        </PlayerQueueWrapper>
+        <PlayerQueueBody>
+          <ScrollArea
+            speed={0.8}
+            smoothScrolling={true}
+            className="area"
+            contentClassName="content"
+            horizontal={false}
+            style={{
+              padding: '0 10px 0 0',
+              height: '300px'
+            }}
+            verticalScrollbarStyle={{
+              borderRadius: '4px'
+            }}
+          >
+            <Playlist
+              playlist={playlist}
+              currentTrackID={track}
+              playToggle={playToggle}
+              setTrack={setCurrentTrack}
+              playingNow={playingNow}
+            />
+          </ScrollArea>
+        </PlayerQueueBody>
       </Dropdown>
-    </div>
+    </StyledQueue>
   )
 }
 
 PlayerQueue.propTypes = {
-  children: PropTypes.node
+  playlist: PropTypes.arrayOf(),
+  track: PropTypes.string,
+  playingNow: 
 }
 
 export default connect(({player}) => player, {playToggle, setCurrentTrack})(PlayerQueue)
