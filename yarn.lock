@@ -6545,6 +6545,11 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-content-loader@^3.4.1:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/react-content-loader/-/react-content-loader-3.4.1.tgz#8eb273c630ffb36cb92f4383be811828eb8e1e66"
+  integrity sha512-lco6voFNwAGFBhVtczjyBuUKcBV1m8Ce3GNNEHm6maOCTIqGQePnomkwkfgcnpT9izZdAbpgeE8O4J/X+OG3JA==
+
 react-create-component-from-tag-prop@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/react-create-component-from-tag-prop/-/react-create-component-from-tag-prop-1.4.0.tgz#a1b3ad06cecb185cd1ba4215f937bd03c69979a9"
