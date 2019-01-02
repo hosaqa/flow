@@ -3,6 +3,7 @@ export const SET_CURRENT_TRACK = 'SET_CURRENT_TRACK';
 export const CLOSEST_TRACK_IS_EXIST = 'CLOSEST_TRACK_IS_EXIST';
 export const SET_CURRENT_TRACK_CLOSEST = 'SET_CURRENT_TRACK_CLOSEST';
 export const REPEAT_TOGGLE = 'REPEAT_TOGGLE';
+export const SHUFFLE_PLAYLIST_TOGGLE = 'SHUFFLE_PLAYLIST_TOGGLE'
 
 export const SET_TRACK_POSITION = 'SET_TRACK_POSITION';
 
@@ -27,25 +28,28 @@ export function repeatToggle() {
 
 export function playlistFetch() {
   return dispatch => {
-    dispatch(playlistIsLoading(true));
+    setTimeout(() => {
+      dispatch(playlistIsLoading(true));
 
-    fetch('/data.json')
-      .then(response => {
-        if (response.status !== 200) {
-          return Promise.reject(new Error(response.statusText));
-        }
+      fetch('/data.json')
+        .then(response => {
+          if (response.status !== 200) {
+            return Promise.reject(new Error(response.statusText));
+          }
+  
+          dispatch(playlistIsLoading(false));
+  
+          return Promise.resolve(response);
+        })
+        .then(response => response.json())
+        .then(playlist => {
+          dispatch(playlistFetchSuccess(playlist));
+        })
+        .catch(() => {
+          dispatch(playlistFetchFailed(true));
+        });
+    }, 4000)
 
-        dispatch(playlistIsLoading(false));
-
-        return Promise.resolve(response);
-      })
-      .then(response => response.json())
-      .then(playlist => {
-        dispatch(playlistFetchSuccess(playlist));
-      })
-      .catch(() => {
-        dispatch(playlistFetchFailed(true));
-      });
   };
 }
 
@@ -114,3 +118,10 @@ export function muteToggle() {
     type: MUTE_TOGGLE
   };
 }
+
+export function shuffleToggle() {
+  return {
+    type: SHUFFLE_PLAYLIST_TOGGLE
+  };
+}
+

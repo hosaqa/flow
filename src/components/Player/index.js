@@ -11,7 +11,7 @@ import Timeline from '../Timeline'
 import VolumeBar from '../VolumeBar'
 import PlayerQueue from './PlayerQueue'
 import { playToggle, playlistFetch, setCurrentTrack, setTrackPosition, setVolume, muteToggle } from '../../actions/PlayerActions'
-import { searchTrackByID, getRandomInt } from '../../utils'
+import { searchTrackByID } from '../../utils'
 
 
 const PlayerWrapper = styled.div`
@@ -54,24 +54,28 @@ class Player extends Component {
   }
 
   closestTrackIsExist (index) {
-    const { playlist, track } = this.props
-
+    const { playlist, track, shuffledPlaylist } = this.props
+    
     if (!playlist) return false
 
-    const currentTrack = searchTrackByID(playlist, track)
-    const currentTrackIndex = playlist.indexOf(currentTrack)
-    
-    return playlist.includes(playlist[currentTrackIndex + index]) ? true : false
+    const currentPlaylist = (shuffledPlaylist) ? shuffledPlaylist : playlist
+
+    const currentTrack = searchTrackByID(currentPlaylist, track)
+    const currentTrackIndex = currentPlaylist.indexOf(currentTrack)
+
+    return currentPlaylist.includes(currentPlaylist[currentTrackIndex + index]) ? true : false
   }
 
   setCurrentTrackClosest (index) {
-    const { playlist, track, setCurrentTrack } = this.props
+    const { playlist, track, setCurrentTrack, shuffledPlaylist } = this.props
 
-    const currentTrack = searchTrackByID(playlist, track)
-    const currentTrackIndex = playlist.indexOf(currentTrack)
+    const currentPlaylist = (shuffledPlaylist) ? shuffledPlaylist : playlist
+
+    const currentTrack = searchTrackByID(currentPlaylist, track)
+    const currentTrackIndex = currentPlaylist.indexOf(currentTrack)
 
     const nextTrackIndex = currentTrackIndex + index
-    if (this.closestTrackIsExist(index)) setCurrentTrack(playlist[nextTrackIndex].id)
+    if (this.closestTrackIsExist(index)) setCurrentTrack(currentPlaylist[nextTrackIndex].id)
   }
 
   handleOnEnd () {
@@ -90,52 +94,31 @@ class Player extends Component {
     }
   }
 
-  shuffleToggle() {
-    this.setState({
-      playlistShuffled: !this.state.playlistShuffled,
-      playlist: this.shufflePlaylist()
-    })
-  }
-
-  shufflePlaylist = () => {
-    if (this.state.playlistShuffled) return this.props.playlist
-
-    const { playlist } = this.state
-    const playlistLength = playlist.length
-
-    let prevIndexesSequence = [...Array(playlistLength).keys()]
-    let shuffledPlaylist = []
-
-    while (prevIndexesSequence.length > 0) {
-      let getRandomIndex = getRandomInt(1, prevIndexesSequence.length) - 1
-
-      shuffledPlaylist.push(playlist[prevIndexesSequence[getRandomIndex]])
-      prevIndexesSequence.splice(getRandomIndex, 1)
-    }
-    
-    return shuffledPlaylist
-  }
-
   clearRAF () {
     raf.cancel(this._raf)
   }
 
   render() {
-    const { playingNow, playlist, track,  volume, muted } = this.props
+    const { playingNow, playlist, track,  volume, muted, shuffledPlaylist } = this.props
 
-    if (!playlist) return null
+    // if (!playlist) return null
+
+    const currentPlaylist = (shuffledPlaylist) ? shuffledPlaylist : playlist
 
     return (
       <PlayerWrapper>
-        <ReactHowler
-          ref={(ref) => (this.player = ref)}
-          src={searchTrackByID(playlist, track).src}
-          playing={playingNow}
-          onPlay={() => this.setSeekPos()}
-          onEnd={() => this.handleOnEnd()}
-          volume={volume}
-          mute={muted}
-        />
+        {
+          playlist &&
+          <ReactHowler
+            ref={(ref) => (this.player = ref)}
+            src={searchTrackByID(currentPlaylist, track).src}
+            playing={playingNow}
+            onPlay={() => this.setSeekPos()}
+            onEnd={() => this.handleOnEnd()}
+            volume={volume}
+            mute={muted}
+          />
+        }
         <Dashboard>
           <Grid
             verticalAlign={'center'}
@@ -147,8 +130,8 @@ class Player extends Component {
               />
             </Grid.Unit>
             <Grid.Unit size={1/2}>
-              <Timeline setTrackPosition={(value) => this.setSeek(value)} />
-              <VolumeBar />
+              {/* <Timeline setTrackPosition={(value) => this.setSeek(value)} />
+              <VolumeBar /> */}
             </Grid.Unit>
             <Grid.Unit size={1/4}>
               <PlayerQueue />

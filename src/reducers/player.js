@@ -1,4 +1,4 @@
-import { searchTrackByID } from '../utils';
+import { searchTrackByID, getRandomInt } from '../utils';
 
 import {
   PLAY_TOGGLE,
@@ -9,7 +9,8 @@ import {
   PLAYLIST_FETCH_SUCCESS,
   PLAYLIST_FETCH_FAILED,
   SET_VOLUME,
-  MUTE_TOGGLE
+  MUTE_TOGGLE,
+  SHUFFLE_PLAYLIST_TOGGLE
 } from '../actions/PlayerActions';
 
 export const initialState = {
@@ -23,13 +24,15 @@ export const initialState = {
   volume: 1,
   muted: false,
   repeating: false,
-  playlistShuffled: false
+  shuffledPlaylist: null
 };
 
 export function playerReducer(state = initialState, action) {
   switch (action.type) {
     case REPEAT_TOGGLE:
       return { ...state, repeating: !state.repeating };
+
+
 
     case PLAY_TOGGLE:
       return { ...state, playingNow: !state.playingNow };
@@ -52,6 +55,21 @@ export function playerReducer(state = initialState, action) {
 
     case MUTE_TOGGLE:
       return { ...state, muted: !state.muted };
+
+    case SHUFFLE_PLAYLIST_TOGGLE:    
+      const oldPlaylist = state.playlist
+      const playlistLength = oldPlaylist.length
+  
+      let prevIndexesSequence = [...Array(playlistLength).keys()]
+      let shuffledPlaylist = []
+  
+      while (prevIndexesSequence.length > 0) {
+        let getRandomIndex = getRandomInt(1, prevIndexesSequence.length) - 1
+  
+        shuffledPlaylist.push(oldPlaylist[prevIndexesSequence[getRandomIndex]])
+        prevIndexesSequence.splice(getRandomIndex, 1)
+      }
+      return { ...state, shuffledPlaylist: shuffledPlaylist };
 
     case PLAYLIST_IS_LOADING:
       return { ...state, playlistIsLoading: action.payload };

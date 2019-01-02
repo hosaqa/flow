@@ -34,8 +34,9 @@ const QueueBody = styled.div`
 const playQueueButton = <PlayerButton ><PlaylistPlayIcon /></PlayerButton>
 
 
-const PlayerQueue = ({playlist, track, playingNow, playToggle, setCurrentTrack}) => {
-  const currentTrack = searchTrackByID(playlist, track)
+const PlayerQueue = ({playlist, track, playingNow, playToggle, setCurrentTrack, shuffledPlaylist}) => {
+  const currentPlaylist = (shuffledPlaylist) ? shuffledPlaylist : playlist
+  const currentTrack = currentPlaylist ? searchTrackByID(currentPlaylist, track) : null
 
   return (
     <StyledQueue>
@@ -58,7 +59,7 @@ const PlayerQueue = ({playlist, track, playingNow, playToggle, setCurrentTrack})
               }}
             >
               <Playlist
-                playlist={playlist}
+                playlist={currentPlaylist}
                 currentTrackID={track}
                 playToggle={playToggle}
                 setTrack={setCurrentTrack}

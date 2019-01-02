@@ -1,20 +1,25 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { playToggle, setCurrentTrack, repeatToggle, shuffleToggle } from '../../actions/PlayerActions'
+import styled from 'styled-components'
+import PlayerButton from '../PlayerButton'
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious'
 import SkipNextIcon from '@material-ui/icons/SkipNext'
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline'
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline'
 import RepeatIcon from '@material-ui/icons/Repeat'
 import ShuffleIcon from '@material-ui/icons/Shuffle'
-import { playToggle, setCurrentTrack, repeatToggle } from '../../actions/PlayerActions'
-import { searchTrackByID } from '../../utils'
-import PlayerButton from '../PlayerButton'
 
 
-function PlayerControls({ playingNow, playlist, track, repeating, playlistShuffled, playToggle, repeatToggle, setCurrentTrack, closestTrackIsExist, setCurrentTrackClosest}) {
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+function PlayerControls({ playingNow, playlist, repeating, shuffledPlaylist, playToggle, repeatToggle, closestTrackIsExist, setCurrentTrackClosest, shuffleToggle}) {
 
   return (
-    <div>
+    <Wrapper>
       <PlayerButton
         onClick={() => setCurrentTrackClosest(-1)}
         iconSize={28}
@@ -26,6 +31,7 @@ function PlayerControls({ playingNow, playlist, track, repeating, playlistShuffl
       <PlayerButton
         onClick={() => playToggle()}
         iconSize={32}
+        disabled={!playlist}
         pseudoSelActive
       >
         {!playingNow
@@ -48,14 +54,15 @@ function PlayerControls({ playingNow, playlist, track, repeating, playlistShuffl
         <RepeatIcon /> 
       </PlayerButton>
       <PlayerButton
-        onClick={() => this.shuffleToggle()}
-        active={playlistShuffled}
+        onClick={shuffleToggle}
+        active={!!shuffledPlaylist ? true : false}
+        disabled={!playlist}
       >
         <ShuffleIcon /> 
       </PlayerButton>
-    </div>
+    </Wrapper>
   )
 }
 
 
-export default connect(({player}) => player, {playToggle, setCurrentTrack, repeatToggle})(PlayerControls);
+export default connect(({player}) => player, {playToggle, setCurrentTrack, repeatToggle, shuffleToggle})(PlayerControls);
