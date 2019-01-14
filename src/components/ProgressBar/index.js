@@ -46,7 +46,7 @@ const Thumb = styled.div`
   box-shadow: 1px 1px 1px rgba(20, 20, 20, 0.4), -1px -1px 1px rgba(96, 96, 96, 0.25);
 `
 
-const ThumbHoverShown = Thumb.extend`
+const ThumbHoverShown = styled(Thumb)`
   transition: transform .12s;
   transform: scale(0);
  

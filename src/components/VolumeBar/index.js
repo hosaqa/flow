@@ -12,7 +12,7 @@ import { setVolume, muteToggle } from '../../actions/PlayerActions'
 import { getMousePosition } from '../../utils'
 
 const Volume = styled.div`
-  padding: 0 7px;
+  padding: 0;
   position: relative;
 `
 

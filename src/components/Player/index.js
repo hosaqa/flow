@@ -4,8 +4,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import raf from 'raf' // requestAnimationFrame polyfill
 import styled from 'styled-components'
-import Grid from 'styled-components-grid';
-
+import { Container, Row, Col, BaseCSS } from 'styled-bootstrap-grid';
 import PlayerControls from './PlayerControls'
 import Timeline from '../Timeline'
 import VolumeBar from '../VolumeBar'
@@ -27,6 +26,12 @@ const PlayerWrapper = styled.div`
 const Dashboard = styled.div`
   width: 1024px;
   margin: auto;
+`
+
+const DraggableControls = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: spabe-between;
 `
 
 class Player extends Component {
@@ -118,26 +123,27 @@ class Player extends Component {
             volume={volume}
             mute={muted}
           />
-        }
-        <Dashboard>
-          <Grid
-            verticalAlign={'center'}
-          >
-            <Grid.Unit size={1/4}>
+        } 
+        <BaseCSS /> 
+        <Container>
+          <Row alignItems="center">
+            <Col col xl="3">
               <PlayerControls
                 closestTrackIsExist={this.closestTrackIsExist.bind(this)}
                 setCurrentTrackClosest={this.setCurrentTrackClosest.bind(this)}
               />
-            </Grid.Unit>
-            <Grid.Unit size={1/2}>
-              {/* <Timeline setTrackPosition={(value) => this.setSeek(value)} />
-              <VolumeBar /> */}
-            </Grid.Unit>
-            <Grid.Unit size={1/4}>
-              <PlayerQueue />
-            </Grid.Unit>
-          </Grid>
-        </Dashboard>
+            </Col>
+            <Col col xl="6">
+              <DraggableControls>
+                <Timeline setTrackPosition={(value) => this.setSeek(value)} />
+                <VolumeBar />
+              </DraggableControls>
+            </Col>
+            <Col col xl="3">
+            <PlayerQueue />
+            </Col>
+          </Row>
+        </Container>
       </PlayerWrapper> 
     )
   }

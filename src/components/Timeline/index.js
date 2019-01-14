@@ -14,8 +14,9 @@ const TimeLineWrapper = styled.div`
 
 const TimerDisplay = styled.div`
   display: inline-block;
-  width: 30px;
+  width: 28px;
   user-select: none;
+  font-size: 14px;
 `
 
 const ProgressBarWrapper = styled.div`
@@ -23,7 +24,7 @@ const ProgressBarWrapper = styled.div`
 `
 
 const ProgressBarBody = styled.div`
-  width: 400px;
+  width: 355px;
   height: 40px;
   padding: 0;
   display: flex;
@@ -148,6 +149,7 @@ class Timeline extends Component {
   }
 
   render() {
+    if (!this.props.playlist) return null
     const timelineRef = React.createRef()
     const trackDuration = this.getTrackDuration()
 

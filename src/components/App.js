@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { ThemeProvider } from 'styled-components'
+import { GridThemeProvider } from 'styled-bootstrap-grid';
 import { Provider } from 'react-redux'
 
 import { store } from '../store/configureStore'
 import Player from './Player'
-import { lightTheme } from '../theme/globalStyle'
+import { lightTheme, gridTheme, GlobalStyle } from '../theme/globalStyle'
 import ContentLoader from 'react-content-loader'
 
 class App extends Component {
@@ -13,7 +14,11 @@ class App extends Component {
     return (
       <Provider store={store}>
         <ThemeProvider theme={lightTheme}>
+					<GridThemeProvider
+						gridTheme={gridTheme}
+					>				
           <div>
+					<GlobalStyle />
           <ContentLoader 
 		height={80}
 		width={200}
@@ -30,7 +35,7 @@ class App extends Component {
 	</ContentLoader>
   <Player />
           </div>
-          
+          </GridThemeProvider>
         </ThemeProvider>
       </Provider>
     )

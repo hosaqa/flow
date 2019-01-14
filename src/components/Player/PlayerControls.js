@@ -14,6 +14,11 @@ import ShuffleIcon from '@material-ui/icons/Shuffle'
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
+  margin: 0 -6px;
+`
+
+const SecondGroup = styled.span`
+  margin: 0 auto;
 `
 
 function PlayerControls({ playingNow, playlist, repeating, shuffledPlaylist, playToggle, repeatToggle, closestTrackIsExist, setCurrentTrackClosest, shuffleToggle}) {
@@ -47,19 +52,21 @@ function PlayerControls({ playingNow, playlist, repeating, shuffledPlaylist, pla
       >
         <SkipNextIcon />
       </PlayerButton>
-      <PlayerButton
-        onClick={repeatToggle}
-        active={repeating}
-      >
-        <RepeatIcon /> 
-      </PlayerButton>
-      <PlayerButton
-        onClick={shuffleToggle}
-        active={!!shuffledPlaylist ? true : false}
-        disabled={!playlist}
-      >
-        <ShuffleIcon /> 
-      </PlayerButton>
+      <SecondGroup>
+        <PlayerButton
+          onClick={repeatToggle}
+          active={repeating}
+        >
+          <RepeatIcon /> 
+        </PlayerButton>
+        <PlayerButton
+          onClick={shuffleToggle}
+          active={!!shuffledPlaylist ? true : false}
+          disabled={!playlist}
+        >
+          <ShuffleIcon /> 
+        </PlayerButton>
+      </SecondGroup>
     </Wrapper>
   )
 }
