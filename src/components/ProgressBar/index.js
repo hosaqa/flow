@@ -55,15 +55,17 @@ const ThumbHoverShown = styled(Thumb)`
   }
 `
 
-const ProgressBar = ({ active, direction, filled, thumbRadius, thumbShowOnHover }) => (
+const ProgressBar = ({ disabled, active, direction, filled, thumbRadius, thumbShowOnHover }) => (
   <StyledProgressBar>
     <ProgressBarEmpty active={active} direction={direction}>
-      <ProgressBarFill direction={direction} filled={`${filled}%`}>
-        {thumbShowOnHover
-          ? <ThumbHoverShown thumbRadius={thumbRadius}/>
-          : <Thumb thumbRadius={thumbRadius}/>
-        }
-      </ProgressBarFill>
+      { !disabled &&
+        <ProgressBarFill direction={direction} filled={`${filled}%`}>
+          {thumbShowOnHover
+            ? <ThumbHoverShown thumbRadius={thumbRadius}/>
+            : <Thumb thumbRadius={thumbRadius}/>
+          }
+        </ProgressBarFill>
+      }
     </ProgressBarEmpty>
   </StyledProgressBar>
 )
@@ -72,6 +74,7 @@ const ProgressBar = ({ active, direction, filled, thumbRadius, thumbShowOnHover 
 export default ProgressBar
 
 ProgressBar.propTypes = {
+  disabled: PropTypes.bool, 
   active: PropTypes.bool,
   direction: PropTypes.string,
   filled: PropTypes.number,

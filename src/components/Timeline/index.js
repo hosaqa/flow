@@ -84,6 +84,7 @@ class Timeline extends Component {
 
     return (
       <ProgressBar
+        disabled={!this.props.playlist}
         active={this.props.nowPlaying}
         thumbShowOnHover={true}
         thumbRadius={6}
@@ -150,6 +151,7 @@ class Timeline extends Component {
 
   render() {
     if (!this.props.playlist) return null
+    
     const timelineRef = React.createRef()
     const trackDuration = this.getTrackDuration()
 
