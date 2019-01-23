@@ -80,7 +80,7 @@ class Timeline extends Component {
   
     trackDuration = minutes * 60 + seconds
     trackPosition = (this.isNumeric(trackPosition)) ? trackPosition : 0
-    const width = trackPosition / trackDuration * 100
+    const width = parseFloat((trackPosition / trackDuration * 100).toFixed(0))
 
     return (
       <ProgressBar
@@ -150,11 +150,12 @@ class Timeline extends Component {
   }
 
   render() {
-    if (!this.props.playlist) return null
-    
-    const timelineRef = React.createRef()
-    const trackDuration = this.getTrackDuration()
+     if (!this.props.playlist) return null
 
+    const timelineRef = React.createRef()
+
+    const trackDuration = this.getTrackDuration()
+      
     let { trackPosition } = this.props
     
     const progressBar = this.renderProgressBarSlider(trackPosition, trackDuration)
@@ -169,7 +170,7 @@ class Timeline extends Component {
   
     return (
       <TimeLineWrapper>
-        <TimerDisplay>{trackPosition}</TimerDisplay>
+        <TimerDisplay>{trackPosition || '--:--'}</TimerDisplay>
         <ProgressBarWrapper>
           <ProgressBarBody 
             ref={timelineRef}
@@ -182,7 +183,7 @@ class Timeline extends Component {
             {progressBar}
           </ProgressBarBody>
         </ProgressBarWrapper>
-        <TimerDisplay>{`${minutes}:${seconds}`}</TimerDisplay>
+        <TimerDisplay>{`${minutes}:${seconds}` || '--:--'}</TimerDisplay>
       </TimeLineWrapper>
     )
   }

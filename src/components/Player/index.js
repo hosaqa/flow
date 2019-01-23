@@ -15,12 +15,15 @@ import { searchTrackByID } from '../../utils'
 
 const PlayerWrapper = styled.div`
   position: fixed;
-  background-color: ${props => props.theme.colorMainBg};
-  border-top: 1px solid #E6E6E6;
+  background-color: ${({playlist, theme}) => (
+    !playlist ? theme.colors.contentPreload : theme.colors.content
+  )};
+  border-top: 1px solid ${({theme}) => theme.colors.border};
   bottom: 0;
   left: 0;
   width: 100%;
   padding: 15px 25px;
+  transition: background-color .3s;
 `
 
 const Dashboard = styled.div`
@@ -106,8 +109,6 @@ class Player extends Component {
   render() {
     const { playingNow, playlist, track,  volume, muted, shuffledPlaylist } = this.props
 
-    // if (!playlist) return null
-
     const currentPlaylist = (shuffledPlaylist) ? shuffledPlaylist : playlist
 
     return (
@@ -136,11 +137,11 @@ class Player extends Component {
             <Col col xl="6">
               <DraggableControls>
                 <Timeline setTrackPosition={(value) => this.setSeek(value)} />
-                <VolumeBar />
+                <span style={{marginLeft: 'auto'}}><VolumeBar /></span>
               </DraggableControls>
             </Col>
             <Col col xl="3">
-            <PlayerQueue />
+              <PlayerQueue />
             </Col>
           </Row>
         </Container>

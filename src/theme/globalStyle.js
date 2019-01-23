@@ -9,10 +9,19 @@ export const lightTheme = {
     lg: 992,
     xl: 1200
   },
+  colors: {
+    border: '#dcdcdc',
+    content: '#f8f8f8',
+    contentPreload: '#fff',
+    skeleton: '#eee',
+    skeletonSecondary: '#dadada',
+    button: '#000',
+    buttonDisabled: '#dedede'
+  },
   colorFontPrimary: '#1f2023',
   colorFontSecondary: '#212121',
-  colorButton: '#1f2023',
-  colorButtonDisabled: '#797979',
+  colorButton: '#000',
+  colorButtonDisabled: '#dedede',
   colorMainBg: '#f9f9f9',
   // colorMainBg: '#efefef',
   colorAccent: '#ff7070',

@@ -56,6 +56,7 @@ function PlayerControls({ playingNow, playlist, repeating, shuffledPlaylist, pla
         <PlayerButton
           onClick={repeatToggle}
           active={repeating}
+          disabled={!playlist}
         >
           <RepeatIcon /> 
         </PlayerButton>

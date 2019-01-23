@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
+import ContentLoader from 'react-content-loader'
 import styled from 'styled-components'
-
+import MusicNote from '@material-ui/icons/MusicNote'
 
 const StyledTrackInfo = styled.div`
   display: flex;
@@ -53,26 +53,43 @@ const Artist = styled.div`
   overflow: hidden;
 `
 
-const TrackInfo = ({ withoutImage, trackname, artist, album, img }) => (
-  <StyledTrackInfo>
-    {
-      withoutImage ||
-      <ImgWrapper>
-        { img
-          ? <img
-              src={img}
-              alt={`${artist} - ${trackname}`}
-            />
-          : <ImgDefault /> 
-        }
-      </ImgWrapper>
+const TrackInfo = ({ theme, withoutImage, trackname, artist, album, img }) => {
+  if (!trackname) {
+    return (
+      <ContentLoader 
+        height={40}
+        width={130}
+        speed={2}
+        primaryColor="#eee"
+        secondaryColor="#dadada"
+        style={{
+          width: '140px',
+          height: '40px'
+        }}
+      >
+        <rect x="47" y="6" width="68" height="8" /> 
+        <rect x="47" y="20" width="108" height="9" />
+        <rect x="0" y="0" width="37" height="37" />
+      </ContentLoader>
+    )
+  }
+  return (<StyledTrackInfo>
+  <ImgWrapper>
+    { img
+      ? <img
+          src={img}
+          alt={`${artist} - ${trackname}`}
+        />
+      : <ImgDefault><MusicNote /></ImgDefault>
     }
-    <Text>
-      <Track>{trackname}</Track>
-      <Artist>{artist}</Artist>
-    </Text>
-  </StyledTrackInfo>
-)
+  </ImgWrapper>
+  <Text>
+    <Track>{trackname}</Track>
+    <Artist>{artist}</Artist>
+  </Text>
+  </StyledTrackInfo>)
+
+}
 
 TrackInfo.propTypes = {
   trackname: PropTypes.string,

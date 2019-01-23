@@ -12,9 +12,9 @@ const StyledPlayerButton = styled.button`
   outline: 0;
   background-color: transparent;
   color: ${({active, disabled, theme}) => (
-    disabled ? theme.colorButton : active ? theme.colorAccent : theme.colorButton
+    disabled ? theme.colors.buttonDisabled : active ? theme.colorAccent : theme.colors.button
   )};
-  transition: color .15s, transform .15s;
+  transition: color .25s, transform .15s;
 
   & > svg {
     vertical-align: middle;
@@ -22,7 +22,7 @@ const StyledPlayerButton = styled.button`
     font-size: ${({iconSize}) => iconSize ? `${iconSize}px` : '24px'};
   }
 
-  ${({disabled}) => !disabled && css`
+  ${({disabled, hoverDisabled}) => !hoverDisabled && !disabled && css`
     &:hover {
       color: ${({theme}) => theme.colorAccent};
     }
@@ -37,13 +37,14 @@ const StyledPlayerButton = styled.button`
   `}
 `
 
-const PlayerButton = ({children, active, disabled, pseudoSelActive, iconSize, onClick}) => (
+const PlayerButton = ({children, active, disabled, pseudoSelActive, iconSize, onClick, hoverDisabled}) => (
   <StyledPlayerButton
     onClick={onClick}
     iconSize={iconSize}
     active={active}
     pseudoSelActive={pseudoSelActive}
     disabled={disabled}
+    hoverDisabled={hoverDisabled}
   >
     {children}
   </StyledPlayerButton>

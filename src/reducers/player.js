@@ -32,8 +32,6 @@ export function playerReducer(state = initialState, action) {
     case REPEAT_TOGGLE:
       return { ...state, repeating: !state.repeating };
 
-
-
     case PLAY_TOGGLE:
       return { ...state, playingNow: !state.playingNow };
 
@@ -56,20 +54,24 @@ export function playerReducer(state = initialState, action) {
     case MUTE_TOGGLE:
       return { ...state, muted: !state.muted };
 
-    case SHUFFLE_PLAYLIST_TOGGLE:    
-      const oldPlaylist = state.playlist
-      const playlistLength = oldPlaylist.length
-  
-      let prevIndexesSequence = [...Array(playlistLength).keys()]
-      let shuffledPlaylist = []
-  
-      while (prevIndexesSequence.length > 0) {
-        let getRandomIndex = getRandomInt(1, prevIndexesSequence.length) - 1
-  
-        shuffledPlaylist.push(oldPlaylist[prevIndexesSequence[getRandomIndex]])
-        prevIndexesSequence.splice(getRandomIndex, 1)
+    case SHUFFLE_PLAYLIST_TOGGLE:
+      if (state.shuffledPlaylist) {
+        return { ...state, shuffledPlaylist: null };
       }
-      return { ...state, shuffledPlaylist: shuffledPlaylist };
+
+      const oldPlaylist = state.playlist;
+      const playlistLength = oldPlaylist.length;
+
+      const prevIndexesSequence = [...Array(playlistLength).keys()];
+      const shuffledPlaylist = [];
+
+      while (prevIndexesSequence.length > 0) {
+        const getRandomIndex = getRandomInt(1, prevIndexesSequence.length) - 1;
+
+        shuffledPlaylist.push(oldPlaylist[prevIndexesSequence[getRandomIndex]]);
+        prevIndexesSequence.splice(getRandomIndex, 1);
+      }
+      return { ...state, shuffledPlaylist };
 
     case PLAYLIST_IS_LOADING:
       return { ...state, playlistIsLoading: action.payload };

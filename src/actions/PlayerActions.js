@@ -48,7 +48,7 @@ export function playlistFetch() {
         .catch(() => {
           dispatch(playlistFetchFailed(true));
         });
-    }, 14000);
+    }, 5000);
   };
 }
 
