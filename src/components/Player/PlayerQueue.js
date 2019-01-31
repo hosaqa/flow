@@ -22,17 +22,25 @@ const QueueBody = styled.div`
   position: absolute;
   bottom: 90px;
   right: 0;
-  width: 450px;
-  height: 300px;
+  width: 290px;
+  height: 190px;
   padding: 0;
   text-align: left;
   border-radius: ${props => props.theme.borderRadiusMain};
-  background-color: ${props => props.theme.colorMainBg};
-  box-shadow: ${props => props.theme.shadowMain};
+  background-color: ${({theme}) => theme.colors.content};
+  box-shadow: ${({theme}) => theme.shadowPrimary};
 `
 
-const playQueueButton = <PlayerButton ><PlaylistPlayIcon /></PlayerButton>
-
+// const playQueueButton = <PlayerButton ><PlaylistPlayIcon /></PlayerButton>
+const playQueueButton = (playlist) => {
+  return (
+    <PlayerButton
+      disabled={!playlist ? true : false}
+    >
+      <PlaylistPlayIcon />
+    </PlayerButton>
+  )
+}
 
 const PlayerQueue = ({playlist, track, playingNow, playToggle, setCurrentTrack, shuffledPlaylist}) => {
   const currentPlaylist = (shuffledPlaylist) ? shuffledPlaylist : playlist
@@ -41,7 +49,7 @@ const PlayerQueue = ({playlist, track, playingNow, playToggle, setCurrentTrack, 
   return (
     <StyledQueue>
       <TrackInfo {...currentTrack}></TrackInfo>
-      <Dropdown selector={playQueueButton}>
+      <Dropdown selector={playQueueButton(playlist)}>
         {/* <PlayerQueueWrapper> */}
           <QueueBody>
             <ScrollArea
@@ -52,7 +60,7 @@ const PlayerQueue = ({playlist, track, playingNow, playToggle, setCurrentTrack, 
               horizontal={false}
               style={{
                 padding: '0 10px 0 0',
-                height: '300px'
+                height: '190px'
               }}
               verticalScrollbarStyle={{
                 borderRadius: '4px'
@@ -74,7 +82,7 @@ const PlayerQueue = ({playlist, track, playingNow, playToggle, setCurrentTrack, 
 }
 
 PlayerQueue.propTypes = {
-  playlist: PropTypes.arrayOf(),
+  playlist: PropTypes.array,
   track: PropTypes.string,
   playingNow: PropTypes.bool
 }

@@ -1,5 +1,17 @@
 [
   {
+    "id": 0,
+    "artist": "Lil Uzi Vert",
+    "trackname": "XO Tour",
+    "album": "Lil Lol",
+    "src": "lil_uzi-xo_tour.mp3",
+    "img": "img/lil-uzi.jpg",
+    "duration": {
+      "minutes": 3,
+      "seconds": 0
+    }
+  },
+  {
     "id":4,
     "artist":"XXXTentacion",
     "trackname":"Save me",

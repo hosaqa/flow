@@ -29,7 +29,8 @@ export const lightTheme = {
   colorGradientStart: '#f90dc9',
   colorGradientEnd: '#ff1d1d',
   borderRadiusMain: '3px',
-  shadowMain: '1px 1px 2px rgba(0, 0, 0, .25)'
+  shadowPrimary:
+    '2px 4px 4px rgba(0, 0, 0, .17), -1px -1px 2px rgba(0, 0, 0, .1)'
 };
 
 export const gridTheme = {

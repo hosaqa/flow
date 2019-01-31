@@ -15,9 +15,9 @@ import { searchTrackByID } from '../../utils'
 
 const PlayerWrapper = styled.div`
   position: fixed;
-  background-color: ${({playlist, theme}) => (
-    !playlist ? theme.colors.contentPreload : theme.colors.content
-  )};
+  background-color: ${({inactive, theme}) => 
+    inactive ? theme.colors.contentPreload : theme.colors.content
+  };
   border-top: 1px solid ${({theme}) => theme.colors.border};
   bottom: 0;
   left: 0;
@@ -107,12 +107,15 @@ class Player extends Component {
   }
 
   render() {
+    console.log('var playlist', playlist)
     const { playingNow, playlist, track,  volume, muted, shuffledPlaylist } = this.props
 
     const currentPlaylist = (shuffledPlaylist) ? shuffledPlaylist : playlist
 
     return (
-      <PlayerWrapper>
+      <PlayerWrapper
+        inactive={playlist ? false : true}
+      >
         {
           playlist &&
           <ReactHowler
