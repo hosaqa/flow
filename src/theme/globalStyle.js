@@ -16,7 +16,11 @@ export const lightTheme = {
     skeleton: '#eee',
     skeletonSecondary: '#dadada',
     button: '#000',
-    buttonDisabled: '#dedede'
+    buttonDisabled: '#dedede',
+    fontPrimary: '#1f2023',
+    fontSecondary: '#212121',
+    accentPrimary: '#f90dc9',
+    accentSecondary: '#ff1d1d'
   },
   colorFontPrimary: '#1f2023',
   colorFontSecondary: '#212121',

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import ProgressBar from '../ProgressBar'
-import { getMousePosition, searchTrackByID } from '../../utils'
+import { getMousePosition, searchTrackByID, isNumeric, countDigits } from '../../utils'
 
 
 const TimeLineWrapper = styled.div`
@@ -13,23 +13,22 @@ const TimeLineWrapper = styled.div`
 `
 
 const TimerDisplay = styled.div`
+  text-align: center;
   display: inline-block;
+  vertical-align: middle;
   width: 28px;
   user-select: none;
   font-size: 14px;
+  transition: color .25s;
+  color: ${({theme, disabled}) => disabled ? theme.colors.buttonDisabled : theme.colors.fontPrimary};
 `
 
 const ProgressBarWrapper = styled.div`
   padding: 0 12px;
-`
-
-const ProgressBarBody = styled.div`
   width: 355px;
   height: 40px;
-  padding: 0;
   display: flex;
   align-items: center;
-  cursor: pointer;
 `
 
 class Timeline extends Component {
@@ -51,14 +50,6 @@ class Timeline extends Component {
     
     return minutes * 60 + seconds
   }
-
-  isNumeric (n) {
-    return !isNaN(parseFloat(n)) && isFinite(n)
-  }
-  
-  countDigits (number) {
-    return (''+number).length
-  }
   
   formateTimerValue (seconds) {
     seconds = Math.round(seconds)
@@ -70,7 +61,7 @@ class Timeline extends Component {
       seconds = seconds % 60
     }
   
-    seconds = (this.countDigits(seconds) < 2) ? '0' + seconds : seconds
+    seconds = (countDigits(seconds) < 2) ? '0' + seconds : seconds
   
     return `${minutes}:${seconds}`
   }
@@ -79,7 +70,7 @@ class Timeline extends Component {
     const {minutes, seconds} = trackDuration
   
     trackDuration = minutes * 60 + seconds
-    trackPosition = (this.isNumeric(trackPosition)) ? trackPosition : 0
+    trackPosition = (isNumeric(trackPosition)) ? trackPosition : 0
     const width = parseFloat((trackPosition / trackDuration * 100).toFixed(0))
 
     return (
@@ -101,7 +92,6 @@ class Timeline extends Component {
 
   onMouseUpRewind() {
     const trackDuration = this.convertDurationToSecond(this.getTrackDuration())
-    //console.log(this.state.dummyLineProgress, trackDuration)
     this.props.setTrackPosition(this.state.dummyLineProgress / 100 * trackDuration)
 
     this.setState({
@@ -150,7 +140,23 @@ class Timeline extends Component {
   }
 
   render() {
-     if (!this.props.playlist) return null
+     if (!this.props.playlist) return (
+
+
+      <TimeLineWrapper>
+        <TimerDisplay disabled={true}>{'--:--'}</TimerDisplay>
+        <ProgressBarWrapper>
+          <ProgressBar
+            disabled={true}
+            active={this.props.nowPlaying}
+            thumbShowOnHover={true}
+            thumbRadius={6}
+            direction={'horizontal'}
+          />
+        </ProgressBarWrapper>
+        <TimerDisplay disabled={true}>{'--:--'}</TimerDisplay>
+      </TimeLineWrapper>
+     )
 
     const timelineRef = React.createRef()
 
@@ -164,15 +170,14 @@ class Timeline extends Component {
     
     trackPosition = (this.state.dummyTime) ? this.state.dummyTime : trackPosition
 
-    trackPosition = (this.isNumeric(trackPosition)) ? this.formateTimerValue(trackPosition) : '0:00'
+    trackPosition = (isNumeric(trackPosition)) ? this.formateTimerValue(trackPosition) : '0:00'
   
-    if (this.countDigits(seconds) < 2) seconds = '0' + seconds
+    if (countDigits(seconds) < 2) seconds = '0' + seconds
   
     return (
       <TimeLineWrapper>
         <TimerDisplay>{trackPosition || '--:--'}</TimerDisplay>
-        <ProgressBarWrapper>
-          <ProgressBarBody 
+          <ProgressBarWrapper 
             ref={timelineRef}
             onClick={(ev) => this.handleOnClick(ev, timelineRef)}
             onMouseDown={() => this.handleOnMouseDown()}
@@ -181,8 +186,7 @@ class Timeline extends Component {
             onMouseMove={(ev) => this.handleOnMouseMove(ev, timelineRef)}
           >
             {progressBar}
-          </ProgressBarBody>
-        </ProgressBarWrapper>
+          </ProgressBarWrapper>
         <TimerDisplay>{`${minutes}:${seconds}` || '--:--'}</TimerDisplay>
       </TimeLineWrapper>
     )

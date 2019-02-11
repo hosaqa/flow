@@ -7,12 +7,13 @@ const StyledProgressBar = styled.div`
   height: 100%;
   width: 100%;
   position: relative;
-  cursor: pointer;
+  cursor: ${({disabled}) => disabled ? 'default' : 'pointer'};
+  pointer-events: ${({disabled}) => disabled ? 'none' : 'auto'};
 `
 
 const ProgressBarEmpty = styled.div`
-  height: ${props => (props.direction === 'horizontal') ? '4px' : '100%'};
-  width: ${props => (props.direction === 'vertical') ? '4px' : '100%'};
+  height: ${({direction}) => (direction === 'horizontal') ? '4px' : '100%'};
+  width: ${({direction}) => (direction === 'vertical') ? '4px' : '100%'};
   position: absolute;
   left: 0;
   right: 0;
@@ -20,27 +21,27 @@ const ProgressBarEmpty = styled.div`
   bottom: 0;
   margin: auto;
   border-radius: 2px;
-  background-color: ${props => props.theme.colorDraggableBg};
-  box-shadow: ${props => props.active ? '2px 2px 2px rgba(0, 0, 0, .1)' : 'none'};
-  transition: box-shadow .35s;
+  background-color: ${({disabled, theme}) => disabled ? theme.colors.buttonDisabled: theme.colorDraggableBg};
+  box-shadow: ${({active}) => active ? '2px 2px 2px rgba(0, 0, 0, .1)' : 'none'};
+  transition: box-shadow .35s, background-color .25s;
 `
 
 const ProgressBarFill = styled.div`
   position: absolute;
   bottom: 0;
   left: 0;
-  height: ${props => (props.direction === 'horizontal') ? '4px' : props.filled};
-  width: ${props => (props.direction === 'vertical') ? '4px' : props.filled};
-  background-image: linear-gradient(154deg, ${props => props.theme.colorGradientStart}, ${props => props.theme.colorGradientEnd});
+  height: ${({direction, filled}) => (direction === 'horizontal') ? '4px' : filled};
+  width: ${({direction, filled}) => (direction === 'vertical') ? '4px' : filled};
+  background-image: linear-gradient(154deg, ${({theme}) => theme.colors.accentPrimary}, ${({theme}) => theme.colors.accentSecondary});
   border-radius: 2px;
 `
 
 const Thumb = styled.div`
   position: absolute;
-  right: ${props => props.thumbRadius ? -(props.thumbRadius * 2 - 4)/2 : -2}px;
-  top: ${props => props.thumbRadius ? -(props.thumbRadius * 2 - 4)/2 : -2}px;
-  width: ${props => props.thumbRadius ? props.thumbRadius * 2 : 8}px;
-  height: ${props => props.thumbRadius ? props.thumbRadius * 2 : 8}px;
+  right: ${({thumbRadius}) => thumbRadius ? -(thumbRadius * 2 - 4)/2 : -2}px;
+  top: ${({thumbRadius}) => thumbRadius ? -(thumbRadius * 2 - 4)/2 : -2}px;
+  width: ${({thumbRadius}) => thumbRadius ? thumbRadius * 2 : 8}px;
+  height: ${({thumbRadius}) => thumbRadius ? thumbRadius * 2 : 8}px;
   border-radius: 50%;
   background-color: #fff;
   box-shadow: 1px 1px 1px rgba(20, 20, 20, 0.4), -1px -1px 1px rgba(96, 96, 96, 0.25);
@@ -56,8 +57,8 @@ const ThumbHoverShown = styled(Thumb)`
 `
 
 const ProgressBar = ({ disabled, active, direction, filled, thumbRadius, thumbShowOnHover }) => (
-  <StyledProgressBar>
-    <ProgressBarEmpty active={active} direction={direction}>
+  <StyledProgressBar disabled={disabled}>
+    <ProgressBarEmpty disabled={disabled} active={active} direction={direction}>
       { !disabled &&
         <ProgressBarFill direction={direction} filled={`${filled}%`}>
           {thumbShowOnHover
