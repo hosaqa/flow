@@ -20,7 +20,14 @@ class App extends Component {
 					>				
           <div>
 					<GlobalStyle />
-          <Drag />
+          <div style={{width: '300px', padding: '30px'}}>
+            <Drag
+        thumbShowOnHover={false}
+        thumbRadius={6}
+        axis={'x'}
+            />
+
+          </div>
           <ContentLoader 
 		height={80}
 		width={200}
