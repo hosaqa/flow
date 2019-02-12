@@ -107,7 +107,6 @@ class Player extends Component {
   }
 
   render() {
-    console.log('var playlist', playlist)
     const { playingNow, playlist, track,  volume, muted, shuffledPlaylist } = this.props
 
     const currentPlaylist = (shuffledPlaylist) ? shuffledPlaylist : playlist

@@ -7,6 +7,7 @@ import { store } from '../store/configureStore'
 import Player from './Player'
 import { lightTheme, gridTheme, GlobalStyle } from '../theme/globalStyle'
 import ContentLoader from 'react-content-loader'
+import Drag from './Drag'
 
 class App extends Component {
 
@@ -19,6 +20,7 @@ class App extends Component {
 					>				
           <div>
 					<GlobalStyle />
+          <Drag />
           <ContentLoader 
 		height={80}
 		width={200}

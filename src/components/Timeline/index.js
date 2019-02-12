@@ -71,7 +71,7 @@ class Timeline extends Component {
   
     trackDuration = minutes * 60 + seconds
     trackPosition = (isNumeric(trackPosition)) ? trackPosition : 0
-    const width = parseFloat((trackPosition / trackDuration * 100).toFixed(0))
+    const width = parseFloat((trackPosition / trackDuration * 100).toFixed(1))
 
     return (
       <ProgressBar
