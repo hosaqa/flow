@@ -55,8 +55,9 @@ const Thumb = styled.div`
 
 
 const Drag = ({ disabled, active, axis, filled, thumbRadius, thumbShowOnHover }) => {
-  const onClickHandler = e => {
 
+  const onClickHandler = e => {
+    console.log(e);
   }
 
   const eventLogger = (e: MouseEvent, data: Object) => {
@@ -67,14 +68,6 @@ const Drag = ({ disabled, active, axis, filled, thumbRadius, thumbShowOnHover })
   return (
 
     <Wrapper disabled={disabled}>
-            <Draggable
-              axis={axis}
-              handle=".draggable-handle"
-              defaultPosition={{x: 0, y: 0}}
-              position={null}
-              scale={1}
-              onMouseDown={eventLogger}
-            >
       <TrackArea
         disabled={disabled}
         active={active}
@@ -82,21 +75,31 @@ const Drag = ({ disabled, active, axis, filled, thumbRadius, thumbShowOnHover })
         click={onClickHandler}
       >
         { !disabled &&
-          
-
-            <FilledArea axis={axis} filled={`${filled}%`}>
-              <div className='draggable-handle'>
+          <div>
+            <FilledArea
+              axis={axis}
+              filled={`${filled}%`}
+            />
+            <Draggable
+              axis={axis}
+              handle=".draggable-handle"
+              defaultPosition={{x: 0, y: 0}}
+              // position={{x: 25}}
+              scale={1}
+              bounds={'parent'}
+              onStart={eventLogger}
+              onDrag={eventLogger}
+            >
+              <div className='draggable-handle' style={{width: '1px', height: '1px'}}>
                 <Thumb
                   thumbRadius={thumbRadius}
                   thumbShowOnHover={thumbShowOnHover}
                 />
               </div>
-              </FilledArea>
-            
-          
+            </Draggable>
+          </div>
         }
       </TrackArea>
-      </Draggable>
     </Wrapper>
   )
 }
