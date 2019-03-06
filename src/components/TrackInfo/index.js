@@ -13,7 +13,7 @@ const ImgWrapper = styled.div`
   width: 37px;
   min-width: 37px;
   height: 37px;
-  box-shadow: 1px 1px 1px rgba(0, 0, 0, .18);
+  /* box-shadow: 1px 1px 1px rgba(0, 0, 0, .18); */
 `
 
 const ImgDefault = styled.div`
@@ -23,8 +23,8 @@ const ImgDefault = styled.div`
   text-align: center;
   font-size: 39px;
   font-weight: 700;
-  background-image: linear-gradient(154deg, ${props => props.theme.colorGradientStart}, ${props => props.theme.colorGradientEnd});
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
+  background-color: ${({theme}) => theme.colors.theme};
+  color: #fff;
 `
 
 const Text = styled.div`
@@ -33,7 +33,7 @@ const Text = styled.div`
 `
 
 const Track = styled.div`
-  color: ${props => props.theme.colorFontPrimary};
+  color: ${({theme}) => theme.colors.fontPrimary};
   font-size: 14px;
   line-height: 22px;
   font-weight: 700;
@@ -46,14 +46,14 @@ const Track = styled.div`
 const Artist = styled.div`
   font-size: 12px;
   line-height: 18px;
-  color: ${props => props.theme.colorFontSecondary};
+  color: ${({theme}) => theme.colors.fontSecondary};
   max-width: 130px;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 `
 
-const TrackInfo = ({ theme, withoutImage, trackname, artist, album, img }) => {
+const TrackInfo = ({ trackname, artist, album, img }) => {
   if (!trackname) {
     return (
       <ContentLoader 
@@ -73,21 +73,24 @@ const TrackInfo = ({ theme, withoutImage, trackname, artist, album, img }) => {
       </ContentLoader>
     )
   }
-  return (<StyledTrackInfo>
-  <ImgWrapper>
-    { img
-      ? <img
-          src={img}
-          alt={`${artist} - ${trackname}`}
-        />
-      : <ImgDefault><MusicNote /></ImgDefault>
-    }
-  </ImgWrapper>
-  <Text>
-    <Track>{trackname}</Track>
-    <Artist>{artist}</Artist>
-  </Text>
-  </StyledTrackInfo>)
+
+  return (
+  <StyledTrackInfo>
+    <ImgWrapper>
+      { img
+        ? <img
+            src={img}
+            alt={`${artist} - ${trackname}`}
+          />
+        : <ImgDefault><MusicNote /></ImgDefault>
+      }
+    </ImgWrapper>
+    <Text>
+      <Track>{trackname}</Track>
+      <Artist>{artist}</Artist>
+    </Text>
+  </StyledTrackInfo>
+  )
 
 }
 

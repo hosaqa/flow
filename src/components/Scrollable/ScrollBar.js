@@ -83,9 +83,6 @@ export default class ScrollBar extends Component {
       this.setState({
         pointStartDrag: null
       })
-      
-      console.log( parseFloat(this.getThumbPosition()) / 100 )
-      //this.props.scrollTo
     }
   }
 

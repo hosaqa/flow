@@ -1,11 +1,12 @@
 import { findDOMNode } from 'react-dom';
 
-export const isNumeric = n => !isNaN(parseFloat(n)) && isFinite(n);
+export const isNumeric = n =>
+  !Number.isNaN(parseFloat(n)) && Number.isFinite(n);
 
-export const countDigits = number => (''+number).length;
+export const countDigits = number => `${number}`.length;
 
 export const getMousePosition = (ev, ref) => {
-  const { top, left, bottom, width, height } = findDOMNode(
+  const { top, left, width, height } = findDOMNode(
     ref.current
   ).getBoundingClientRect();
 

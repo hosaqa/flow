@@ -9,7 +9,7 @@ import PlayerControls from './PlayerControls'
 import Timeline from '../Timeline'
 import VolumeBar from '../VolumeBar'
 import PlayerQueue from './PlayerQueue'
-import { playToggle, playlistFetch, setCurrentTrack, setTrackPosition, setVolume, muteToggle } from '../../actions/PlayerActions'
+import { playToggle, playlistFetch, setCurrentTrack, setTrackPosition } from '../../actions/PlayerActions'
 import { searchTrackByID } from '../../utils'
 
 
@@ -24,11 +24,6 @@ const PlayerWrapper = styled.div`
   width: 100%;
   padding: 15px 25px;
   transition: background-color .3s;
-`
-
-const Dashboard = styled.div`
-  width: 1024px;
-  margin: auto;
 `
 
 const DraggableControls = styled.div`

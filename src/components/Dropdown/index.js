@@ -74,7 +74,7 @@ export default class Dropdown extends Component {
         <DropdownSelector onClick={this.handleSelectorClick}>
           {selector}
         </DropdownSelector>
-        <TransitionGroup>
+        <TransitionGroup timeout={200}>
           {isOpen && <DropdownContentAnimated>
             {children}
           </DropdownContentAnimated>}

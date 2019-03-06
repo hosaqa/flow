@@ -27,11 +27,10 @@ const QueueBody = styled.div`
   padding: 0;
   text-align: left;
   border-radius: ${props => props.theme.borderRadiusMain};
-  background-color: ${({theme}) => theme.colors.content};
+  background-color: ${({theme}) => theme.colors.contentPreload};
   box-shadow: ${({theme}) => theme.shadowPrimary};
 `
 
-// const playQueueButton = <PlayerButton ><PlaylistPlayIcon /></PlayerButton>
 const playQueueButton = (playlist) => {
   return (
     <PlayerButton
@@ -42,40 +41,47 @@ const playQueueButton = (playlist) => {
   )
 }
 
-const PlayerQueue = ({playlist, track, playingNow, playToggle, setCurrentTrack, shuffledPlaylist}) => {
+const PlayerQueue = ({playlist = [], track, playingNow, playToggle, setCurrentTrack, shuffledPlaylist}) => {
   const currentPlaylist = (shuffledPlaylist) ? shuffledPlaylist : playlist
   const currentTrack = currentPlaylist ? searchTrackByID(currentPlaylist, track) : null
 
   return (
     <StyledQueue>
+
       <TrackInfo {...currentTrack}></TrackInfo>
       <Dropdown selector={playQueueButton(playlist)}>
-        {/* <PlayerQueueWrapper> */}
-          <QueueBody>
-            <ScrollArea
-              speed={0.8}
-              smoothScrolling={true}
-              className="area"
-              contentClassName="content"
-              horizontal={false}
-              style={{
-                padding: '0 10px 0 0',
-                height: '190px'
-              }}
-              verticalScrollbarStyle={{
-                borderRadius: '4px'
-              }}
-            >
-              <Playlist
-                playlist={currentPlaylist}
-                currentTrackID={track}
-                playToggle={playToggle}
-                setTrack={setCurrentTrack}
-                playingNow={playingNow}
-              />
-            </ScrollArea>
-          </QueueBody>
-        {/* </PlayerQueueWrapper> */}
+        <QueueBody>
+          <ScrollArea
+            speed={0.8}
+            smoothScrolling={true}
+            className="area"
+            contentClassName="content"
+            horizontal={false}
+            style={{
+              padding: '0 10px 0 0',
+              height: '190px'
+            }}
+            verticalContainerStyle={{
+              opacity: '1',
+              backgroundColor: '#ededed',
+              width: '8px',
+              borderRadius: '0 3px 3px 0'
+            }}
+            verticalScrollbarStyle={{
+              borderRadius: '4px',
+              backgroundColor: '#ff6b6b',
+              marginLeft: '0'
+            }}
+          >
+            <Playlist
+              playlist={currentPlaylist}
+              currentTrackID={track}
+              playToggle={playToggle}
+              setTrack={setCurrentTrack}
+              playingNow={playingNow}
+            />
+          </ScrollArea>
+        </QueueBody>
       </Dropdown>
     </StyledQueue>
   )
@@ -83,7 +89,7 @@ const PlayerQueue = ({playlist, track, playingNow, playToggle, setCurrentTrack, 
 
 PlayerQueue.propTypes = {
   playlist: PropTypes.array,
-  track: PropTypes.string,
+  track: PropTypes.number,
   playingNow: PropTypes.bool
 }
 

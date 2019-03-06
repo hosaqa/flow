@@ -17,22 +17,14 @@ const Volume = styled.div`
   position: relative;
 `
 
-const VolumeToggle = styled.button`
-  -webkit-user-select: none;
-  -webkit-appearance: none;
-  border: 0;
-  outline: 0;
-  background-color: transparent;
-`
-
 const VolumeSlider = styled.div`
   position: absolute;
   bottom: calc(100% + 15px);
   height: 125px;
   width: 30px;
-  border-radius: ${props => props.theme.borderRadiusMain};
-  background-color: ${props => props.theme.colorMainBg};
-  box-shadow: ${props => props.theme.shadowMain};
+  border-radius: ${({theme}) => theme.borderRadius};
+  background-color: ${({theme}) => theme.colors.content};
+  box-shadow: ${({theme}) => theme.shadows.primary};
   padding: 13px 0;
   opacity: 0;
   visibility: hidden;
@@ -40,12 +32,6 @@ const VolumeSlider = styled.div`
   transform-origin: center bottom;
   transition: .2s opacity, .2s visibility, .12s transform;
   transition-delay: .28s;
-
-  /* ${Volume}:hover & {
-    opacity: 1;
-    visibility: visible;
-    transform: scale(1);
-  } */
 
   ${({disabled}) => !disabled && css`
     ${Volume}:hover & {
@@ -57,9 +43,12 @@ const VolumeSlider = styled.div`
 `
 
 class VolumeBar extends Component {
+  constructor(props) {
+    super(props);
 
-  state = {
-    mouseButtonPressed: false
+    this.state = {
+      mouseButtonPressed: false
+    }
   }
 
   setVolume = value => {
@@ -70,16 +59,13 @@ class VolumeBar extends Component {
   }
 
   setVolumeFromPosition(ev, ref) {
-    const { setVolume } = this.props
     const { topPosition } = getMousePosition(ev, ref)
-
-    let volumeValue = 1 - parseFloat(topPosition.toFixed(2))
 
     this.setVolume(1 - parseFloat(topPosition.toFixed(2)))
   }
 
   handleOnWheel(ev) {
-    const { volume, setVolume } = this.props
+    const { volume } = this.props
 
     if (!this.state.mouseButtonPressed) {
       const oneScrollDelta = 53 // значение дельты по Y при одной прокрутке колесика

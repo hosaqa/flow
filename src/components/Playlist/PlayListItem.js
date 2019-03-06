@@ -7,7 +7,6 @@ import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline'
 
 import PlayerButton from '../PlayerButton'
 import TrackInfo from '../TrackInfo'
-import { duration } from '@material-ui/core/styles/transitions';
 
 const StyledPlaylistItem = styled.div`
   display: flex;

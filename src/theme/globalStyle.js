@@ -18,23 +18,29 @@ export const lightTheme = {
     button: '#000',
     buttonDisabled: '#dedede',
     fontPrimary: '#1f2023',
-    fontSecondary: '#212121',
+    fontSecondary: '#878787',
     accentPrimary: '#f90dc9',
-    accentSecondary: '#ff1d1d'
+    accentSecondary: '#ff1d1d',
+    theme: '#ff6b6b'
   },
+  shadows: {
+    primary:
+      '1px 3px 4px rgba(0, 0, 0, 0.12), -1px -1px 2px rgba(0, 0, 0, 0.05)'
+  },
+  borderRadius: '3px',
+
   colorFontPrimary: '#1f2023',
   colorFontSecondary: '#212121',
   colorButton: '#000',
   colorButtonDisabled: '#dedede',
   colorMainBg: '#f9f9f9',
-  // colorMainBg: '#efefef',
   colorAccent: '#ff7070',
   colorDraggableBg: 'rgba(255, 112, 112, 0.50)',
   colorGradientStart: '#f90dc9',
   colorGradientEnd: '#ff1d1d',
   borderRadiusMain: '3px',
   shadowPrimary:
-    '2px 4px 4px rgba(0, 0, 0, .17), -1px -1px 2px rgba(0, 0, 0, .1)'
+    '1px 3px 4px rgba(0, 0, 0, 0.12), -1px -1px 2px rgba(0, 0, 0, 0.05)'
 };
 
 export const gridTheme = {
