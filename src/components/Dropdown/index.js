@@ -1,20 +1,20 @@
-import React, {Component} from 'react'
-import {findDOMNode} from 'react-dom'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import {TransitionGroup} from 'react-transition-group'
-import transition from "styled-transition-group"
+import React, {Component} from 'react';
+import {findDOMNode} from 'react-dom';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import {TransitionGroup} from 'react-transition-group';
+import transition from "styled-transition-group";
 
 const DropdownWrapper = styled.div `
   position: relative;
-`
+`;
 const DropdownSelector = styled.div `
   position: relative;
-`
+`;
 
 const DropdownContent = styled.div `
   display: block;
-`
+`;
 const DropdownContentAnimated = transition(DropdownContent).attrs({timeout: 200})`
   transform-origin: right bottom;
 
@@ -39,35 +39,35 @@ const DropdownContentAnimated = transition(DropdownContent).attrs({timeout: 200}
     transform: scale(.97);
     transition: opacity 150ms ease-in, transform 150ms ease-in;
   }
-`
+`;
 
 export default class Dropdown extends Component {
   state = {
     isOpen: false
   }
 
-  getDropdownRef = node => {
-    return this.dropdown = node
-  }
+  getDropdownRef = node => { this.dropdown = node; }
 
-  handleClickOutside = (ev) => {
-    const dropdownNode = findDOMNode(this.dropdown)
-    !dropdownNode.contains(ev.target) && this.setState({isOpen: false})
-  }
+  handleClickOutside = ev => !this.dropdown.contains(ev.target) && this.setState({isOpen: false})
 
   handleSelectorClick = () => {
-    this.setState({
-      isOpen: !this.state.isOpen
-    }, () => {
-      this.state.isOpen
-        ? document.addEventListener('click', this.handleClickOutside)
-        : document.removeEventListener('click', this.handleClickOutside)
-    })
+    this.setState(
+    prevState => ({
+      isOpen: !prevState.isOpen
+    }),
+    () => {
+      const {isOpen} = this.state;
+      if (isOpen) {
+        document.addEventListener('click', this.handleClickOutside);
+      } else {
+        document.removeEventListener('click', this.handleClickOutside);
+      }
+    });
   }
 
   render() {
-    const {selector, children} = this.props
-    const {isOpen} = this.state
+    const {selector, children} = this.props;
+    const {isOpen} = this.state;
 
     return (
       <DropdownWrapper ref={this.getDropdownRef}>
@@ -80,11 +80,11 @@ export default class Dropdown extends Component {
           </DropdownContentAnimated>}
         </TransitionGroup>
       </DropdownWrapper>
-    )
+    );
   }
 }
 
 Dropdown.propTypes = {
   selector: PropTypes.node.isRequired,
   children: PropTypes.node.isRequired
-}
+};

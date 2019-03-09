@@ -1,6 +1,6 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
 
 const StyledProgressBar = styled.div`
@@ -9,7 +9,7 @@ const StyledProgressBar = styled.div`
   position: relative;
   cursor: ${({disabled}) => disabled ? 'default' : 'pointer'};
   pointer-events: ${({disabled}) => disabled ? 'none' : 'auto'};
-`
+`;
 
 const ProgressBarEmpty = styled.div`
   height: ${({direction}) => (direction === 'horizontal') ? '4px' : '100%'};
@@ -21,10 +21,10 @@ const ProgressBarEmpty = styled.div`
   bottom: 0;
   margin: auto;
   border-radius: 2px;
-  background-color: ${({disabled, theme}) => disabled ? theme.colors.buttonDisabled: theme.colorDraggableBg};
+  background-color: ${({disabled, theme}) => disabled ? theme.colors.buttonDisabled: theme.colors.colorDraggableBg};
   box-shadow: ${({active}) => active ? '2px 2px 2px rgba(0, 0, 0, .1)' : 'none'};
   transition: box-shadow .35s, background-color .25s;
-`
+`;
 
 const ProgressBarFill = styled.div`
   position: absolute;
@@ -34,7 +34,7 @@ const ProgressBarFill = styled.div`
   width: ${({direction, filled}) => (direction === 'vertical') ? '4px' : filled};
   background-image: linear-gradient(154deg, ${({theme}) => theme.colors.accentPrimary}, ${({theme}) => theme.colors.accentSecondary});
   border-radius: 2px;
-`
+`;
 
 const Thumb = styled.div`
   position: absolute;
@@ -45,7 +45,7 @@ const Thumb = styled.div`
   border-radius: 50%;
   background-color: #fff;
   box-shadow: 1px 1px 1px rgba(20, 20, 20, 0.4), -1px -1px 1px rgba(96, 96, 96, 0.25);
-`
+`;
 
 const ThumbHoverShown = styled(Thumb)`
   transition: transform .12s;
@@ -54,7 +54,7 @@ const ThumbHoverShown = styled(Thumb)`
   ${StyledProgressBar}:hover & {
     transform: scale(1);
   }
-`
+`;
 
 const ProgressBar = ({ disabled, active, direction, filled, thumbRadius, thumbShowOnHover }) => (
   <StyledProgressBar disabled={disabled}>
@@ -69,10 +69,10 @@ const ProgressBar = ({ disabled, active, direction, filled, thumbRadius, thumbSh
       }
     </ProgressBarEmpty>
   </StyledProgressBar>
-)
+);
 
 
-export default ProgressBar
+export default ProgressBar;
 
 ProgressBar.propTypes = {
   disabled: PropTypes.bool, 
@@ -81,4 +81,4 @@ ProgressBar.propTypes = {
   filled: PropTypes.number,
   thumbRadius: PropTypes.number,
   thumbShowOnHover: PropTypes.bool
-}
+};

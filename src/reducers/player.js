@@ -35,7 +35,7 @@ export function playerReducer(state = initialState, action) {
     case PLAY_TOGGLE:
       return { ...state, playingNow: !state.playingNow };
 
-    case SET_CURRENT_TRACK:
+    case SET_CURRENT_TRACK: {
       const { id, playingNow } = action.payload;
 
       return {
@@ -44,6 +44,7 @@ export function playerReducer(state = initialState, action) {
         playingNow: playingNow || state.playingNow,
         trackPosition: null
       };
+    }
 
     case SET_TRACK_POSITION:
       return { ...state, trackPosition: action.payload };
@@ -54,7 +55,7 @@ export function playerReducer(state = initialState, action) {
     case MUTE_TOGGLE:
       return { ...state, muted: !state.muted };
 
-    case SHUFFLE_PLAYLIST_TOGGLE:
+    case SHUFFLE_PLAYLIST_TOGGLE: {
       if (state.shuffledPlaylist) {
         return { ...state, shuffledPlaylist: null };
       }
@@ -72,14 +73,16 @@ export function playerReducer(state = initialState, action) {
         prevIndexesSequence.splice(getRandomIndex, 1);
       }
       return { ...state, shuffledPlaylist };
+    }
 
     case PLAYLIST_IS_LOADING:
       return { ...state, playlistIsLoading: action.payload };
 
-    case PLAYLIST_FETCH_SUCCESS:
+    case PLAYLIST_FETCH_SUCCESS: {
       const playlist = action.payload;
 
       return { ...state, playlist, track: playlist[0].id };
+    }
 
     case PLAYLIST_FETCH_FAILED:
       return { ...state, playlistFetchFailed: action.payload };

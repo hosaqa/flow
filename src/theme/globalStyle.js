@@ -7,7 +7,7 @@ export const lightTheme = {
     sm: 576,
     md: 768,
     lg: 992,
-    xl: 1200
+    xl: 1200,
   },
   colors: {
     border: '#dcdcdc',
@@ -21,26 +21,14 @@ export const lightTheme = {
     fontSecondary: '#878787',
     accentPrimary: '#f90dc9',
     accentSecondary: '#ff1d1d',
-    theme: '#ff6b6b'
+    theme: '#ff6b6b',
+    colorDraggableBg: 'rgba(255, 112, 112, 0.50)'
   },
   shadows: {
     primary:
-      '1px 3px 4px rgba(0, 0, 0, 0.12), -1px -1px 2px rgba(0, 0, 0, 0.05)'
+      '1px 3px 4px rgba(0, 0, 0, 0.12), -1px -1px 2px rgba(0, 0, 0, 0.05)',
   },
-  borderRadius: '3px',
-
-  colorFontPrimary: '#1f2023',
-  colorFontSecondary: '#212121',
-  colorButton: '#000',
-  colorButtonDisabled: '#dedede',
-  colorMainBg: '#f9f9f9',
-  colorAccent: '#ff7070',
-  colorDraggableBg: 'rgba(255, 112, 112, 0.50)',
-  colorGradientStart: '#f90dc9',
-  colorGradientEnd: '#ff1d1d',
-  borderRadiusMain: '3px',
-  shadowPrimary:
-    '1px 3px 4px rgba(0, 0, 0, 0.12), -1px -1px 2px rgba(0, 0, 0, 0.05)'
+  borderRadius: '3px'
 };
 
 export const gridTheme = {
@@ -49,7 +37,7 @@ export const gridTheme = {
     lg: 992,
     md: 768,
     sm: 576,
-    xs: 575
+    xs: 575,
   },
   container: {
     padding: 0,
@@ -58,9 +46,9 @@ export const gridTheme = {
       lg: 960,
       md: 720,
       sm: 540,
-      xs: 540
-    }
-  }
+      xs: 540,
+    },
+  },
 };
 
 export const GlobalStyle = createGlobalStyle`

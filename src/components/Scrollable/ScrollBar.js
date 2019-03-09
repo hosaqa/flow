@@ -1,10 +1,12 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { findDOMNode } from 'react-dom'
-import styled from 'styled-components'
-import { Motion, spring } from 'react-motion'
+/* eslint-disable */
+// когда-нибудь доделаю
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { findDOMNode } from 'react-dom';
+import styled from 'styled-components';
+import { Motion, spring } from 'react-motion';
 
-import { getMousePosition } from '../../utils'
+import { getMousePosition } from '../../utils';
 
 const Wrapper = styled.div`
   position: absolute;
@@ -15,7 +17,7 @@ const Wrapper = styled.div`
   background-color: #d0d0d0;
   box-shadow: -1px 0 1px rgba(0, 0, 0, .05);
   border-radius: 5px;
-`
+`;
 
 const Track = styled.div`
   position: absolute;
@@ -23,7 +25,7 @@ const Track = styled.div`
   top: 0;
   height: ${({trackHeight}) => trackHeight}px;
   width: 100%;
-`
+`;
 
 const Thumb = styled.div`
   position: absolute;
@@ -39,7 +41,7 @@ const Thumb = styled.div`
   &:hover {
     background-color: red;
   }
-`
+`;
 
 export default class ScrollBar extends Component {
   state = {
@@ -52,99 +54,99 @@ export default class ScrollBar extends Component {
     if (prevProps.viewportHeight !== this.props.viewportHeight) {
       this.setState({
         thumbHeight: this.getThumbHeight()
-      })
+      });
     }
   }
 
   componentDidMount() {
-    document.addEventListener('mousedown', this.handler)
+    document.addEventListener('mousedown', this.handler);
 
     document.addEventListener('mouseup', () => {
       
       if (this.state.dragged){
-        document.removeEventListener('mousedown', this.handler)
+        document.removeEventListener('mousedown', this.handler);
       } 
-    })
+    });
   }
 
   handler = ev => {
     if (ev.target === findDOMNode(this._thumbNode)) {
-      this.drag(ev)
+      this.drag(ev);
     }
   }
 
   drag = (ev) => {
-    if (!this.state.dragged) return false
+    if (!this.state.dragged) return false;
     if (!this.state.pointStartDrag) {
       this.setState({
         pointStartDrag: ev.screenY
-      })
+      });
     } else {
       this.setState({
         pointStartDrag: null
-      })
+      });
     }
   }
 
   dragMove = (delta) => {
     this.setState({
       pointStartDrag: null
-    })
-    this.props.scrollTo(this.props.contentPosition - delta)
+    });
+    this.props.scrollTo(this.props.contentPosition - delta);
   }
 
   getThumbHeight = () => {
-    const { viewportHeight, contentHeight } = this.props
+    const { viewportHeight, contentHeight } = this.props;
 
-    return Math.round(viewportHeight / contentHeight * viewportHeight)
+    return Math.round(viewportHeight / contentHeight * viewportHeight);
   }
   
   getThumbPosition = () => {
-    const { viewportHeight, contentPosition, contentHeight } = this.props
+    const { viewportHeight, contentPosition, contentHeight } = this.props;
     
-    return (Math.abs(contentPosition) / (contentHeight - viewportHeight) * 100).toFixed(2)
+    return (Math.abs(contentPosition) / (contentHeight - viewportHeight) * 100).toFixed(2);
   }
 
   thumbClickHandler = ev => {
-    ev.stopPropagation()
+    ev.stopPropagation();
   }
 
   BarClickHandler = (ev, ref) => {
-    const { contentPosition, contentHeight, scrollTo } = this.props
+    const { contentPosition, contentHeight, scrollTo } = this.props;
 
-    const { topPosition } = getMousePosition(ev, ref)
-    const scrollDown = parseFloat(topPosition * 100).toFixed(2) > parseFloat(this.getThumbPosition())
+    const { topPosition } = getMousePosition(ev, ref);
+    const scrollDown = parseFloat(topPosition * 100).toFixed(2) > parseFloat(this.getThumbPosition());
     
-    const delta = scrollDown ? contentHeight / 10 : contentHeight / - 10
+    const delta = scrollDown ? contentHeight / 10 : contentHeight / - 10;
 
-    scrollTo(contentPosition + delta)
+    scrollTo(contentPosition + delta);
   }
 
   handleOnMouseDown = (ev) => {
-    window.addEventListener('mousemove', this.drag)
+    window.addEventListener('mousemove', this.drag);
     
     this.setState({
       dragged: true
-    })
+    });
   }
 
   handleOnMouseUp = (ev) => {
-    window.removeEventListener('mousemove', this.drag)
+    window.removeEventListener('mousemove', this.drag);
     this.setState({
       dragged: false,
       pointStartDrag: null
-    })
+    });
   }
 
   getTrackRef = node => {
-    this.track = node
+    this.track = node;
   }
 
   render() {
-    const { viewportHeight } = this.props
-    const { thumbHeight } = this.state
+    const { viewportHeight } = this.props;
+    const { thumbHeight } = this.state;
 
-    const barRef = React.createRef()
+    const barRef = React.createRef();
 
     return (
       <Wrapper
@@ -161,7 +163,7 @@ export default class ScrollBar extends Component {
           >
             {interpolatedStyle => (
               <Thumb
-                ref={(node) => { this._thumbNode = node }}
+                ref={(node) => { this._thumbNode = node; }}
                 onClick={this.thumbClickHandler}
                 onMouseDown={this.handleOnMouseDown}
                 onMouseUp={this.handleOnMouseUp}
@@ -172,7 +174,7 @@ export default class ScrollBar extends Component {
           </Motion>
         </Track>
       </Wrapper>
-    )
+    );
   }
 }
 
@@ -180,4 +182,4 @@ ScrollBar.propTypes = {
   viewportHeight: PropTypes.number,
   contentHeight: PropTypes.number,
   contentPosition: PropTypes.number
-}
+};

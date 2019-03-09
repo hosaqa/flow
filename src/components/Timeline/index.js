@@ -1,16 +1,16 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import styled from 'styled-components'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import styled from 'styled-components';
 
-import ProgressBar from '../ProgressBar'
-import { getMousePosition, searchTrackByID, isNumeric, countDigits } from '../../utils'
+import ProgressBar from '../ProgressBar';
+import { getMousePosition, searchTrackByID, isNumeric, countDigits } from '../../utils';
 
 
 const TimeLineWrapper = styled.div`
   display: flex;
   align-items: center;
-`
+`;
 
 const TimerDisplay = styled.div`
   text-align: center;
@@ -21,7 +21,7 @@ const TimerDisplay = styled.div`
   font-size: 14px;
   transition: color .25s;
   color: ${({theme, disabled}) => disabled ? theme.colors.buttonDisabled : theme.colors.fontPrimary};
-`
+`;
 
 const ProgressBarWrapper = styled.div`
   padding: 0 12px;
@@ -29,7 +29,7 @@ const ProgressBarWrapper = styled.div`
   height: 40px;
   display: flex;
   align-items: center;
-`
+`;
 
 class Timeline extends Component {
   state = {
@@ -40,139 +40,155 @@ class Timeline extends Component {
 
 
   getTrackDuration() {
-    const { playlist, track } = this.props
+    const { playlist, track } = this.props;
 
-    return searchTrackByID(playlist, track).duration
+    return searchTrackByID(playlist, track).duration;
   }
 
   convertDurationToSecond(trackDuration) {
-    const { minutes, seconds } = trackDuration
+    const { minutes, seconds } = trackDuration;
     
-    return minutes * 60 + seconds
+    return minutes * 60 + seconds;
   }
   
   formateTimerValue (seconds) {
-    seconds = Math.round(seconds)
+    seconds = Math.round(seconds);
   
-    let minutes = 0
+    let minutes = 0;
   
     if (seconds >= 60) {
-      minutes = Math.floor(seconds / 60)
-      seconds = seconds % 60
+      minutes = Math.floor(seconds / 60);
+      seconds %= 60;
     }
   
-    seconds = (countDigits(seconds) < 2) ? '0' + seconds : seconds
+    seconds = (countDigits(seconds) < 2) ? '0' + seconds : seconds;
   
-    return `${minutes}:${seconds}`
+    return `${minutes}:${seconds}`;
   }
   
   renderProgressBarSlider (trackPosition, trackDuration) {
-    const {minutes, seconds} = trackDuration
+    const {playlist, nowPlaying} = this.props;
+    const {dummyLineProgress} = this.state;
+    const {minutes, seconds} = trackDuration;
   
-    trackDuration = minutes * 60 + seconds
-    trackPosition = (isNumeric(trackPosition)) ? trackPosition : 0
-    const width = parseFloat((trackPosition / trackDuration * 100).toFixed(1))
+    trackDuration = minutes * 60 + seconds;
+    trackPosition = (isNumeric(trackPosition)) ? trackPosition : 0;
+    const width = parseFloat((trackPosition / trackDuration * 100).toFixed(1));
 
     return (
       <ProgressBar
-        disabled={!this.props.playlist}
-        active={this.props.nowPlaying}
-        thumbShowOnHover={true}
+        disabled={!playlist}
+        active={nowPlaying}
+        thumbShowOnHover
         thumbRadius={6}
-        direction={'horizontal'}
-        filled={(this.state.dummyLineProgress)? this.state.dummyLineProgress : width}
+        direction="horizontal"
+        filled={dummyLineProgress || width}
       />
-    )
+    );
   }
 
   getTouchedPosition(ev, ref) {
-    const { left, width } = getMousePosition(ev, ref)
-    return (ev.clientX - Math.round(left)) / width
+    const { left, width } = getMousePosition(ev, ref);
+    return (ev.clientX - Math.round(left)) / width;
   }
 
   onMouseUpRewind() {
-    const trackDuration = this.convertDurationToSecond(this.getTrackDuration())
-    this.props.setTrackPosition(this.state.dummyLineProgress / 100 * trackDuration)
+    const {setTrackPosition} = this.props;
+    const {dummyLineProgress} = this.state;
+
+    const trackDuration = this.convertDurationToSecond(this.getTrackDuration());
+    setTrackPosition(dummyLineProgress / 100 * trackDuration);
 
     this.setState({
       mouseDowned: false,
       dummyLineProgress: null,
       dummyTime: null
-    })
+    });
   }
 
   handleOnMouseDown() {
-    this.setState({mouseDowned: true})
+    this.setState({mouseDowned: true});
   }
 
   handleOnMouseUp() {
-    this.onMouseUpRewind()
+    this.onMouseUpRewind();
   }
 
-  handleOnMouseLeave() {  
-    if (this.state.mouseDowned && this.state.dummyLineProgress) {
-      this.onMouseUpRewind()
+  handleOnMouseLeave() {
+    const {mouseDowned, dummyLineProgress} = this.state;
+
+    if (mouseDowned && dummyLineProgress) {
+      this.onMouseUpRewind();
     }
   }
 
   handleOnClick (ev, ref) {
-    const trackDuration = this.convertDurationToSecond(this.getTrackDuration())
+    const {setTrackPosition} = this.props;
 
-    const touchedPosition = this.getTouchedPosition(ev, ref)
+    const trackDuration = this.convertDurationToSecond(this.getTrackDuration());
 
-    const rewindTo = Math.round(touchedPosition * trackDuration)
-    this.props.setTrackPosition(rewindTo)
+    const touchedPosition = this.getTouchedPosition(ev, ref);
+
+    const rewindTo = Math.round(touchedPosition * trackDuration);
+    setTrackPosition(rewindTo);
   }
 
   handleOnMouseMove (ev, ref) {
-    if (this.state.mouseDowned) {
-      const trackDuration = this.convertDurationToSecond(this.getTrackDuration())
+    const {mouseDowned} = this.state;
 
-      const touchedPosition = this.getTouchedPosition(ev, ref)
+    if (mouseDowned) {
+      const trackDuration = this.convertDurationToSecond(this.getTrackDuration());
+
+      const touchedPosition = this.getTouchedPosition(ev, ref);
 
       if (touchedPosition > 0 && touchedPosition < 1) {
         this.setState({
           dummyLineProgress: touchedPosition * 100,
           dummyTime: touchedPosition * trackDuration
-        })
+        });
       }
     }
   }
 
   render() {
-     if (!this.props.playlist) return (
-
-
+    const {playlist, nowPlaying, test} = this.props;
+    const {dummyTime} = this.state;
+    
+    if (!playlist) return (
       <TimeLineWrapper>
-        <TimerDisplay disabled={true}>{'--:--'}</TimerDisplay>
+        <TimerDisplay disabled>--:--</TimerDisplay>
         <ProgressBarWrapper>
           <ProgressBar
-            disabled={true}
-            active={this.props.nowPlaying}
-            thumbShowOnHover={true}
+            disabled
+            active={nowPlaying}
+            thumbShowOnHover
             thumbRadius={6}
-            direction={'horizontal'}
+            direction="horizontal"
           />
         </ProgressBarWrapper>
-        <TimerDisplay disabled={true}>{'--:--'}</TimerDisplay>
+        <TimerDisplay disabled>--:--</TimerDisplay>
       </TimeLineWrapper>
-     )
+     );
 
-    const timelineRef = React.createRef()
+    const timelineRef = React.createRef();
 
-    const trackDuration = this.getTrackDuration()
+    const trackDuration = this.getTrackDuration();
       
-    let { trackPosition } = this.props
+    let { trackPosition } = this.props;
+    if (test && typeof test.f === 'function') {
+      console.log(test.f(), trackPosition);
+    }
     
-    const progressBar = this.renderProgressBarSlider(trackPosition, trackDuration)
+    const progressBar = this.renderProgressBarSlider(trackPosition, trackDuration);
     
-    let { minutes, seconds } = trackDuration
-    
-    trackPosition = (this.state.dummyTime) ? this.state.dummyTime : trackPosition
+    let { seconds } = trackDuration;
+    const { minutes } = trackDuration;
 
-    trackPosition = (isNumeric(trackPosition)) ? this.formateTimerValue(trackPosition) : '0:00'
+    trackPosition = dummyTime || trackPosition;
+
+    trackPosition = (isNumeric(trackPosition)) ? this.formateTimerValue(trackPosition) : '0:00';
   
-    if (countDigits(seconds) < 2) seconds = '0' + seconds
+    if (countDigits(seconds) < 2) seconds = '0' + seconds;
   
     return (
       <TimeLineWrapper>
@@ -189,7 +205,7 @@ class Timeline extends Component {
           </ProgressBarWrapper>
         <TimerDisplay>{`${minutes}:${seconds}` || '--:--'}</TimerDisplay>
       </TimeLineWrapper>
-    )
+    );
   }
 }
 
@@ -203,7 +219,7 @@ Timeline.propTypes = {
     PropTypes.object
   ]),
   setTrackPosition: PropTypes.func
-}
+};
 
 
-export default connect(({player}) => player)(Timeline)
+export default connect(({player}) => player)(Timeline);

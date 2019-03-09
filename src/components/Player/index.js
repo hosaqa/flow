@@ -1,16 +1,16 @@
-import ReactHowler from 'react-howler'
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import raf from 'raf' // requestAnimationFrame polyfill
-import styled from 'styled-components'
+import ReactHowler from 'react-howler';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import raf from 'raf'; // requestAnimationFrame polyfill
+import styled from 'styled-components';
 import { Container, Row, Col, BaseCSS } from 'styled-bootstrap-grid';
-import PlayerControls from './PlayerControls'
-import Timeline from '../Timeline'
-import VolumeBar from '../VolumeBar'
-import PlayerQueue from './PlayerQueue'
-import { playToggle, playlistFetch, setCurrentTrack, setTrackPosition } from '../../actions/PlayerActions'
-import { searchTrackByID } from '../../utils'
+import PlayerControls from './PlayerControls';
+import Timeline from '../Timeline';
+import VolumeBar from '../VolumeBar';
+import PlayerQueue from './PlayerQueue';
+import { playToggle, playlistFetch, setCurrentTrack, setTrackPosition } from '../../actions/PlayerActions';
+import { searchTrackByID } from '../../utils';
 
 
 const PlayerWrapper = styled.div`
@@ -24,96 +24,112 @@ const PlayerWrapper = styled.div`
   width: 100%;
   padding: 15px 25px;
   transition: background-color .3s;
-`
+`;
 
 const DraggableControls = styled.div`
   display: flex;
   align-items: center;
-  justify-content: spabe-between;
-`
+  justify-content: space-between;
+`;
 
 class Player extends Component {
+  constructor(props) {
+    super(props);
+    this.closestTrackIsExist = this.closestTrackIsExist.bind(this);
+    this.setCurrentTrackClosest = this.setCurrentTrackClosest.bind(this);
+  }
+
   componentDidMount() {
-    this.props.playlistFetch()
+    const {playlistFetch} = this.props;
+    playlistFetch();
   }
 
   componentWillUnmount () {
-    this.clearRAF()
+    this.clearRAF();
   }
 
+
   setSeek (rewindTo) {
-    this.props.setTrackPosition(rewindTo)
-    this.player.seek(rewindTo)
+    const {setTrackPosition} = this.props;
+    setTrackPosition(rewindTo);
+    this.player.seek(rewindTo);
+  }
+
+  seekTest() {
+    // if (this.player) return false;
+    if (this.player) return {
+      f: this.player.seek
+    };
   }
 
   setSeekPos () {
-    const { playingNow, setTrackPosition } = this.props
+    const { playingNow, setTrackPosition } = this.props;
 
-    setTrackPosition(this.player.seek())
+    setTrackPosition(this.player.seek());
 
     if (playingNow) {
-      this._raf = raf(() => this.setSeekPos())
+      this._raf = raf(() => this.setSeekPos());
     }
   }
 
   closestTrackIsExist (index) {
-    const { playlist, track, shuffledPlaylist } = this.props
+    const { playlist, track, shuffledPlaylist } = this.props;
     
-    if (!playlist) return false
+    if (!playlist) return false;
 
-    const currentPlaylist = (shuffledPlaylist) ? shuffledPlaylist : playlist
+    const currentPlaylist = (shuffledPlaylist) || playlist;
 
-    const currentTrack = searchTrackByID(currentPlaylist, track)
-    const currentTrackIndex = currentPlaylist.indexOf(currentTrack)
+    const currentTrack = searchTrackByID(currentPlaylist, track);
+    const currentTrackIndex = currentPlaylist.indexOf(currentTrack);
 
-    return currentPlaylist.includes(currentPlaylist[currentTrackIndex + index]) ? true : false
+    return !!currentPlaylist.includes(currentPlaylist[currentTrackIndex + index]);
   }
 
   setCurrentTrackClosest (index) {
-    const { playlist, track, setCurrentTrack, shuffledPlaylist } = this.props
+    const { playlist, track, setCurrentTrack, shuffledPlaylist } = this.props;
 
-    const currentPlaylist = (shuffledPlaylist) ? shuffledPlaylist : playlist
+    const currentPlaylist = (shuffledPlaylist) || playlist;
 
-    const currentTrack = searchTrackByID(currentPlaylist, track)
-    const currentTrackIndex = currentPlaylist.indexOf(currentTrack)
+    const currentTrack = searchTrackByID(currentPlaylist, track);
+    const currentTrackIndex = currentPlaylist.indexOf(currentTrack);
 
-    const nextTrackIndex = currentTrackIndex + index
-    if (this.closestTrackIsExist(index)) setCurrentTrack(currentPlaylist[nextTrackIndex].id)
+    const nextTrackIndex = currentTrackIndex + index;
+    if (this.closestTrackIsExist(index)) setCurrentTrack(currentPlaylist[nextTrackIndex].id);
   }
 
   handleOnEnd () {
-    const { playToggle, repeating } = this.props
+    const { playToggle, repeating } = this.props;
 
     if (!repeating) {
-      const nextTrackExist = this.closestTrackIsExist(1)
+      const nextTrackExist = this.closestTrackIsExist(1);
 
       if (!nextTrackExist) {
-        playToggle()
+        playToggle();
         
-        this.clearRAF()
+        this.clearRAF();
       } else {
-        this.setCurrentTrackClosest(1)
+        this.setCurrentTrackClosest(1);
       }
     }
   }
 
   clearRAF () {
-    raf.cancel(this._raf)
+    raf.cancel(this._raf);
   }
 
   render() {
-    const { playingNow, playlist, track,  volume, muted, shuffledPlaylist } = this.props
+    const { playingNow, playlist, track,  volume, muted, shuffledPlaylist } = this.props;
 
-    const currentPlaylist = (shuffledPlaylist) ? shuffledPlaylist : playlist
+    const currentPlaylist = (shuffledPlaylist) || playlist;
 
     return (
       <PlayerWrapper
-        inactive={playlist ? false : true}
+        inactive={!playlist}
       >
         {
           playlist &&
           <ReactHowler
-            ref={(ref) => (this.player = ref)}
+            ref={ref => {this.player = ref;}}
             src={searchTrackByID(currentPlaylist, track).src}
             playing={playingNow}
             onPlay={() => this.setSeekPos()}
@@ -127,13 +143,16 @@ class Player extends Component {
           <Row alignItems="center">
             <Col col xl="3">
               <PlayerControls
-                closestTrackIsExist={this.closestTrackIsExist.bind(this)}
-                setCurrentTrackClosest={this.setCurrentTrackClosest.bind(this)}
+                closestTrackIsExist={this.closestTrackIsExist}
+                setCurrentTrackClosest={this.setCurrentTrackClosest}
               />
             </Col>
             <Col col xl="6">
               <DraggableControls>
-                <Timeline setTrackPosition={(value) => this.setSeek(value)} />
+                <Timeline
+                  setTrackPosition={(value) => this.setSeek(value)}
+                  test={this.seekTest()}
+                />
                 <span style={{marginLeft: 'auto'}}><VolumeBar /></span>
               </DraggableControls>
             </Col>
@@ -143,12 +162,12 @@ class Player extends Component {
           </Row>
         </Container>
       </PlayerWrapper> 
-    )
+    );
   }
 }
 
 Player.propTypes = {
   playlist: PropTypes.arrayOf(PropTypes.object)
-}
+};
 
-export default connect(({player}) => player, {playToggle, playlistFetch, setCurrentTrack, setTrackPosition})(Player)
+export default connect(({player}) => player, {playToggle, playlistFetch, setCurrentTrack, setTrackPosition})(Player);

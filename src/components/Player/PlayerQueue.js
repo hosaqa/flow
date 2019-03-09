@@ -1,22 +1,22 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import styled from 'styled-components'
-import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay'
-import ScrollArea from 'react-scrollbar'
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import styled from 'styled-components';
+import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay';
+import ScrollArea from 'react-scrollbar';
 
-import Dropdown from '../Dropdown'
-import PlayerButton from '../PlayerButton'
-import Playlist from '../Playlist'
-import TrackInfo from '../TrackInfo'
-import { playToggle, setCurrentTrack } from '../../actions/PlayerActions'
-import { searchTrackByID } from '../../utils'
+import Dropdown from '../Dropdown';
+import PlayerButton from '../PlayerButton';
+import Playlist from '../Playlist';
+import TrackInfo from '../TrackInfo';
+
+import { searchTrackByID } from '../../utils';
 
 const StyledQueue = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-`
+`;
 
 const QueueBody = styled.div`
   position: absolute;
@@ -29,31 +29,28 @@ const QueueBody = styled.div`
   border-radius: ${props => props.theme.borderRadiusMain};
   background-color: ${({theme}) => theme.colors.contentPreload};
   box-shadow: ${({theme}) => theme.shadowPrimary};
-`
+`;
 
-const playQueueButton = (playlist) => {
-  return (
+const playQueueButton = (playlist) => (
     <PlayerButton
-      disabled={!playlist ? true : false}
+      disabled={!playlist}
     >
       <PlaylistPlayIcon />
     </PlayerButton>
-  )
-}
+  );
 
-const PlayerQueue = ({playlist = [], track, playingNow, playToggle, setCurrentTrack, shuffledPlaylist}) => {
-  const currentPlaylist = (shuffledPlaylist) ? shuffledPlaylist : playlist
-  const currentTrack = currentPlaylist ? searchTrackByID(currentPlaylist, track) : null
+const PlayerQueue = ({playlist, track}) => {
+  const currentTrack = playlist ? searchTrackByID(playlist, track) : null;
 
   return (
     <StyledQueue>
 
-      <TrackInfo {...currentTrack}></TrackInfo>
+      <TrackInfo {...currentTrack} />
       <Dropdown selector={playQueueButton(playlist)}>
         <QueueBody>
           <ScrollArea
             speed={0.8}
-            smoothScrolling={true}
+            smoothScrolling
             className="area"
             contentClassName="content"
             horizontal={false}
@@ -73,24 +70,29 @@ const PlayerQueue = ({playlist = [], track, playingNow, playToggle, setCurrentTr
               marginLeft: '0'
             }}
           >
-            <Playlist
-              playlist={currentPlaylist}
-              currentTrackID={track}
-              playToggle={playToggle}
-              setTrack={setCurrentTrack}
-              playingNow={playingNow}
-            />
+            <Playlist/>
           </ScrollArea>
         </QueueBody>
       </Dropdown>
     </StyledQueue>
-  )
-}
+  );
+};
 
 PlayerQueue.propTypes = {
-  playlist: PropTypes.array,
+  playlist: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number,
+    artist: PropTypes.string,
+    trackname: PropTypes.string,
+    album: PropTypes.string,
+    src: PropTypes.string,
+    img: PropTypes.string,
+    duration: PropTypes.shape({
+      minutes: PropTypes.number,
+       seconds: PropTypes.number
+    })
+  })),
   track: PropTypes.number,
   playingNow: PropTypes.bool
-}
+};
 
-export default connect(({player}) => player, {playToggle, setCurrentTrack})(PlayerQueue)
+export default connect(({player}) => player, null)(PlayerQueue);

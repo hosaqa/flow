@@ -1,17 +1,19 @@
-import React, { Component } from 'react'
-import { findDOMNode } from 'react-dom'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import { Motion, spring } from 'react-motion'
+/* eslint-disable */
+// когда-нибудь доделаю
+import React, { Component } from 'react';
+import { findDOMNode } from 'react-dom';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { Motion, spring } from 'react-motion';
 
-import ScrollBar from './ScrollBar'
+import ScrollBar from './ScrollBar';
 
 
 const Viewport = styled.div`
   height: ${({viewportHeight}) => viewportHeight ? `${viewportHeight}px` : 'auto'};
   overflow: hidden;
   position: relative;
-`
+`;
 
 const ContentWrapper = styled.div`
   position: absolute;
@@ -24,12 +26,12 @@ const ContentWrapper = styled.div`
   &:hover {
     will-change: transform;
   }
-`
+`;
 const Content = styled.div`
   user-select: none;
   position: relative;
   height: ${({contentHeight}) => contentHeight ? `${contentHeight}px` : 'auto'};
-`
+`;
 
 export default class Scrollable extends Component {
   state = {
@@ -44,50 +46,46 @@ export default class Scrollable extends Component {
     this.setState({
       contentHeight: this.getContentHeight(),
       viewportHeight: this.getViewportHeight()
-    })
+    });
   }
 
   getViewportRef = node => {
-    this.viewport = node
+    this.viewport = node;
   }
 
   getContentRef = node => {
-    this.content = node
+    this.content = node;
   }
 
-  getViewportHeight = () => {
-    return findDOMNode(this.viewport).parentElement.clientHeight
-  }
+  getViewportHeight = () => findDOMNode(this.viewport).parentElement.clientHeight
 
-  getContentHeight = () => {
-    return findDOMNode(this.content).offsetHeight
-  }
+  getContentHeight = () => findDOMNode(this.content).offsetHeight
 
   scrollTo = (to) => {
-    const { viewportHeight, contentHeight, contentPosition } = this.state
+    const { viewportHeight, contentHeight, contentPosition } = this.state;
 
-    const delta = to - contentPosition
+    const delta = to - contentPosition;
  
-    const extremeLimit = delta > 0 ? viewportHeight - contentHeight : 0
+    const extremeLimit = delta > 0 ? viewportHeight - contentHeight : 0;
 
-    const toExtremeLimitRewindCondition = delta > 0 ? (contentPosition - delta < extremeLimit) : (contentPosition - delta > extremeLimit)
+    const toExtremeLimitRewindCondition = delta > 0 ? (contentPosition - delta < extremeLimit) : (contentPosition - delta > extremeLimit);
 
     if (contentPosition !== extremeLimit) {
-      let to = toExtremeLimitRewindCondition ? extremeLimit : this.state.contentPosition - delta
+      const to = toExtremeLimitRewindCondition ? extremeLimit : this.state.contentPosition - delta;
 
       this.setState({
         contentPosition: to
-      })
+      });
     }
   }
 
   handleOnWheel = (ev) => {
-    this.scrollTo(this.state.contentPosition + ev.deltaY)
+    this.scrollTo(this.state.contentPosition + ev.deltaY);
   }
 
   render() {
-    const { children } = this.props
-    const { viewportHeight, contentHeight, contentPosition } = this.state
+    const { children } = this.props;
+    const { viewportHeight, contentHeight, contentPosition } = this.state;
 
     return (
       <Viewport
@@ -117,10 +115,10 @@ export default class Scrollable extends Component {
           scrollTo={this.scrollTo}
         />
       </Viewport>
-    )
+    );
   }
 }
 
 Scrollable.propTypes = {
   children: PropTypes.element.isRequired
-}
+};
