@@ -4,7 +4,6 @@ import {
   PLAY_TOGGLE,
   SET_CURRENT_TRACK,
   REPEAT_TOGGLE,
-  SET_TRACK_POSITION,
   PLAYLIST_IS_LOADING,
   PLAYLIST_FETCH_SUCCESS,
   PLAYLIST_FETCH_FAILED,
@@ -46,8 +45,6 @@ export function playerReducer(state = initialState, action) {
       };
     }
 
-    case SET_TRACK_POSITION:
-      return { ...state, trackPosition: action.payload };
 
     case SET_VOLUME:
       return { ...state, volume: action.payload };

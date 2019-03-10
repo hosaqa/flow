@@ -5,8 +5,6 @@ export const SET_CURRENT_TRACK_CLOSEST = 'SET_CURRENT_TRACK_CLOSEST';
 export const REPEAT_TOGGLE = 'REPEAT_TOGGLE';
 export const SHUFFLE_PLAYLIST_TOGGLE = 'SHUFFLE_PLAYLIST_TOGGLE';
 
-export const SET_TRACK_POSITION = 'SET_TRACK_POSITION';
-
 export const SET_VOLUME = 'SET_VOLUME';
 export const MUTE_TOGGLE = 'MUTE_TOGGLE';
 
@@ -69,13 +67,6 @@ export function setCurrentTrackClosest(index) {
   return {
     type: SET_CURRENT_TRACK_CLOSEST,
     payload: index
-  };
-}
-
-export function setTrackPosition(position) {
-  return {
-    type: SET_TRACK_POSITION,
-    payload: position
   };
 }
 

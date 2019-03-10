@@ -9,7 +9,8 @@ import PlayerControls from './PlayerControls';
 import Timeline from '../Timeline';
 import VolumeBar from '../VolumeBar';
 import PlayerQueue from './PlayerQueue';
-import { playToggle, playlistFetch, setCurrentTrack, setTrackPosition } from '../../actions/PlayerActions';
+import { playToggle, playlistFetch, setCurrentTrack } from '../../actions/PlayerActions';
+import { setTrackPosition } from '../../actions/TrackTimeActions';
 import { searchTrackByID } from '../../utils';
 
 
@@ -53,13 +54,6 @@ class Player extends Component {
     const {setTrackPosition} = this.props;
     setTrackPosition(rewindTo);
     this.player.seek(rewindTo);
-  }
-
-  seekTest() {
-    // if (this.player) return false;
-    if (this.player) return {
-      f: this.player.seek
-    };
   }
 
   setSeekPos () {
@@ -119,7 +113,7 @@ class Player extends Component {
 
   render() {
     const { playingNow, playlist, track,  volume, muted, shuffledPlaylist } = this.props;
-
+    console.log('render?');
     const currentPlaylist = (shuffledPlaylist) || playlist;
 
     return (
@@ -151,7 +145,6 @@ class Player extends Component {
               <DraggableControls>
                 <Timeline
                   setTrackPosition={(value) => this.setSeek(value)}
-                  test={this.seekTest()}
                 />
                 <span style={{marginLeft: 'auto'}}><VolumeBar /></span>
               </DraggableControls>
@@ -167,7 +160,18 @@ class Player extends Component {
 }
 
 Player.propTypes = {
-  playlist: PropTypes.arrayOf(PropTypes.object)
+  playlist: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number,
+    artist: PropTypes.string,
+    trackname: PropTypes.string,
+    album: PropTypes.string,
+    src: PropTypes.string,
+    img: PropTypes.string,
+    duration: PropTypes.shape({
+      minutes: PropTypes.number,
+       seconds: PropTypes.number
+    })
+  })),
 };
 
 export default connect(({player}) => player, {playToggle, playlistFetch, setCurrentTrack, setTrackPosition})(Player);

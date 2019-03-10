@@ -113,7 +113,7 @@ class VolumeBar extends Component {
   render() {
     const { volume, muted, muteToggle, playlist } = this.props;
     const volumeBarRef = React.createRef();
-
+    
     return (
       <Volume onWheel={(ev) => this.handleOnWheel(ev)}>
         <PlayerButton

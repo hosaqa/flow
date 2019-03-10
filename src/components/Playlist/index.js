@@ -35,7 +35,18 @@ const Playlist = ({nonDefaultPlaylist, track, playlist, shuffledPlaylist, playTo
 };
 
 Playlist.propTypes = {
-  playlist: PropTypes.arrayOf(PropTypes.object),
+  playlist: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number,
+    artist: PropTypes.string,
+    trackname: PropTypes.string,
+    album: PropTypes.string,
+    src: PropTypes.string,
+    img: PropTypes.string,
+    duration: PropTypes.shape({
+      minutes: PropTypes.number,
+       seconds: PropTypes.number
+    })
+  })),
   track: PropTypes.number,
   playToggle: PropTypes.func,
   setCurrentTrack: PropTypes.func,

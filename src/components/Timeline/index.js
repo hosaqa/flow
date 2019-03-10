@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
@@ -31,16 +31,16 @@ const ProgressBarWrapper = styled.div`
   align-items: center;
 `;
 
-class Timeline extends Component {
+class Timeline extends PureComponent {
   state = {
     dummyLineProgress: null,
     dummyTime: null,
     mouseDowned: false
   }
 
-
   getTrackDuration() {
-    const { playlist, track } = this.props;
+    const {player} = this.props;
+    const { playlist, track } = player;
 
     return searchTrackByID(playlist, track).duration;
   }
@@ -67,7 +67,8 @@ class Timeline extends Component {
   }
   
   renderProgressBarSlider (trackPosition, trackDuration) {
-    const {playlist, nowPlaying} = this.props;
+    const {player} = this.props;
+    const {playlist, nowPlaying} = player;
     const {dummyLineProgress} = this.state;
     const {minutes, seconds} = trackDuration;
   
@@ -151,7 +152,9 @@ class Timeline extends Component {
   }
 
   render() {
-    const {playlist, nowPlaying, test} = this.props;
+    const {player, trackTime} = this.props;
+
+    const {playlist, nowPlaying} = player;
     const {dummyTime} = this.state;
     
     if (!playlist) return (
@@ -174,10 +177,7 @@ class Timeline extends Component {
 
     const trackDuration = this.getTrackDuration();
       
-    let { trackPosition } = this.props;
-    if (test && typeof test.f === 'function') {
-      console.log(test.f(), trackPosition);
-    }
+    let { trackPosition } = trackTime;
     
     const progressBar = this.renderProgressBarSlider(trackPosition, trackDuration);
     
@@ -214,12 +214,11 @@ Timeline.propTypes = {
     minutes: PropTypes.number,
     seconds: PropTypes.number
   }),
-  trackPosition: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.object
-  ]),
+  trackTime: PropTypes.shape({
+    setTrackPosition: PropTypes.number
+  }),
   setTrackPosition: PropTypes.func
 };
 
 
-export default connect(({player}) => player)(Timeline);
+export default connect(({player, trackTime}) => ({player, trackTime}))(Timeline);

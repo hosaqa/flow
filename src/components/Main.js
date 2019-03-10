@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Container, Row, Col, BaseCSS } from 'styled-bootstrap-grid';
 
 import { searchTrackByID } from '../utils'
-import { playToggle, playlistFetch, setCurrentTrack, setTrackPosition } from '../actions/PlayerActions'
+import { playToggle, playlistFetch, setCurrentTrack } from '../actions/PlayerActions'
 import Playlist from './Playlist'
 
 const Main = ({playingNow, playlist, track,  volume, muted, shuffledPlaylist}) => (
@@ -21,4 +21,4 @@ const Main = ({playingNow, playlist, track,  volume, muted, shuffledPlaylist}) =
     </div>
   )
 
-export default connect(({player}) => player, {playToggle, playlistFetch, setCurrentTrack, setTrackPosition})(Main)
+export default connect(({player, }) => player, {playToggle, playlistFetch, setCurrentTrack})(Main)
