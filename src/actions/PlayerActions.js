@@ -91,26 +91,24 @@ export function shuffleToggle() {
 
 export function playlistFetch() {
   return dispatch => {
-    setTimeout(() => {
-      dispatch(playlistIsLoading(true));
+    dispatch(playlistIsLoading(true));
 
-      fetch('/data.json')
-        .then(response => {
-          if (response.status !== 200) {
-            return Promise.reject(new Error(response.statusText));
-          }
+    fetch('/data.json')
+      .then(response => {
+        if (response.status !== 200) {
+          return Promise.reject(new Error(response.statusText));
+        }
 
-          dispatch(playlistIsLoading(false));
+        dispatch(playlistIsLoading(false));
 
-          return Promise.resolve(response);
-        })
-        .then(response => response.json())
-        .then(playlist => {
-          dispatch(playlistFetchSuccess(playlist));
-        })
-        .catch(() => {
-          dispatch(playlistFetchFailed(true));
-        });
-    }, 5000);
+        return Promise.resolve(response);
+      })
+      .then(response => response.json())
+      .then(playlist => {
+        dispatch(playlistFetchSuccess(playlist));
+      })
+      .catch(() => {
+        dispatch(playlistFetchFailed(true));
+      });
   };
 }

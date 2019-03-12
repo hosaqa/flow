@@ -1,19 +1,17 @@
-import React, { Component } from 'react'
-import { ThemeProvider } from 'styled-components'
+import React from 'react';
+import { ThemeProvider } from 'styled-components';
 import { GridThemeProvider } from 'styled-bootstrap-grid';
-import { Provider } from 'react-redux'
+import { Provider } from 'react-redux';
 
-import { store } from '../store/configureStore'
-import Header from './Header'
-import Player from './Player'
-import Main from './Main'
-import { lightTheme, gridTheme, GlobalStyle } from '../theme/globalStyle'
+import { store } from '../store/configureStore';
+import Header from './Header';
+import Player from './Player';
+import PageContent from './PageContent';
+import ContentPlaylist from './ContentPlaylist';
+import { lightTheme, gridTheme, GlobalStyle } from '../theme/globalStyle';
 
 
-class App extends Component {
-
-  render() {
-    return (
+const App = () => (
       <Provider store={store}>
         <ThemeProvider theme={lightTheme}>
 					<GridThemeProvider
@@ -22,14 +20,14 @@ class App extends Component {
           <div>
 					  <GlobalStyle />
             <Header />
-            <Main />
+            <PageContent>
+              <ContentPlaylist />
+            </PageContent>
             <Player />
           </div>
           </GridThemeProvider>
         </ThemeProvider>
       </Provider>
-    )
-  }
-}
+    );
 
-export default App
+export default App;

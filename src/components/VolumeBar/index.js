@@ -103,17 +103,17 @@ class VolumeBar extends Component {
       mouseButtonPressed: false
     });
   }
-  
+
   handleOnMouseLeave() {
     this.setState({
       mouseButtonPressed: false
     });
-  }  
+  } 
 
   render() {
     const { volume, muted, muteToggle, playlist } = this.props;
     const volumeBarRef = React.createRef();
-    
+
     return (
       <Volume onWheel={(ev) => this.handleOnWheel(ev)}>
         <PlayerButton

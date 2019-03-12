@@ -17,6 +17,7 @@
     "react-scripts": "1.1.5",
     "react-scrollbar": "^0.5.4",
     "react-transition-group": "^2.5.0",
+    "recompose": "^0.30.0",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",

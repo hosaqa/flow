@@ -26,9 +26,9 @@ const QueueBody = styled.div`
   height: 190px;
   padding: 0;
   text-align: left;
-  border-radius: ${props => props.theme.borderRadiusMain};
+  border-radius: ${({theme}) => theme.borderRadius};
   background-color: ${({theme}) => theme.colors.contentPreload};
-  box-shadow: ${({theme}) => theme.shadowPrimary};
+  box-shadow: ${({theme}) => theme.shadows.primary};
 `;
 
 const playQueueButton = (playlist) => (

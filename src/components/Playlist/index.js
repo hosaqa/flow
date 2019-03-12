@@ -12,10 +12,23 @@ const List = styled.div`
 `;
 
 const Playlist = ({nonDefaultPlaylist, track, playlist, shuffledPlaylist, playToggle, playingNow, setCurrentTrack}) => {
+  if (!nonDefaultPlaylist && !playlist) return (
+    <List>
+      <PlayListItem />
+      <PlayListItem />
+      <PlayListItem />
+      <PlayListItem />
+      <PlayListItem />
+      <PlayListItem />
+    </List>
+  );
+
   let currentPlaylist = nonDefaultPlaylist || playlist;
   currentPlaylist = (!nonDefaultPlaylist && shuffledPlaylist) ? shuffledPlaylist : playlist;
   const currentTrack = searchTrackByID(playlist, track).id;
+  console.log(nonDefaultPlaylist, playlist);
   
+
   return (
     <List>
       {currentPlaylist.map(item => (

@@ -41,14 +41,25 @@ const TimeLabel = styled.div`
   margin-left: auto;
 `;
 
+
+
 const getTrackTime = ({minutes, seconds}) => {
   seconds = (`${seconds}`).length < 2 ? `0${seconds}` : seconds;
 
   return `${minutes}:${seconds}`;
 };
 
-const PlaylistItem = ({track, currentTrackID, playToggle, setTrack, playingNow}) => (
-  <Wrapper>
+const PlaylistItem = ({track, currentTrackID, playToggle, setTrack, playingNow}) => {
+  if (!track) {
+    return (
+      <Wrapper>
+        <TrackInfo/>
+      </Wrapper>
+    );
+  }
+
+  return (
+    <Wrapper>
     <ButtonWrapper
       visible={(currentTrackID === track.id)}
     >
@@ -73,8 +84,10 @@ const PlaylistItem = ({track, currentTrackID, playToggle, setTrack, playingNow})
       withoutImage
     />
     <TimeLabel>{getTrackTime(track.duration)}</TimeLabel>
-  </Wrapper>
-);
+    </Wrapper>
+  );
+
+};
 
 PlaylistItem.propTypes = {
   track: PropTypes.shape({
