@@ -22,7 +22,10 @@ export const lightTheme = {
     accentPrimary: '#f90dc9',
     accentSecondary: '#ff1d1d',
     theme: '#ff6b6b',
-    colorDraggableBg: 'rgba(255, 112, 112, 0.50)'
+    colorDraggableBg: 'rgba(255, 112, 112, 0.50)',
+    headerGradientFirst: '#ff6b6b',
+    headerGradientSecond: '#ff486c',
+    headerGradientThird: '#ff1d6e'
   },
   shadows: {
     primary:

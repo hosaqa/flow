@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { Container, Row, Col } from 'styled-bootstrap-grid';
+import { Row, Col } from 'styled-bootstrap-grid';
 
 import Playlist from './Playlist';
 
