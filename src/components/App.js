@@ -2,7 +2,7 @@ import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { GridThemeProvider } from 'styled-bootstrap-grid';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { store } from '../store/configureStore';
 
 import Header from './Header';
@@ -14,7 +14,7 @@ import { lightTheme, gridTheme, GlobalStyle } from '../theme/globalStyle';
 
 const App = () => (
       <Provider store={store}>
-        <Router>
+        <BrowserRouter>
           <ThemeProvider theme={lightTheme}>
             <GridThemeProvider
               gridTheme={gridTheme}
@@ -29,7 +29,7 @@ const App = () => (
             </div>
             </GridThemeProvider>
           </ThemeProvider>
-          </Router>
+          </BrowserRouter>
       </Provider>
     );
 

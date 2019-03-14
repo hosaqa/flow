@@ -30,6 +30,9 @@
     "no-underscore-dangle": "off",
     "no-nested-ternary": "warn",
     "react/require-default-props": "off",
-    "import/no-named-default": 0
+    "import/no-named-default": 0,
+    "linebreak-style": 0,
+    "global-require": 0,
+    "eslint linebreak-style": [0, "error", "windows"]
   }
 }

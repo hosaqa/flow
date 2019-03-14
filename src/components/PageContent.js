@@ -1,7 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { Route, Switch } from 'react-router-dom';
 import { Container } from 'styled-bootstrap-grid';
 import styled from 'styled-components';
+import ContentPlaylist from './ContentPlaylist';
 
 
 const Wrapper = styled.div`
@@ -13,18 +14,18 @@ const Inner = styled.div`
   padding: 25px;
 `;
 
-const PageContent = ({children}) => (
+const PageContent = () => (
   <Wrapper>
     <Container>
       <Inner>
-        {children}
+        <Switch>
+          <Route exact path="/" component={ContentPlaylist} />
+          <Route path="/playlist" component={ContentPlaylist} />
+          <Route path="/about" component={() => 2} />
+        </Switch>
       </Inner>
     </Container>
   </Wrapper>
 );
-
-PageContent.propTypes = {
-  children: PropTypes.node
-};
 
 export default PageContent;

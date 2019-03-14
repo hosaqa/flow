@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Container, Row, Col } from 'styled-bootstrap-grid';
+import { Link } from 'react-router-dom';
 
 import Navigation from '../Navigation';
 
@@ -23,7 +24,9 @@ const Header = () => (
     <Container>
       <HeaderRow alignItems="center">
         <Col col="4">
-          <img src="/img/logo.svg" alt="logo"/>
+          <Link to="/">
+            <img src="/img/logo.svg" alt="logo"/>
+          </Link>
         </Col>
         <Col col="8">
           <Navigation />

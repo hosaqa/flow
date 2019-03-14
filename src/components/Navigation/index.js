@@ -1,9 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { BrowserRouter as Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-const Linked = styled.a`
+const Wrapper = styled.div`
+  text-align: right;
+`;
+
+const StyledLink = styled(Link)`
   font-size: 18px;
   color: #fff;
   text-decoration: none;
@@ -14,26 +17,13 @@ const Linked = styled.a`
   }
 `;
 
-const Navigation = (props) => (
-  
-    <div>
-      
-      <div>
-        <Link to="/playlist">Playlist</Link>
-        <Link to="/about">About</Link>
-      </div>
-      <div>
-        <Route path="/playlist" component={() => 1} />
-        <Route path="/about" component={() => 2} />
-      </div>
-      
-    </div>
-  
+const Navigation = () => (
+    <Wrapper>
+      <StyledLink to="/playlist">Playlist</StyledLink>
+      <StyledLink to="/about">About</StyledLink>
+    </Wrapper>
   );
 
-Navigation.propTypes = {
-
-};
 
 export default Navigation;
 
