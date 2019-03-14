@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import { Container } from 'styled-bootstrap-grid';
 import styled from 'styled-components';
 import ContentPlaylist from './ContentPlaylist';
+import PageAbout from './StaticPage/PageAbout';
 
 
 const Wrapper = styled.div`
@@ -21,7 +22,7 @@ const PageContent = () => (
         <Switch>
           <Route exact path="/" component={ContentPlaylist} />
           <Route path="/playlist" component={ContentPlaylist} />
-          <Route path="/about" component={() => 2} />
+          <Route path="/about" component={PageAbout} />
         </Switch>
       </Inner>
     </Container>
