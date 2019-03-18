@@ -7,7 +7,7 @@ import PageAbout from './StaticPage/PageAbout';
 
 
 const Wrapper = styled.div`
-  margin: 100px 0 0;
+  margin: 100px 0;
 `;
 
 const Inner = styled.div`

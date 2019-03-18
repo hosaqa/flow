@@ -30,6 +30,7 @@ export const lightTheme = {
   shadows: {
     primary:
       '1px 3px 4px rgba(0, 0, 0, 0.12), -1px -1px 2px rgba(0, 0, 0, 0.05)',
+    secondary: '0 4px 4px rgba(0, 0, 0, .05)'
   },
   borderRadius: '3px'
 };
@@ -57,6 +58,7 @@ export const gridTheme = {
 export const GlobalStyle = createGlobalStyle`
   ${styledNormalize}
   @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,200i,300,300i,400,400i,600,600i,700,700i,900,900i');
+  @import url('https://fonts.googleapis.com/css?family=Montserrat:900i');
   body {
     font-family: 'Source Sans Pro', sans-serif;
   }

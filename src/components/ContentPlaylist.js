@@ -7,26 +7,34 @@ import { Row, Col } from 'styled-bootstrap-grid';
 import Playlist from './Playlist';
 
 const Wrapper = styled.div`
-  background-color: ${({theme}) => theme.colors.contentPreload};
-  padding: 15px 13px;
+  display: flex;
+  /* padding: 15px 13px; */
 `;
 
-const CoverImg = styled.img`
-  max-width: 100%;
+const CoverImg = styled.div`
+  width: 280px;
+  height: 280px;
+  margin: 0 20px 0 0;
+  flex-shrink: 0;
+  background: ${({theme}) => theme.colors.contentPreload} url("img/cover.svg") no-repeat center / 197px;
+  box-shadow: ${({theme}) => theme.shadows.secondary};
+`;
+
+const Content = styled.div`
+  background-color: ${({theme}) => theme.colors.contentPreload};
+  padding: 15px 20px;
+  flex-grow: 1;
+  box-shadow: ${({theme}) => theme.shadows.secondary};
 `;
 
 const ContentPlaylist = ({playlist}) => (
     <Wrapper>
-      <Row>
-        <Col col={4}>
-          <CoverImg src="img/cover.jpg" alt="cover" />
-        </Col>
-        <Col col={8}>
-          <Playlist
-            nonDefaultPlaylist={playlist}
-          />
-        </Col>
-      </Row>
+      <CoverImg />
+      <Content>
+        <Playlist
+          nonDefaultPlaylist={playlist}
+        />
+      </Content>
     </Wrapper>
   );
 

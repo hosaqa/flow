@@ -1,67 +1,134 @@
 [
   {
     "id": 0,
+    "artist": "Aphex Twin",
+    "trackname": "Avril 14th",
+    "album": "",
+    "src": "/tracks/aphex-twin_avril-14th.mp3",
+    "img": "/img/artists/aphex-twin.jpg",
+    "duration": {
+      "minutes": 2,
+      "seconds": 6
+    }
+  },
+  {
+    "id": 1,
+    "artist": "New Beat Fund",
+    "trackname": "When Shes's Sober",
+    "album": "",
+    "src": "/tracks/new-beat-fund_when-shes-sober.mp3",
+    "duration": {
+      "minutes": 4,
+      "seconds": 3
+    }
+  },
+  {
+    "id": 3,
+    "artist": "Lil PEEP",
+    "trackname": "Awful Things",
+    "album": "",
+    "src": "/tracks/lil-peep_awful-things.mp3",
+    "img": "/img/artists/lil-peep.jpeg",
+    "duration": {
+      "minutes": 3,
+      "seconds": 34
+    }
+  },
+  {
+    "id": 4,
+    "artist": "Lil PEEP",
+    "trackname": "Better Off (Dying)",
+    "album": "",
+    "src": "/tracks/lil-peep_better-off-(dying).mp3",
+    "img": "/img/artists/lil-peep.jpeg",
+    "duration": {
+      "minutes": 2,
+      "seconds": 35
+    }
+  },
+  {
+    "id": 5,
+    "artist": "Lil PEEP x Marshmello",
+    "trackname": "Spotlight",
+    "album": "",
+    "src": "/tracks/lil-peep-marshmello_spotlight.mp3",
+    "img": "/img/artists/lil-peep.jpeg",
+    "duration": {
+      "minutes": 2,
+      "seconds": 58
+    }
+  },
+  {
+    "id": 6,
+    "artist": "Lil PEEP",
+    "trackname": "Yesterday",
+    "album": "",
+    "src": "/tracks/lil-peep_yesterday.mp3",
+    "img": "/img/artists/lil-peep.jpeg",
+    "duration": {
+      "minutes": 1,
+      "seconds": 51
+    }
+  },
+  {
+    "id": 7,
     "artist": "Lil Uzi Vert",
-    "trackname": "XO Tour",
-    "album": "Lil Lol",
-    "src": "lil_uzi-xo_tour.mp3",
-    "img": "img/lil-uzi.jpg",
+    "trackname": "XO Tour Llif3",
+    "src": "/tracks/lil-uzi_xo-tour.mp3",
+    "img": "/img/artists/lil-uzi.jpg",
     "duration": {
       "minutes": 3,
       "seconds": 0
     }
   },
   {
-    "id":4,
+    "id":8,
     "artist":"XXXTentacion",
     "trackname":"Save me",
-    "album":"unnamed",
-    "src":"xxxtentacion-save_me.mp3",
-    "img":"img/xxxtentacion.jpg",
+    "src":"/tracks/xxxtentacion_save-me.mp3",
+    "img":"/img/artists/xxxtentacion.jpg",
     "duration":{
        "minutes":2,
        "seconds":45
     }
   },  
   {
-     "id":5,
+     "id":9,
      "artist":"XXXTentacion",
      "trackname":"KING",
-     "album":"unnamed",
-     "src":"xxxtentacion-king.mp3",
-     "img":"img/xxxtentacion.jpg",
+     "src":"/tracks/xxxtentacion_king.mp3",
+     "img":"/img/artists/xxxtentacion.jpg",
      "duration":{
         "minutes":1,
         "seconds":53
      }
   },
   {
-     "id":1,
+     "id":10,
      "artist":"Lil Pump",
      "trackname":"Molly",
-     "album":"Rich",
-     "img":"img/lil-pump.jpg",
-     "src":"lil_pump-molly.mp3",
+     "img":"/img/artists/lil-pump.jpg",
+     "src":"/tracks/lil-pump_molly.mp3",
      "duration":{
         "minutes":1,
         "seconds":39
      }
   },
   {
-     "id":2,
+     "id":11,
      "artist":"Гнойный & Смешарик",
      "trackname":"Клетчатая сумка",
-     "src":"2.mp3",
+     "src":"/tracks/gnoynii_kletchataya-sumka.mp3",
      "duration":{
         "minutes":1,
         "seconds":1
      }
   },
   {
-     "id":3,
+     "id":12,
      "artist":"MGMT",
      "trackname":"When you die",
-     "src":"1.mp3",
+     "src":"/tracks/mgmt_when-you-die.mp3",
      "duration":{
         "minutes":4,
         "seconds":24
