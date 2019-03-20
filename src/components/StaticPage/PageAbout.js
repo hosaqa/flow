@@ -5,7 +5,7 @@ const PageAbout = () => (
     <StaticPage>
       <Title>About</Title>
       <Paragraph>
-        Music streaming app. Non-commercial project.
+        This is my pet project, web application for music streaming.
       </Paragraph>
       <Paragraph>
         Technology stack: react, redux, styled-components.
@@ -24,14 +24,14 @@ const PageAbout = () => (
         </ExternalLink>
       </Paragraph>
       <Paragraph>
-        TODO:
+        To do:
       </Paragraph>
       <MarkedList>
         <MarkedListItem>Express Rest API</MarkedListItem>
-        <MarkedListItem>make responsive</MarkedListItem>
-        <MarkedListItem>authentication</MarkedListItem>
-        <MarkedListItem>sorting tracks by genre and artist</MarkedListItem>
-        <MarkedListItem>track search</MarkedListItem>
+        <MarkedListItem>make responsive layout</MarkedListItem>
+        <MarkedListItem>ability to create your own profile</MarkedListItem>
+        <MarkedListItem>ability to sort by artists and genres</MarkedListItem>
+        <MarkedListItem>ability to look up the track</MarkedListItem>
       </MarkedList>
       <Paragraph>
         Contact with me: {' '}
