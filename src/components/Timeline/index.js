@@ -11,6 +11,7 @@ import { getMousePosition, searchTrackByID, isNumeric, countDigits } from '../..
 const TimeLineWrapper = styled.div`
   display: flex;
   align-items: center;
+  position: relative;
 `;
 
 const TimerDisplay = styled.div`
@@ -37,7 +38,7 @@ const Preloader = styled.div`
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  bottom: -20px;
+  bottom: -23px;
 `;
 
 class Timeline extends Component {
@@ -212,7 +213,7 @@ class Timeline extends Component {
             onMouseLeave={() => this.handleOnMouseLeave()}
             onMouseMove={(ev) => this.handleOnMouseMove(ev, timelineRef)}
           >
-            {!trackIsLoaded && 
+            { !trackIsLoaded &&
             <Preloader>
               <ThreeBounce color='#ff6b6b' size={25} />
             </Preloader>
