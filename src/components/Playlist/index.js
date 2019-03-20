@@ -26,8 +26,6 @@ const Playlist = ({nonDefaultPlaylist, track, playlist, shuffledPlaylist, playTo
   let currentPlaylist = nonDefaultPlaylist || playlist;
   currentPlaylist = (!nonDefaultPlaylist && shuffledPlaylist) ? shuffledPlaylist : playlist;
   const currentTrack = searchTrackByID(playlist, track).id;
-  console.log(nonDefaultPlaylist, playlist);
-  
 
   return (
     <List>

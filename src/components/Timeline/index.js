@@ -1,7 +1,8 @@
-import React, { Component, PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import {ThreeBounce} from 'styled-spinkit';
 
 import ProgressBar from '../ProgressBar';
 import { getMousePosition, searchTrackByID, isNumeric, countDigits } from '../../utils';
@@ -24,14 +25,22 @@ const TimerDisplay = styled.div`
 `;
 
 const ProgressBarWrapper = styled.div`
-  padding: 0 12px;
+  margin: 0 12px;
   width: 355px;
   height: 40px;
   display: flex;
   align-items: center;
 `;
 
-class Timeline extends PureComponent {
+const Preloader = styled.div`
+  width: 25px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -20px;
+`;
+
+class Timeline extends Component {
   state = {
     dummyLineProgress: null,
     dummyTime: null,
@@ -68,7 +77,7 @@ class Timeline extends PureComponent {
   
   renderProgressBarSlider (trackPosition, trackDuration) {
     const {player} = this.props;
-    const {playlist, nowPlaying} = player;
+    const {playlist, nowPlaying, trackIsLoaded} = player;
     const {dummyLineProgress} = this.state;
     const {minutes, seconds} = trackDuration;
   
@@ -79,6 +88,7 @@ class Timeline extends PureComponent {
     return (
       <ProgressBar
         disabled={!playlist}
+        isLoading={!trackIsLoaded}
         active={nowPlaying}
         thumbShowOnHover
         thumbRadius={6}
@@ -153,8 +163,8 @@ class Timeline extends PureComponent {
 
   render() {
     const {player, trackTime} = this.props;
-
-    const {playlist, nowPlaying} = player;
+    
+    const {playlist, nowPlaying, trackIsLoaded} = player;
     const {dummyTime} = this.state;
     
     if (!playlist) return (
@@ -189,9 +199,10 @@ class Timeline extends PureComponent {
     trackPosition = (isNumeric(trackPosition)) ? this.formateTimerValue(trackPosition) : '0:00';
   
     if (countDigits(seconds) < 2) seconds = '0' + seconds;
-  
+    console.log(trackIsLoaded);
     return (
       <TimeLineWrapper>
+        
         <TimerDisplay>{trackPosition || '--:--'}</TimerDisplay>
           <ProgressBarWrapper 
             ref={timelineRef}
@@ -201,6 +212,11 @@ class Timeline extends PureComponent {
             onMouseLeave={() => this.handleOnMouseLeave()}
             onMouseMove={(ev) => this.handleOnMouseMove(ev, timelineRef)}
           >
+            {!trackIsLoaded && 
+            <Preloader>
+              <ThreeBounce color='#ff6b6b' size={25} />
+            </Preloader>
+            }
             {progressBar}
           </ProgressBarWrapper>
         <TimerDisplay>{`${minutes}:${seconds}` || '--:--'}</TimerDisplay>

@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
-import {findDOMNode} from 'react-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {TransitionGroup} from 'react-transition-group';
-import transition from "styled-transition-group";
+import transition from 'styled-transition-group';
 
 const DropdownWrapper = styled.div `
   position: relative;
@@ -75,7 +74,7 @@ export default class Dropdown extends Component {
           {selector}
         </DropdownSelector>
         <TransitionGroup timeout={200}>
-          {isOpen && <DropdownContentAnimated>
+          {isOpen && <DropdownContentAnimated timeout={200}>
             {children}
           </DropdownContentAnimated>}
         </TransitionGroup>

@@ -7,6 +7,7 @@ const Wrapper = styled.div`
   padding: 24px 48px;
   width: 490px;
   margin: auto;
+  box-shadow: ${({theme}) => theme.shadows.secondary};
 `;
 
 export const Title = styled.div`

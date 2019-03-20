@@ -7352,6 +7352,11 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^3.0.0"
     inherits "^2.0.1"
 
+round-to@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/round-to/-/round-to-3.0.0.tgz#f457177d68e5a1d9d55796528cd03daea0bb4fb9"
+  integrity sha512-h8xeIC7dRHkY++BGKtXTlO/FifRJdUmW5YObBk/8X9nc/2syNXKN8qUA6OvCgmPdtYlWvDqKZOuxz/CX6dcZNg==
+
 run-async@^2.2.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/run-async/-/run-async-2.3.0.tgz#0371ab4ae0bdd720d4166d7dfda64ff7a445a6c0"
@@ -7946,6 +7951,13 @@ styled-normalize@^8.0.6:
   version "8.0.6"
   resolved "https://registry.yarnpkg.com/styled-normalize/-/styled-normalize-8.0.6.tgz#f27f87292f46aa79ad6db6339aff5db529df3c91"
   integrity sha512-tOnAD1+wV04aiVy6chaQA4u/EtkGiGZPlIBYvEfWlZQBrDqRhu9EdPyXlFzLWxpOmANoQelJqSOMlV3QNCDKkw==
+
+styled-spinkit@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/styled-spinkit/-/styled-spinkit-0.6.1.tgz#d047ef9ddb87b6f16b216826a16c85b3d0a30d7f"
+  integrity sha512-f8TT9QNNIw0vyJ2ODDihZBR//FI0Qa8/En8dBIsoa0cV1BGzhabtOoFqzdg4v02HHFbn0hSQae+9tVP1tLTN3w==
+  dependencies:
+    round-to "^3.0.0"
 
 styled-transition-group@^1.0.0:
   version "1.0.0"

@@ -9,13 +9,14 @@ import {
   PLAYLIST_FETCH_FAILED,
   SET_VOLUME,
   MUTE_TOGGLE,
-  SHUFFLE_PLAYLIST_TOGGLE
+  SHUFFLE_PLAYLIST_TOGGLE,
+  TRACK_LOAD_SUCCESS
 } from '../actions/PlayerActions';
 
 export const initialState = {
   playlistIsLoading: false,
   playlistFetchFailed: false,
-  trackIsLoading: false,
+  trackIsLoaded: false,
   playingNow: false,
   playlist: null,
   track: null,
@@ -41,7 +42,8 @@ export function playerReducer(state = initialState, action) {
         ...state,
         track: searchTrackByID(state.playlist, id).id,
         playingNow: playingNow || state.playingNow,
-        trackPosition: null
+        trackPosition: null,
+        trackIsLoaded: false
       };
     }
 
@@ -71,6 +73,9 @@ export function playerReducer(state = initialState, action) {
       }
       return { ...state, shuffledPlaylist };
     }
+
+    case TRACK_LOAD_SUCCESS:
+      return { ...state, trackIsLoaded: action.payload };
 
     case PLAYLIST_IS_LOADING:
       return { ...state, playlistIsLoading: action.payload };

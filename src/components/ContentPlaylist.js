@@ -2,13 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { Row, Col } from 'styled-bootstrap-grid';
 
 import Playlist from './Playlist';
 
 const Wrapper = styled.div`
   display: flex;
-  /* padding: 15px 13px; */
 `;
 
 const CoverImg = styled.div`

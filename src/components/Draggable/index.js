@@ -58,8 +58,7 @@ const Thumb = styled.div`
 const Drag = ({ disabled, active, axis, filled, thumbRadius, thumbShowOnHover }) => {
   const ref = React.createRef();
   const onClickHandler = e => {
-    console.log(e ,ref);
-    console.log(getMousePosition(e, ref));
+
   };
 
   return (

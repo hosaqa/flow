@@ -9,7 +9,7 @@ import PlayerControls from './PlayerControls';
 import Timeline from '../Timeline';
 import VolumeBar from '../VolumeBar';
 import PlayerQueue from './PlayerQueue';
-import { playToggle, playlistFetch, setCurrentTrack } from '../../actions/PlayerActions';
+import { playToggle, playlistFetch, setCurrentTrack, trackLoadSuccess } from '../../actions/PlayerActions';
 import { setTrackPosition } from '../../actions/TrackTimeActions';
 import { searchTrackByID } from '../../utils';
 
@@ -112,8 +112,8 @@ class Player extends Component {
   }
 
   render() {
-    const { playingNow, playlist, track,  volume, muted, shuffledPlaylist } = this.props;
-    console.log('render?');
+    const { playingNow, playlist, track,  volume, muted, shuffledPlaylist, trackLoadSuccess } = this.props;
+    
     const currentPlaylist = (shuffledPlaylist) || playlist;
 
     return (
@@ -126,8 +126,11 @@ class Player extends Component {
             ref={ref => {this.player = ref;}}
             src={searchTrackByID(currentPlaylist, track).src}
             playing={playingNow}
+            preload
             onPlay={() => this.setSeekPos()}
             onEnd={() => this.handleOnEnd()}
+            onLoad={() => trackLoadSuccess(true)}
+            // onLoad={()=>{console.log('bee');}}
             volume={volume}
             mute={muted}
           />
@@ -174,4 +177,4 @@ Player.propTypes = {
   })),
 };
 
-export default connect(({player}) => player, {playToggle, playlistFetch, setCurrentTrack, setTrackPosition})(Player);
+export default connect(({player}) => player, {playToggle, playlistFetch, setCurrentTrack, setTrackPosition, trackLoadSuccess})(Player);

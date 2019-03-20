@@ -8,9 +8,12 @@ export const SHUFFLE_PLAYLIST_TOGGLE = 'SHUFFLE_PLAYLIST_TOGGLE';
 export const SET_VOLUME = 'SET_VOLUME';
 export const MUTE_TOGGLE = 'MUTE_TOGGLE';
 
+export const TRACK_LOAD_SUCCESS = 'TRACK_LOAD_SUCCESS';
+
 export const PLAYLIST_IS_LOADING = 'PLAYLIST_IS_LOADING';
 export const PLAYLIST_FETCH_SUCCESS = 'PLAYLIST_FETCH_SUCCESS';
 export const PLAYLIST_FETCH_FAILED = 'PLAYLIST_FETCH_FAILED';
+
 
 export function playToggle() {
   return {
@@ -21,6 +24,13 @@ export function playToggle() {
 export function repeatToggle() {
   return {
     type: REPEAT_TOGGLE
+  };
+}
+
+export function trackLoadSuccess(bool) {
+  return {
+    type: TRACK_LOAD_SUCCESS,
+    payload: bool
   };
 }
 

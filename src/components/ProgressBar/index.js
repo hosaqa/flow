@@ -21,7 +21,7 @@ const ProgressBarEmpty = styled.div`
   bottom: 0;
   margin: auto;
   border-radius: 2px;
-  background-color: ${({disabled, theme}) => disabled ? theme.colors.buttonDisabled: theme.colors.colorDraggableBg};
+  background-color: ${({disabled, isLoading, theme}) => disabled ? theme.colors.buttonDisabled : theme.colors.colorDraggableBg};
   box-shadow: ${({active}) => active ? '2px 2px 2px rgba(0, 0, 0, .1)' : 'none'};
   transition: box-shadow .35s, background-color .25s;
 `;
@@ -56,9 +56,9 @@ const ThumbHoverShown = styled(Thumb)`
   }
 `;
 
-const ProgressBar = ({ disabled, active, direction, filled, thumbRadius, thumbShowOnHover }) => (
+const ProgressBar = ({ disabled, active, direction, filled, thumbRadius, thumbShowOnHover, isLoading }) => (
   <StyledProgressBar disabled={disabled}>
-    <ProgressBarEmpty disabled={disabled} active={active} direction={direction}>
+    <ProgressBarEmpty isLoading={isLoading} disabled={disabled} active={active} direction={direction}>
       { !disabled &&
         <ProgressBarFill direction={direction} filled={`${filled}%`}>
           {thumbShowOnHover
@@ -75,6 +75,7 @@ const ProgressBar = ({ disabled, active, direction, filled, thumbRadius, thumbSh
 export default ProgressBar;
 
 ProgressBar.propTypes = {
+  isLoading: PropTypes.bool, 
   disabled: PropTypes.bool, 
   active: PropTypes.bool,
   direction: PropTypes.string,
