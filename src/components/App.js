@@ -12,27 +12,30 @@ import PageContent from './PageContent';
 import ContentPlaylist from './ContentPlaylist';
 import { lightTheme, gridTheme, GlobalStyle } from '../theme/globalStyle';
 
-ReactGA.initialize('UA-92698247-2');
+const App = () => {
+  ReactGA.initialize('UA-92698247-2');
+  ReactGA.pageview(window.location.pathname);
 
-const App = () => (
-      <Provider store={store}>
-        <BrowserRouter>
-          <ThemeProvider theme={lightTheme}>
-            <GridThemeProvider
-              gridTheme={gridTheme}
-            >				
-            <div>
-              <GlobalStyle />
-              <Header />
-              <PageContent>
-                <ContentPlaylist />
-              </PageContent>
-              <Player />
-            </div>
-            </GridThemeProvider>
-          </ThemeProvider>
-          </BrowserRouter>
-      </Provider>
-    );
+  return (
+    <Provider store={store}>
+      <BrowserRouter>
+        <ThemeProvider theme={lightTheme}>
+          <GridThemeProvider
+            gridTheme={gridTheme}
+          >				
+          <div>
+            <GlobalStyle />
+            <Header />
+            <PageContent>
+              <ContentPlaylist />
+            </PageContent>
+            <Player />
+          </div>
+          </GridThemeProvider>
+        </ThemeProvider>
+        </BrowserRouter>
+    </Provider>
+  );
+};
 
 export default App;

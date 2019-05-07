@@ -2,7 +2,8 @@ import React from 'react';
 import ReactGA from 'react-ga';
 import {StaticPage, Title, Paragraph, ExternalLink, MarkedList, MarkedListItem} from './index';
 
-ReactGA.modalview('/about');
+ReactGA.pageview('/about');
+
 const PageAbout = () => (
     <StaticPage>
       <Title>About</Title>
