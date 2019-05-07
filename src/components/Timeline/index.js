@@ -200,7 +200,6 @@ class Timeline extends Component {
     trackPosition = (isNumeric(trackPosition)) ? this.formateTimerValue(trackPosition) : '0:00';
   
     if (countDigits(seconds) < 2) seconds = '0' + seconds;
-    console.log(trackIsLoaded);
     return (
       <TimeLineWrapper>
         

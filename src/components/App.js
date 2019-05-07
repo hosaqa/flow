@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from '../store/configureStore';
 
+import Draggable from './Draggable';
 import Header from './Header';
 import Player from './Player';
 import PageContent from './PageContent';
@@ -26,6 +27,11 @@ const App = () => {
           <div>
             <GlobalStyle />
             <Header />
+            {/* <div style={{margin: '100px'}}>
+            <Draggable startPosition={{x: 20, y: 20}}>
+              <div style={{height: '50px', width: '50px', background: 'red'}} />
+            </Draggable>
+            </div> */}
             <PageContent>
               <ContentPlaylist />
             </PageContent>
@@ -35,6 +41,7 @@ const App = () => {
         </ThemeProvider>
         </BrowserRouter>
     </Provider>
+    
   );
 };
 

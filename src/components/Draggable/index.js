@@ -1,5 +1,4 @@
-import React from 'react';
-import Draggable from 'react-draggable';
+import React, {useState, useEffect, useRef} from 'react';
 import styled from 'styled-components';
 import { getMousePosition } from '../../utils';
 
@@ -54,52 +53,79 @@ const Thumb = styled.div`
   }
 `;
 
-// когда-нибудь закончу
-const Drag = ({ disabled, active, axis, filled, thumbRadius, thumbShowOnHover }) => {
-  const ref = React.createRef();
-  const onClickHandler = e => {
+const Element = styled.div`
+  touch-action: none;
+  user-select: none;
+  cursor: pointer;
+  transform: translate(${({x, y}) => `${x}px, ${y}px`});
+`;
 
+
+const getElMetrics = el => ({
+    height: el.offsetHeight,
+    width: el.offsetWidth,
+  });
+
+// когда-нибудь закончу
+const Draggable = ({
+  children,
+  axis,
+  startPosition = {x: 0, y: 0},
+  disabled,
+  onStart,
+  onStop,
+}) => {
+  const [position, setPosition] = useState(startPosition);
+  const [dragging, setDragging] = useState(false);
+
+  const elementRef = useRef(null);
+
+  useEffect(() => {
+    const element = elementRef.current;
+    const childrenMetrics = getElMetrics(element.children[0]);
+    element.style.height = `${childrenMetrics.height}px`;
+    element.style.width = `${childrenMetrics.width}px`;
+  });
+  
+  // clickH
+
+  const handleClick = () => {
+    setPosition({x: 25, y: 25});
+  };
+
+  const handleMouseDown = () => {
+    setDragging(true);
+  };
+
+  const handleMouseUp = () => {
+    setDragging(false);
+  };
+
+  const handleMouseMove = (e, ref) => {
+    if (dragging) {
+      const { mouseX, mouseY } = getMousePosition(e, ref);
+      setPosition({x: mouseX, y: mouseY});
+    }
+  };
+
+  const handleMouseLeave = () => {
+    // console.log('leave');
   };
 
   return (
-
-    <Wrapper
-      disabled={disabled}
-      onClick={onClickHandler}
-      ref={ref}
+    <Element
+      ref={elementRef}
+      x={position.x}
+      y={position.y}
+      onClick={handleClick}
+      onMouseMove={e => {handleMouseMove(e, elementRef);}}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseLeave}
     >
-      <TrackArea
-        disabled={disabled}
-        active={active}
-        axis={axis}
-        click={onClickHandler}
-      >
-        { !disabled &&
-          <div>
-            <FilledArea
-              axis={axis}
-              filled={`${filled}%`}
-            />
-            <Draggable
-              axis={axis}
-              handle=".draggable-handle"
-              defaultPosition={{x: 0, y: 0}}
-              position={{x: 100, y: 0}}
-              scale={1}
-              bounds="parent"
-            >
-              <div className='draggable-handle' style={{width: '1px', height: '1px'}}>
-                <Thumb
-                  thumbRadius={thumbRadius}
-                  thumbShowOnHover={thumbShowOnHover}
-                />
-              </div>
-            </Draggable>
-          </div>
-        }
-      </TrackArea>
-    </Wrapper>
-  );
+      {children}
+    </Element>
+    );
 };
  
-export default Drag;
+export default Draggable;

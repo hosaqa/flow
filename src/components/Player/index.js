@@ -130,7 +130,6 @@ class Player extends Component {
             onPlay={() => this.setSeekPos()}
             onEnd={() => this.handleOnEnd()}
             onLoad={() => trackLoadSuccess(true)}
-            // onLoad={()=>{console.log('bee');}}
             volume={volume}
             mute={muted}
           />
