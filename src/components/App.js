@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactGA from 'react-ga';
 import { ThemeProvider } from 'styled-components';
 import { GridThemeProvider } from 'styled-bootstrap-grid';
 import { Provider } from 'react-redux';
@@ -11,6 +12,7 @@ import PageContent from './PageContent';
 import ContentPlaylist from './ContentPlaylist';
 import { lightTheme, gridTheme, GlobalStyle } from '../theme/globalStyle';
 
+ReactGA.initialize('UA-92698247-2');
 
 const App = () => (
       <Provider store={store}>
