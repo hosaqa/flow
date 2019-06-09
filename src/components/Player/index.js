@@ -58,7 +58,7 @@ class Player extends Component {
 
   setSeekPos () {
     const { playingNow, setTrackPosition } = this.props;
-
+    // console.log(this.player.duration());
     setTrackPosition(this.player.seek());
 
     if (playingNow) {
@@ -169,10 +169,7 @@ Player.propTypes = {
     album: PropTypes.string,
     src: PropTypes.string,
     img: PropTypes.string,
-    duration: PropTypes.shape({
-      minutes: PropTypes.number,
-       seconds: PropTypes.number
-    })
+    duration: PropTypes.number
   })),
 };
 

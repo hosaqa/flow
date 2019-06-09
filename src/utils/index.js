@@ -1,3 +1,12 @@
+const formatSecondsToMMSS = totalSeconds => {
+  if (!totalSeconds) return '--:--';
+
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  return `${minutes}:${Math.floor(seconds).toString().padStart(2, '0')}`;
+};
+
 export const isNumeric = n => !Number.isNaN(parseFloat(n)) && Number.isFinite(n);
 
 export const countDigits = number => `${number}`.length;
@@ -22,3 +31,5 @@ export const getMousePosition = (ev, ref) => {
 export const searchTrackByID = (playlist, id) => playlist.find(track => track.id === id);
 
 export const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
+
+export {formatSecondsToMMSS};

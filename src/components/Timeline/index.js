@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import {ThreeBounce} from 'styled-spinkit';
 
 import ProgressBar from '../ProgressBar';
-import { getMousePosition, searchTrackByID, isNumeric, countDigits } from '../../utils';
+import { getMousePosition, searchTrackByID, isNumeric, countDigits, formatSecondsToMMSS } from '../../utils';
 
 
 const TimeLineWrapper = styled.div`
@@ -47,42 +47,19 @@ class Timeline extends Component {
     dummyTime: null,
     mouseDowned: false
   }
-
+  
   getTrackDuration() {
     const {player} = this.props;
     const { playlist, track } = player;
 
     return searchTrackByID(playlist, track).duration;
   }
-
-  convertDurationToSecond(trackDuration) {
-    const { minutes, seconds } = trackDuration;
-    
-    return minutes * 60 + seconds;
-  }
-  
-  formateTimerValue (seconds) {
-    seconds = Math.round(seconds);
-  
-    let minutes = 0;
-  
-    if (seconds >= 60) {
-      minutes = Math.floor(seconds / 60);
-      seconds %= 60;
-    }
-  
-    seconds = (countDigits(seconds) < 2) ? '0' + seconds : seconds;
-  
-    return `${minutes}:${seconds}`;
-  }
   
   renderProgressBarSlider (trackPosition, trackDuration) {
     const {player} = this.props;
     const {playlist, nowPlaying, trackIsLoaded} = player;
     const {dummyLineProgress} = this.state;
-    const {minutes, seconds} = trackDuration;
-  
-    trackDuration = minutes * 60 + seconds;
+
     trackPosition = (isNumeric(trackPosition)) ? trackPosition : 0;
     const width = parseFloat((trackPosition / trackDuration * 100).toFixed(1));
 
@@ -108,7 +85,7 @@ class Timeline extends Component {
     const {setTrackPosition} = this.props;
     const {dummyLineProgress} = this.state;
 
-    const trackDuration = this.convertDurationToSecond(this.getTrackDuration());
+    const trackDuration = this.getTrackDuration();
     setTrackPosition(dummyLineProgress / 100 * trackDuration);
 
     this.setState({
@@ -137,7 +114,7 @@ class Timeline extends Component {
   handleOnClick (ev, ref) {
     const {setTrackPosition} = this.props;
 
-    const trackDuration = this.convertDurationToSecond(this.getTrackDuration());
+    const trackDuration = this.getTrackDuration();
 
     const touchedPosition = this.getTouchedPosition(ev, ref);
 
@@ -149,7 +126,7 @@ class Timeline extends Component {
     const {mouseDowned} = this.state;
 
     if (mouseDowned) {
-      const trackDuration = this.convertDurationToSecond(this.getTrackDuration());
+      const trackDuration = this.getTrackDuration();
 
       const touchedPosition = this.getTouchedPosition(ev, ref);
 
@@ -163,6 +140,8 @@ class Timeline extends Component {
   }
 
   render() {
+    
+    // console.log(formatSecondsToMMSS());
     const {player, trackTime} = this.props;
     
     const {playlist, nowPlaying, trackIsLoaded} = player;
@@ -186,20 +165,16 @@ class Timeline extends Component {
 
     const timelineRef = React.createRef();
 
-    const trackDuration = this.getTrackDuration();
+    // const trackDuration = formatSecondsToMMSS(this.getTrackDuration());
       
     let { trackPosition } = trackTime;
     
-    const progressBar = this.renderProgressBarSlider(trackPosition, trackDuration);
-    
-    let { seconds } = trackDuration;
-    const { minutes } = trackDuration;
+    const progressBar = this.renderProgressBarSlider(trackPosition, this.getTrackDuration());
 
     trackPosition = dummyTime || trackPosition;
 
-    trackPosition = (isNumeric(trackPosition)) ? this.formateTimerValue(trackPosition) : '0:00';
+    trackPosition = (isNumeric(trackPosition)) ? formatSecondsToMMSS(trackPosition) : '0:00';
   
-    if (countDigits(seconds) < 2) seconds = '0' + seconds;
     return (
       <TimeLineWrapper>
         
@@ -219,17 +194,14 @@ class Timeline extends Component {
             }
             {progressBar}
           </ProgressBarWrapper>
-        <TimerDisplay>{`${minutes}:${seconds}` || '--:--'}</TimerDisplay>
+        <TimerDisplay>{formatSecondsToMMSS(this.getTrackDuration())}</TimerDisplay>
       </TimeLineWrapper>
     );
   }
 }
 
 Timeline.propTypes = {
-  trackDuration: PropTypes.shape({
-    minutes: PropTypes.number,
-    seconds: PropTypes.number
-  }),
+  trackDuration: PropTypes.number,
   trackTime: PropTypes.shape({
     setTrackPosition: PropTypes.number
   }),

@@ -1,0 +1,20 @@
+[
+  {
+    "trackname": "Avril 14th",
+    "artist": {"$oid": "5cec3aae4569f05f070ed327"},
+    "src": "/tracks/aphex-twin_avril-14th.mp3",
+    "duration": 125.59673469387755
+  },
+  {
+    "trackname": "Save me",
+    "artist": {"$oid": "5cec3aae4569f05f070ed32b"},
+    "src": "/tracks/xxxtentacion_save-me.mp3",
+    "duration": 163.26530612244898
+  },
+  {
+    "trackname": "KING",
+    "artist": {"$oid": "5cec3aae4569f05f070ed32b"},
+    "src": "/tracks/xxxtentacion_king.mp3",
+    "duration": 112.82392290249433
+  }
+]

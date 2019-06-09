@@ -75,6 +75,7 @@ const Draggable = ({
   onStart,
   onStop,
 }) => {
+  const [startMousePosition, setStartMousePosition] = useState(null);
   const [position, setPosition] = useState(startPosition);
   const [dragging, setDragging] = useState(false);
 
@@ -93,18 +94,26 @@ const Draggable = ({
     setPosition({x: 25, y: 25});
   };
 
-  const handleMouseDown = () => {
+  const handleMouseDown = e => {
     setDragging(true);
+    setStartMousePosition({x: e.clientX, y: e.clientY});
   };
 
   const handleMouseUp = () => {
     setDragging(false);
+    setStartMousePosition(null);
   };
 
   const handleMouseMove = (e, ref) => {
     if (dragging) {
       const { mouseX, mouseY } = getMousePosition(e, ref);
-      setPosition({x: mouseX, y: mouseY});
+      const startX = startMousePosition.x;
+      const startY = startMousePosition.y;
+      // setPosition({x: mouseX, y: mouseY});
+      // console.log(mouseX, mouseY);
+      console.log(startX - e.clientX, startY - e.clientY);
+
+      setPosition({x: startX - e.clientX, y: startY - e.clientY});
     }
   };
 
@@ -112,16 +121,22 @@ const Draggable = ({
     // console.log('leave');
   };
 
+  window.addEventListener('mousedown', e => {
+    console.log(e.target, elementRef.current);
+    console.log(e.target === elementRef.current);
+  });
+
   return (
     <Element
       ref={elementRef}
       x={position.x}
       y={position.y}
-      onClick={handleClick}
-      onMouseMove={e => {handleMouseMove(e, elementRef);}}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseLeave}
+      // onDragStart={() => false}
+      // onClick={handleClick}
+      // onMouseMove={e => {handleMouseMove(e, elementRef);}}
+      // onMouseDown={handleMouseDown}
+      // onMouseUp={handleMouseUp}
+      // onMouseLeave={handleMouseLeave}
     >
       {children}
     </Element>

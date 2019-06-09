@@ -8,6 +8,8 @@ import PauseIcon from '@material-ui/icons/Pause';
 import PlayerButton from '../PlayerButton';
 import TrackInfo from '../TrackInfo';
 
+import { formatSecondsToMMSS } from '../../utils';
+
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
@@ -83,7 +85,7 @@ const PlaylistItem = ({track, currentTrackID, playToggle, setTrack, playingNow})
       {...track}
       withoutImage
     />
-    <TimeLabel>{getTrackTime(track.duration)}</TimeLabel>
+    <TimeLabel>{formatSecondsToMMSS(track.duration)}</TimeLabel>
     </Wrapper>
   );
 
@@ -97,10 +99,7 @@ PlaylistItem.propTypes = {
     album: PropTypes.string,
     src: PropTypes.string,
     img: PropTypes.string,
-    duration: PropTypes.shape({
-      minutes: PropTypes.number,
-       seconds: PropTypes.number
-    })
+    duration: PropTypes.number
   }),
   currentTrackID: PropTypes.number,
   playToggle: PropTypes.func,

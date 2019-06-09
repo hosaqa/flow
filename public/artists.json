@@ -1,0 +1,31 @@
+[
+  {
+    "name": "Aphex Twin",
+    "img": "/img/artists/aphex-twin.jpg" 
+  },
+  {
+    "name": "New Beat Fund"
+  },
+  {
+    "name": "Lil Peep",
+    "img": "/img/artists/lil-peep.jpeg"
+  },
+  {
+    "name": "Lil Uzi Vert",
+    "img": "/img/artists/lil-uzi.jpg"
+  },
+  {
+    "name": "XXXTentacion",
+    "img": "/img/artists/xxxtentacion.jpg" 
+  },
+  {
+    "name": "Lil Pump",
+    "img": "/img/artists/lil-pump.jpg" 
+  },
+  {
+    "name": "Гнойный & Смешарик"
+  },
+  {
+    "name": "MGMT"
+  }
+]
