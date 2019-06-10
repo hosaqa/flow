@@ -5,12 +5,12 @@ import styled from 'styled-components';
 import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay';
 import ScrollArea from 'react-scrollbar';
 
-import Dropdown from '../Dropdown';
-import PlayerButton from '../PlayerButton';
+import Dropdown from '../UI/Dropdown';
+import PlayerButton from '../UI/PlayerButton';
 import Playlist from '../Playlist';
-import TrackInfo from '../TrackInfo';
+import TrackInfo from '../UI/TrackInfo';
 
-import { searchTrackByID } from '../../utils';
+import { searchArrItemByID } from '../../utils';
 
 const StyledQueue = styled.div`
   display: flex;
@@ -40,7 +40,7 @@ const playQueueButton = (playlist) => (
   );
 
 const PlayerQueue = ({playlist, track}) => {
-  const currentTrack = playlist ? searchTrackByID(playlist, track) : null;
+  const currentTrack = playlist ? searchArrItemByID(playlist, track) : null;
 
   return (
     <StyledQueue>

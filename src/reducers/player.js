@@ -1,4 +1,4 @@
-import { searchTrackByID, getRandomInt } from '../utils';
+import { searchArrItemByID, getRandomInt } from '../utils';
 
 import {
   PLAY_TOGGLE,
@@ -40,7 +40,7 @@ export function playerReducer(state = initialState, action) {
 
       return {
         ...state,
-        track: searchTrackByID(state.playlist, id).id,
+        track: searchArrItemByID(state.playlist, id).id,
         playingNow: playingNow || state.playingNow,
         trackPosition: null,
         trackIsLoaded: false

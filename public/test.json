@@ -1,0 +1,110 @@
+[
+  {
+    "artist": {"$oid":"5cec3aae4569f05f070ed327"},
+    "trackname": "Avril 14th",
+    "src": "/tracks/aphex-twin_avril-14th.mp3",
+    "duration": {
+      "minutes": 2,
+      "seconds": 6
+    }
+  },
+  {
+    "artist": {"$oid":"5cec3aae4569f05f070ed328"},
+    "trackname": "When Shes's Sober",
+    "src": "/tracks/new-beat-fund_when-shes-sober.mp3",
+    "duration": {
+      "minutes": 4,
+      "seconds": 3
+    }
+  },
+  {
+    "artist": {"$oid":"5cec3aae4569f05f070ed329"},
+    "trackname": "Awful Things",
+    "src": "/tracks/lil-peep_awful-things.mp3",
+    "duration": {
+      "minutes": 3,
+      "seconds": 34
+    }
+  },
+  {
+    "artist": {"$oid":"5cec3aae4569f05f070ed329"},
+    "trackname": "Better Off (Dying)",
+    "src": "/tracks/lil-peep_better-off-(dying).mp3",
+    "duration": {
+      "minutes": 2,
+      "seconds": 35
+    }
+  },
+  {
+    "artist": {"$oid":"5cec3aae4569f05f070ed329"},
+    "trackname": "Spotlight",
+    "src": "/tracks/lil-peep-marshmello_spotlight.mp3",
+    "duration": {
+      "minutes": 2,
+      "seconds": 58
+    }
+  },
+  {
+    "artist": {"$oid":"5cec3aae4569f05f070ed329"},
+    "trackname": "Yesterday",
+    "src": "/tracks/lil-peep_yesterday.mp3",
+    "duration": {
+      "minutes": 1,
+      "seconds": 51
+    }
+  },
+  {
+    "artist": {"$oid":"5cec3aae4569f05f070ed32a"},
+    "trackname": "XO Tour Llif3",
+    "src": "/tracks/lil-uzi_xo-tour.mp3",
+    "duration": {
+      "minutes": 3,
+      "seconds": 0
+    }
+  },
+  {
+    "artist": {"$oid":"5cec3aae4569f05f070ed32b"},
+    "trackname": "Save me",
+    "src": "/tracks/xxxtentacion_save-me.mp3",
+    "duration": {
+       "minutes": 2,
+       "seconds": 45
+    }
+  },
+  {
+    "artist": {"$oid":"5cec3aae4569f05f070ed32b"},
+    "trackname":"KING",
+    "src":"/tracks/xxxtentacion_king.mp3",
+    "duration": {
+       "minutes": 1,
+       "seconds": 53
+    }
+  },
+  {
+    "artist": {"$oid":"5cec3aae4569f05f070ed32c"},
+    "trackname":"Molly",
+    "src":"/tracks/lil-pump_molly.mp3",
+    "duration":{
+       "minutes": 1,
+       "seconds": 39
+    }
+  },
+  {
+    "artist": {"$oid":"5cec3aae4569f05f070ed32e"},
+    "trackname":"Клетчатая сумка",
+    "src":"/tracks/gnoynii_kletchataya-sumka.mp3",
+    "duration":{
+       "minutes": 1,
+       "seconds": 1
+    }
+  },  
+  {
+    "artist": {"$oid":"5cec3aae4569f05f070ed32d"},
+     "trackname": "When you die",
+     "src": "/tracks/mgmt_when-you-die.mp3",
+     "duration":{
+        "minutes": 4,
+        "seconds": 24
+     }
+  }
+]

@@ -1,5 +1,5 @@
 const formatSecondsToMMSS = totalSeconds => {
-  if (!totalSeconds) return '--:--';
+  if (!totalSeconds) return '0:00';
 
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
@@ -7,11 +7,11 @@ const formatSecondsToMMSS = totalSeconds => {
   return `${minutes}:${Math.floor(seconds).toString().padStart(2, '0')}`;
 };
 
-export const isNumeric = n => !Number.isNaN(parseFloat(n)) && Number.isFinite(n);
+const isNumeric = n => !Number.isNaN(parseFloat(n)) && Number.isFinite(n);
 
-export const countDigits = number => `${number}`.length;
+const countDigits = number => `${number}`.length;
 
-export const getMousePosition = (ev, ref) => {
+const getMousePosition = (ev, ref) => {
   const {
     top, left, width, height,
   } = ref.current.getBoundingClientRect();
@@ -28,8 +28,8 @@ export const getMousePosition = (ev, ref) => {
   };
 };
 
-export const searchTrackByID = (playlist, id) => playlist.find(track => track.id === id);
+const searchArrItemByID = (arr, id) => arr.find(item => item.id === id);
 
-export const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
+const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
 
-export {formatSecondsToMMSS};
+export {formatSecondsToMMSS, isNumeric, countDigits, getMousePosition, searchArrItemByID, getRandomInt};

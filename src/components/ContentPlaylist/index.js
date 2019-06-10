@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import Playlist from './Playlist';
+import Playlist from '../Playlist';
+import coverImg from './cover.svg';
 
 const Wrapper = styled.div`
   display: flex;
@@ -14,7 +15,7 @@ const CoverImg = styled.div`
   height: 280px;
   margin: 0 20px 0 0;
   flex-shrink: 0;
-  background: ${({theme}) => theme.colors.contentPreload} url("img/cover.svg") no-repeat center / 197px;
+  background: ${({theme}) => theme.colors.contentPreload} url(${coverImg}) no-repeat center / 197px;
   box-shadow: ${({theme}) => theme.shadows.secondary};
 `;
 

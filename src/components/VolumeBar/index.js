@@ -7,8 +7,8 @@ import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import VolumeDownIcon from '@material-ui/icons/VolumeDown';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 
-import ProgressBar from '../ProgressBar';
-import PlayerButton from '../PlayerButton';
+import ProgressBar from '../UI/ProgressBar';
+import PlayerButton from '../UI/PlayerButton';
 import { setVolume, muteToggle } from '../../actions/PlayerActions';
 import { getMousePosition } from '../../utils';
 

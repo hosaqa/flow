@@ -11,7 +11,7 @@ import VolumeBar from '../VolumeBar';
 import PlayerQueue from './PlayerQueue';
 import { playToggle, playlistFetch, setCurrentTrack, trackLoadSuccess } from '../../actions/PlayerActions';
 import { setTrackPosition } from '../../actions/TrackTimeActions';
-import { searchTrackByID } from '../../utils';
+import { searchArrItemByID } from '../../utils';
 
 
 const PlayerWrapper = styled.div`
@@ -73,7 +73,7 @@ class Player extends Component {
 
     const currentPlaylist = (shuffledPlaylist) || playlist;
 
-    const currentTrack = searchTrackByID(currentPlaylist, track);
+    const currentTrack = searchArrItemByID(currentPlaylist, track);
     const currentTrackIndex = currentPlaylist.indexOf(currentTrack);
 
     return !!currentPlaylist.includes(currentPlaylist[currentTrackIndex + index]);
@@ -84,7 +84,7 @@ class Player extends Component {
 
     const currentPlaylist = (shuffledPlaylist) || playlist;
 
-    const currentTrack = searchTrackByID(currentPlaylist, track);
+    const currentTrack = searchArrItemByID(currentPlaylist, track);
     const currentTrackIndex = currentPlaylist.indexOf(currentTrack);
 
     const nextTrackIndex = currentTrackIndex + index;
@@ -124,7 +124,7 @@ class Player extends Component {
           playlist &&
           <ReactHowler
             ref={ref => {this.player = ref;}}
-            src={searchTrackByID(currentPlaylist, track).src}
+            src={searchArrItemByID(currentPlaylist, track).src}
             playing={playingNow}
             preload
             onPlay={() => this.setSeekPos()}

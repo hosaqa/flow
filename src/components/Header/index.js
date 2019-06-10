@@ -4,6 +4,7 @@ import { Container, Row, Col } from 'styled-bootstrap-grid';
 import { Link } from 'react-router-dom';
 
 import Navigation from '../Navigation';
+import logo from './logo.svg';
 
 const StyledHeader = styled.header`
   z-index: 1000;
@@ -26,7 +27,7 @@ const Header = () => (
       <HeaderRow alignItems="center">
         <Col col="4">
           <Link to="/">
-            <img src="/img/logo.svg" alt="logo"/>
+            <img src={logo} alt="logo"/>
           </Link>
         </Col>
         <Col col="8">

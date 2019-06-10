@@ -7,7 +7,7 @@ import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
 import RepeatIcon from '@material-ui/icons/Repeat';
 import ShuffleIcon from '@material-ui/icons/Shuffle';
-import PlayerButton from '../PlayerButton';
+import PlayerButton from '../UI/PlayerButton';
 import { playToggle, setCurrentTrack, repeatToggle, shuffleToggle } from '../../actions/PlayerActions';
 
 

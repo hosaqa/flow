@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import PlayListItem from './PlayListItem';
-import { searchTrackByID } from '../../utils';
+import { searchArrItemByID } from '../../utils';
 import { playToggle, setCurrentTrack } from '../../actions/PlayerActions';
 
 const List = styled.div`
@@ -25,7 +25,7 @@ const Playlist = ({nonDefaultPlaylist, track, playlist, shuffledPlaylist, playTo
 
   let currentPlaylist = nonDefaultPlaylist || playlist;
   currentPlaylist = (!nonDefaultPlaylist && shuffledPlaylist) ? shuffledPlaylist : playlist;
-  const currentTrack = searchTrackByID(playlist, track).id;
+  const currentTrack = searchArrItemByID(playlist, track).id;
 
   return (
     <List>

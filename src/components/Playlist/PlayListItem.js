@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
 
-import PlayerButton from '../PlayerButton';
-import TrackInfo from '../TrackInfo';
+import PlayerButton from '../UI/PlayerButton';
+import TrackInfo from '../UI/TrackInfo';
 
 import { formatSecondsToMMSS } from '../../utils';
 

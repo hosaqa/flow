@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import {ThreeBounce} from 'styled-spinkit';
 
-import ProgressBar from '../ProgressBar';
-import { getMousePosition, searchTrackByID, isNumeric, countDigits, formatSecondsToMMSS } from '../../utils';
+import ProgressBar from '../UI/ProgressBar';
+import { getMousePosition, searchArrItemByID, isNumeric, formatSecondsToMMSS } from '../../utils';
 
 
 const TimeLineWrapper = styled.div`
@@ -52,7 +52,7 @@ class Timeline extends Component {
     const {player} = this.props;
     const { playlist, track } = player;
 
-    return searchTrackByID(playlist, track).duration;
+    return searchArrItemByID(playlist, track).duration;
   }
   
   renderProgressBarSlider (trackPosition, trackDuration) {
