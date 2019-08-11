@@ -1,7 +1,7 @@
-import ReactHowler from 'react-howler';
-import React, { Component } from 'react';
+import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import ReactHowler from 'react-howler';
 import raf from 'raf'; // requestAnimationFrame polyfill
 import styled from 'styled-components';
 import { Container, Row, Col, BaseCSS } from 'styled-bootstrap-grid';
@@ -9,22 +9,25 @@ import PlayerControls from './PlayerControls';
 import Timeline from '../Timeline';
 import VolumeBar from '../VolumeBar';
 import PlayerQueue from './PlayerQueue';
-import { playToggle, playlistFetch, setCurrentTrack, trackLoadSuccess } from '../../actions/PlayerActions';
 import { setTrackPosition } from '../../actions/TrackTimeActions';
+import {
+  playToggle,
+  setCurrentTrack,
+  fetchTrackResult,
+  fetchPlaylist,
+} from './actions';
 import { searchArrItemByID } from '../../utils';
-
 
 const PlayerWrapper = styled.div`
   position: fixed;
-  background-color: ${({inactive, theme}) => 
-    inactive ? theme.colors.contentPreload : theme.colors.content
-  };
-  border-top: 1px solid ${({theme}) => theme.colors.border};
+  background-color: ${({ inactive, theme }) =>
+    inactive ? theme.colors.contentPreload : theme.colors.content};
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
   bottom: 0;
   left: 0;
   width: 100%;
   padding: 15px 25px;
-  transition: background-color .3s;
+  transition: background-color 0.3s;
 `;
 
 const DraggableControls = styled.div`
@@ -33,144 +36,159 @@ const DraggableControls = styled.div`
   justify-content: space-between;
 `;
 
-class Player extends Component {
-  constructor(props) {
-    super(props);
-    this.closestTrackIsExist = this.closestTrackIsExist.bind(this);
-    this.setCurrentTrackClosest = this.setCurrentTrackClosest.bind(this);
-  }
+const Player = ({
+  muted,
+  playingNow,
+  playlist,
+  repeating,
+  shuffledPlaylist,
+  track,
+  volume,
+  playToggle,
+  fetchPlaylist,
+  setCurrentTrack,
+  setTrackPosition,
+  fetchTrackResult,
+}) => {
+  const playerRef = useRef(null);
+  let playerRaf = null;
 
-  componentDidMount() {
-    const {playlistFetch} = this.props;
-    playlistFetch();
-  }
+  useEffect(() => {
+    fetchPlaylist();
+  }, []);
 
-  componentWillUnmount () {
-    this.clearRAF();
-  }
-
-
-  setSeek (rewindTo) {
-    const {setTrackPosition} = this.props;
+  const setSeek = rewindTo => {
     setTrackPosition(rewindTo);
-    this.player.seek(rewindTo);
-  }
+    playerRef.current.seek(rewindTo);
+  };
 
-  setSeekPos () {
-    const { playingNow, setTrackPosition } = this.props;
-    // console.log(this.player.duration());
-    setTrackPosition(this.player.seek());
+  const setSeekPos = () => {
+    setTrackPosition(playerRef.current.seek());
 
-    if (playingNow) {
-      this._raf = raf(() => this.setSeekPos());
-    }
-  }
+    playerRaf = raf(() => setSeekPos());
 
-  closestTrackIsExist (index) {
-    const { playlist, track, shuffledPlaylist } = this.props;
-    
+    // if (playingNow) {
+    //   playerRaf = raf(() => setSeekPos());
+    // }
+  };
+
+  const closestTrackIsExist = index => {
     if (!playlist) return false;
 
-    const currentPlaylist = (shuffledPlaylist) || playlist;
+    const currentPlaylist = shuffledPlaylist || playlist;
 
     const currentTrack = searchArrItemByID(currentPlaylist, track);
     const currentTrackIndex = currentPlaylist.indexOf(currentTrack);
 
-    return !!currentPlaylist.includes(currentPlaylist[currentTrackIndex + index]);
-  }
+    return !!currentPlaylist.includes(
+      currentPlaylist[currentTrackIndex + index]
+    );
+  };
 
-  setCurrentTrackClosest (index) {
-    const { playlist, track, setCurrentTrack, shuffledPlaylist } = this.props;
-
-    const currentPlaylist = (shuffledPlaylist) || playlist;
+  const setCurrentTrackClosest = index => {
+    const currentPlaylist = shuffledPlaylist || playlist;
 
     const currentTrack = searchArrItemByID(currentPlaylist, track);
     const currentTrackIndex = currentPlaylist.indexOf(currentTrack);
 
     const nextTrackIndex = currentTrackIndex + index;
-    if (this.closestTrackIsExist(index)) setCurrentTrack(currentPlaylist[nextTrackIndex].id);
-  }
+    if (closestTrackIsExist(index))
+      setCurrentTrack(currentPlaylist[nextTrackIndex].id);
+  };
 
-  handleOnEnd () {
-    const { playToggle, repeating } = this.props;
-
+  const handleOnEnd = () => {
     if (!repeating) {
-      const nextTrackExist = this.closestTrackIsExist(1);
+      const nextTrackExist = closestTrackIsExist(1);
 
       if (!nextTrackExist) {
         playToggle();
-        
-        this.clearRAF();
+
+        clearRAF();
       } else {
-        this.setCurrentTrackClosest(1);
+        setCurrentTrackClosest(1);
       }
     }
-  }
+  };
 
-  clearRAF () {
-    raf.cancel(this._raf);
-  }
+  const clearRAF = () => {
+    raf.cancel(playerRaf);
+  };
 
-  render() {
-    const { playingNow, playlist, track,  volume, muted, shuffledPlaylist, trackLoadSuccess } = this.props;
-    
-    const currentPlaylist = (shuffledPlaylist) || playlist;
+  const currentPlaylist = shuffledPlaylist || playlist;
 
-    return (
-      <PlayerWrapper
-        inactive={!playlist}
-      >
-        {
-          playlist &&
-          <ReactHowler
-            ref={ref => {this.player = ref;}}
-            src={searchArrItemByID(currentPlaylist, track).src}
-            playing={playingNow}
-            preload
-            onPlay={() => this.setSeekPos()}
-            onEnd={() => this.handleOnEnd()}
-            onLoad={() => trackLoadSuccess(true)}
-            volume={volume}
-            mute={muted}
-          />
-        } 
-        <BaseCSS /> 
-        <Container>
-          <Row alignItems="center">
-            <Col col xl="3">
-              <PlayerControls
-                closestTrackIsExist={this.closestTrackIsExist}
-                setCurrentTrackClosest={this.setCurrentTrackClosest}
-              />
-            </Col>
-            <Col col xl="6">
-              <DraggableControls>
-                <Timeline
-                  setTrackPosition={(value) => this.setSeek(value)}
-                />
-                <span style={{marginLeft: 'auto'}}><VolumeBar /></span>
-              </DraggableControls>
-            </Col>
-            <Col col xl="3">
-              <PlayerQueue />
-            </Col>
-          </Row>
-        </Container>
-      </PlayerWrapper> 
-    );
-  }
-}
-
-Player.propTypes = {
-  playlist: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
-    artist: PropTypes.string,
-    trackname: PropTypes.string,
-    album: PropTypes.string,
-    src: PropTypes.string,
-    img: PropTypes.string,
-    duration: PropTypes.number
-  })),
+  return (
+    <PlayerWrapper>
+      <BaseCSS />
+      {playlist && (
+        <ReactHowler
+          ref={playerRef}
+          src={searchArrItemByID(currentPlaylist, track).src}
+          playing={playingNow}
+          onPlay={setSeekPos}
+          onEnd={handleOnEnd}
+          onLoad={fetchTrackResult}
+          onLoadError={() => fetchTrackResult('Loading error')}
+          volume={volume}
+          mute={muted}
+        />
+      )}
+      <Container>
+        <Row alignItems="center">
+          <Col col xl="3">
+            <PlayerControls
+              closestTrackIsExist={closestTrackIsExist}
+              setCurrentTrackClosest={setCurrentTrackClosest}
+            />
+          </Col>
+          <Col col xl="6">
+            <DraggableControls>
+              <Timeline setTrackPosition={value => setSeek(value)} />
+              <span style={{ marginLeft: 'auto' }}>
+                <VolumeBar />
+              </span>
+            </DraggableControls>
+          </Col>
+          <Col col xl="3">
+            <PlayerQueue />
+          </Col>
+        </Row>
+      </Container>
+    </PlayerWrapper>
+  );
 };
 
-export default connect(({player}) => player, {playToggle, playlistFetch, setCurrentTrack, setTrackPosition, trackLoadSuccess})(Player);
+Player.propTypes = {
+  muted: PropTypes.bool,
+  playingNow: PropTypes.bool,
+  playlist: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      artist: PropTypes.string,
+      trackname: PropTypes.string,
+      album: PropTypes.string,
+      src: PropTypes.string,
+      img: PropTypes.string,
+      duration: PropTypes.number,
+    })
+  ),
+  repeating: PropTypes.bool,
+  shuffledPlaylist: PropTypes.array,
+  track: PropTypes.number,
+  volume: PropTypes.number,
+  playToggle: PropTypes.func,
+  fetchPlaylist: PropTypes.func,
+  setCurrentTrack: PropTypes.func,
+  setTrackPosition: PropTypes.func,
+  fetchTrackResult: PropTypes.func,
+};
+
+export default connect(
+  ({ player }) => ({ ...player }),
+  {
+    playToggle,
+    fetchPlaylist,
+    setCurrentTrack,
+    setTrackPosition,
+    fetchTrackResult,
+  }
+)(Player);

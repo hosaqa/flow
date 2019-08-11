@@ -2,11 +2,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import {ThreeBounce} from 'styled-spinkit';
+import { ThreeBounce } from 'styled-spinkit';
 
 import ProgressBar from '../UI/ProgressBar';
-import { getMousePosition, searchArrItemByID, isNumeric, formatSecondsToMMSS } from '../../utils';
-
+import {
+  getMousePosition,
+  searchArrItemByID,
+  isNumeric,
+  formatSecondsToMMSS,
+} from '../../utils';
 
 const TimeLineWrapper = styled.div`
   display: flex;
@@ -21,8 +25,9 @@ const TimerDisplay = styled.div`
   width: 28px;
   user-select: none;
   font-size: 14px;
-  transition: color .25s;
-  color: ${({theme, disabled}) => disabled ? theme.colors.buttonDisabled : theme.colors.fontPrimary};
+  transition: color 0.25s;
+  color: ${({ theme, disabled }) =>
+    disabled ? theme.colors.buttonDisabled : theme.colors.fontPrimary};
 `;
 
 const ProgressBarWrapper = styled.div`
@@ -45,28 +50,30 @@ class Timeline extends Component {
   state = {
     dummyLineProgress: null,
     dummyTime: null,
-    mouseDowned: false
-  }
-  
+    mouseDowned: false,
+  };
+
   getTrackDuration() {
-    const {player} = this.props;
+    const { player } = this.props;
     const { playlist, track } = player;
 
     return searchArrItemByID(playlist, track).duration;
   }
-  
-  renderProgressBarSlider (trackPosition, trackDuration) {
-    const {player} = this.props;
-    const {playlist, nowPlaying, trackIsLoaded} = player;
-    const {dummyLineProgress} = this.state;
 
-    trackPosition = (isNumeric(trackPosition)) ? trackPosition : 0;
-    const width = parseFloat((trackPosition / trackDuration * 100).toFixed(1));
+  renderProgressBarSlider(trackPosition, trackDuration) {
+    const { player } = this.props;
+    const { playlist, nowPlaying, trackIsLoading } = player;
+    const { dummyLineProgress } = this.state;
+
+    trackPosition = isNumeric(trackPosition) ? trackPosition : 0;
+    const width = parseFloat(
+      ((trackPosition / trackDuration) * 100).toFixed(1)
+    );
 
     return (
       <ProgressBar
         disabled={!playlist}
-        isLoading={!trackIsLoaded}
+        isLoading={trackIsLoading}
         active={nowPlaying}
         thumbShowOnHover
         thumbRadius={6}
@@ -82,21 +89,21 @@ class Timeline extends Component {
   }
 
   onMouseUpRewind() {
-    const {setTrackPosition} = this.props;
-    const {dummyLineProgress} = this.state;
+    const { setTrackPosition } = this.props;
+    const { dummyLineProgress } = this.state;
 
     const trackDuration = this.getTrackDuration();
-    setTrackPosition(dummyLineProgress / 100 * trackDuration);
+    setTrackPosition((dummyLineProgress / 100) * trackDuration);
 
     this.setState({
       mouseDowned: false,
       dummyLineProgress: null,
-      dummyTime: null
+      dummyTime: null,
     });
   }
 
   handleOnMouseDown() {
-    this.setState({mouseDowned: true});
+    this.setState({ mouseDowned: true });
   }
 
   handleOnMouseUp() {
@@ -104,15 +111,15 @@ class Timeline extends Component {
   }
 
   handleOnMouseLeave() {
-    const {mouseDowned, dummyLineProgress} = this.state;
+    const { mouseDowned, dummyLineProgress } = this.state;
 
     if (mouseDowned && dummyLineProgress) {
       this.onMouseUpRewind();
     }
   }
 
-  handleOnClick (ev, ref) {
-    const {setTrackPosition} = this.props;
+  handleOnClick(ev, ref) {
+    const { setTrackPosition } = this.props;
 
     const trackDuration = this.getTrackDuration();
 
@@ -122,8 +129,8 @@ class Timeline extends Component {
     setTrackPosition(rewindTo);
   }
 
-  handleOnMouseMove (ev, ref) {
-    const {mouseDowned} = this.state;
+  handleOnMouseMove(ev, ref) {
+    const { mouseDowned } = this.state;
 
     if (mouseDowned) {
       const trackDuration = this.getTrackDuration();
@@ -133,68 +140,74 @@ class Timeline extends Component {
       if (touchedPosition > 0 && touchedPosition < 1) {
         this.setState({
           dummyLineProgress: touchedPosition * 100,
-          dummyTime: touchedPosition * trackDuration
+          dummyTime: touchedPosition * trackDuration,
         });
       }
     }
   }
 
   render() {
-    
     // console.log(formatSecondsToMMSS());
-    const {player, trackTime} = this.props;
-    
-    const {playlist, nowPlaying, trackIsLoaded} = player;
-    const {dummyTime} = this.state;
-    
-    if (!playlist) return (
-      <TimeLineWrapper>
-        <TimerDisplay disabled>--:--</TimerDisplay>
-        <ProgressBarWrapper>
-          <ProgressBar
-            disabled
-            active={nowPlaying}
-            thumbShowOnHover
-            thumbRadius={6}
-            direction="horizontal"
-          />
-        </ProgressBarWrapper>
-        <TimerDisplay disabled>--:--</TimerDisplay>
-      </TimeLineWrapper>
-     );
+    const { player, trackTime } = this.props;
+
+    const { playlist, nowPlaying, trackIsLoading } = player;
+    const { dummyTime } = this.state;
+
+    if (!playlist)
+      return (
+        <TimeLineWrapper>
+          <TimerDisplay disabled>--:--</TimerDisplay>
+          <ProgressBarWrapper>
+            <ProgressBar
+              disabled
+              active={nowPlaying}
+              thumbShowOnHover
+              thumbRadius={6}
+              direction="horizontal"
+            />
+          </ProgressBarWrapper>
+          <TimerDisplay disabled>--:--</TimerDisplay>
+        </TimeLineWrapper>
+      );
 
     const timelineRef = React.createRef();
 
     // const trackDuration = formatSecondsToMMSS(this.getTrackDuration());
-      
+
     let { trackPosition } = trackTime;
-    
-    const progressBar = this.renderProgressBarSlider(trackPosition, this.getTrackDuration());
+
+    const progressBar = this.renderProgressBarSlider(
+      trackPosition,
+      this.getTrackDuration()
+    );
 
     trackPosition = dummyTime || trackPosition;
 
-    trackPosition = (isNumeric(trackPosition)) ? formatSecondsToMMSS(trackPosition) : '0:00';
-  
+    trackPosition = isNumeric(trackPosition)
+      ? formatSecondsToMMSS(trackPosition)
+      : '0:00';
+
     return (
       <TimeLineWrapper>
-        
         <TimerDisplay>{trackPosition || '--:--'}</TimerDisplay>
-          <ProgressBarWrapper 
-            ref={timelineRef}
-            onClick={(ev) => this.handleOnClick(ev, timelineRef)}
-            onMouseDown={() => this.handleOnMouseDown()}
-            onMouseUp={() => this.handleOnMouseUp()}
-            onMouseLeave={() => this.handleOnMouseLeave()}
-            onMouseMove={(ev) => this.handleOnMouseMove(ev, timelineRef)}
-          >
-            { !trackIsLoaded &&
+        <ProgressBarWrapper
+          ref={timelineRef}
+          onClick={ev => this.handleOnClick(ev, timelineRef)}
+          onMouseDown={() => this.handleOnMouseDown()}
+          onMouseUp={() => this.handleOnMouseUp()}
+          onMouseLeave={() => this.handleOnMouseLeave()}
+          onMouseMove={ev => this.handleOnMouseMove(ev, timelineRef)}
+        >
+          {trackIsLoading && (
             <Preloader>
-              <ThreeBounce color='#ff6b6b' size={25} />
+              <ThreeBounce color="#ff6b6b" size={25} />
             </Preloader>
-            }
-            {progressBar}
-          </ProgressBarWrapper>
-        <TimerDisplay>{formatSecondsToMMSS(this.getTrackDuration())}</TimerDisplay>
+          )}
+          {progressBar}
+        </ProgressBarWrapper>
+        <TimerDisplay>
+          {formatSecondsToMMSS(this.getTrackDuration())}
+        </TimerDisplay>
       </TimeLineWrapper>
     );
   }
@@ -203,10 +216,11 @@ class Timeline extends Component {
 Timeline.propTypes = {
   trackDuration: PropTypes.number,
   trackTime: PropTypes.shape({
-    setTrackPosition: PropTypes.number
+    setTrackPosition: PropTypes.number,
   }),
-  setTrackPosition: PropTypes.func
+  setTrackPosition: PropTypes.func,
 };
 
-
-export default connect(({player, trackTime}) => ({player, trackTime}))(Timeline);
+export default connect(({ player, trackTime }) => ({ player, trackTime }))(
+  Timeline
+);

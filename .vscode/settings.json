@@ -1,15 +1,3 @@
 {
-  "editor.formatOnPaste": false,
-  "editor.formatOnSave": false,
-  "[javascript]": {
-    "editor.formatOnSave": false
-  },
-  "[html]": {
-    "editor.formatOnSave": false
-  },
-  "[json]": {
-    "editor.formatOnSave": false
-  },
-  "eslint.autoFixOnSave": true,
-  "eslint.alwaysShowStatus": true
+  "editor.formatOnSave": true
 }

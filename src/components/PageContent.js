@@ -5,13 +5,12 @@ import styled from 'styled-components';
 import ContentPlaylist from './ContentPlaylist';
 import PageAbout from './StaticPage/PageAbout';
 
-
 const Wrapper = styled.div`
   margin: 100px 0;
 `;
 
 const Inner = styled.div`
-  background-color: ${({theme}) => theme.colors.content};
+  background-color: ${({ theme }) => theme.colors.content};
   padding: 25px;
 `;
 

@@ -69,33 +69,33 @@
     "duration": 163
   },
   {
-     "id": 9,
-     "artist": "XXXTentacion",
-     "trackname": "KING",
-     "src": "/tracks/xxxtentacion_king.mp3",
-     "img": "/img/artists/xxxtentacion.jpg",
-     "duration": 113
+    "id": 9,
+    "artist": "XXXTentacion",
+    "trackname": "KING",
+    "src": "/tracks/xxxtentacion_king.mp3",
+    "img": "/img/artists/xxxtentacion.jpg",
+    "duration": 113
   },
   {
-     "id": 10,
-     "artist": "Lil Pump",
-     "trackname": "Molly",
-     "img": "/img/artists/lil-pump.jpg",
-     "src": "/tracks/lil-pump_molly.mp3",
-     "duration": 99
+    "id": 10,
+    "artist": "Lil Pump",
+    "trackname": "Molly",
+    "img": "/img/artists/lil-pump.jpg",
+    "src": "/tracks/lil-pump_molly.mp3",
+    "duration": 99
   },
   {
-     "id": 11,
-     "artist": "Гнойный & Смешарик",
-     "trackname": "Клетчатая сумка",
-     "src": "/tracks/gnoynii_kletchataya-sumka.mp3",
-     "duration": 66
+    "id": 11,
+    "artist": "Гнойный & Смешарик",
+    "trackname": "Клетчатая сумка",
+    "src": "/tracks/gnoynii_kletchataya-sumka.mp3",
+    "duration": 66
   },
   {
-     "id": 12,
-     "artist": "MGMT",
-     "trackname": "When you die",
-     "src": "/tracks/mgmt_when-you-die.mp3",
-     "duration": 263
+    "id": 12,
+    "artist": "MGMT",
+    "trackname": "When you die",
+    "src": "/tracks/mgmt_when-you-die.mp3",
+    "duration": 263
   }
 ]

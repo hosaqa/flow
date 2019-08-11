@@ -5,26 +5,36 @@ import styled from 'styled-components';
 
 import PlayListItem from './PlayListItem';
 import { searchArrItemByID } from '../../utils';
-import { playToggle, setCurrentTrack } from '../../actions/PlayerActions';
+import { playToggle, setCurrentTrack } from '../Player/actions';
 
 const List = styled.div`
   position: relative;
 `;
 
-const Playlist = ({nonDefaultPlaylist, track, playlist, shuffledPlaylist, playToggle, playingNow, setCurrentTrack}) => {
-  if (!nonDefaultPlaylist && !playlist) return (
-    <List>
-      <PlayListItem />
-      <PlayListItem />
-      <PlayListItem />
-      <PlayListItem />
-      <PlayListItem />
-      <PlayListItem />
-    </List>
-  );
+const Playlist = ({
+  nonDefaultPlaylist,
+  track,
+  playlist,
+  shuffledPlaylist,
+  playToggle,
+  playingNow,
+  setCurrentTrack,
+}) => {
+  if (!nonDefaultPlaylist && !playlist)
+    return (
+      <List>
+        <PlayListItem />
+        <PlayListItem />
+        <PlayListItem />
+        <PlayListItem />
+        <PlayListItem />
+        <PlayListItem />
+      </List>
+    );
 
   let currentPlaylist = nonDefaultPlaylist || playlist;
-  currentPlaylist = (!nonDefaultPlaylist && shuffledPlaylist) ? shuffledPlaylist : playlist;
+  currentPlaylist =
+    !nonDefaultPlaylist && shuffledPlaylist ? shuffledPlaylist : playlist;
   const currentTrack = searchArrItemByID(playlist, track).id;
 
   return (
@@ -46,19 +56,24 @@ const Playlist = ({nonDefaultPlaylist, track, playlist, shuffledPlaylist, playTo
 };
 
 Playlist.propTypes = {
-  playlist: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
-    artist: PropTypes.string,
-    trackname: PropTypes.string,
-    album: PropTypes.string,
-    src: PropTypes.string,
-    img: PropTypes.string,
-    duration: PropTypes.number
-  })),
+  playlist: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      artist: PropTypes.string,
+      trackname: PropTypes.string,
+      album: PropTypes.string,
+      src: PropTypes.string,
+      img: PropTypes.string,
+      duration: PropTypes.number,
+    })
+  ),
   track: PropTypes.number,
   playToggle: PropTypes.func,
   setCurrentTrack: PropTypes.func,
-  playingNow: PropTypes.bool
+  playingNow: PropTypes.bool,
 };
 
-export default connect(({player}) => player, {playToggle, setCurrentTrack})(Playlist);
+export default connect(
+  ({ player }) => player,
+  { playToggle, setCurrentTrack }
+)(Playlist);
