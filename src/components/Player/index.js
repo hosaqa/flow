@@ -73,8 +73,6 @@ const Player = ({
   };
 
   const closestTrackIsExist = index => {
-    if (!playlist) return false;
-
     const currentPlaylist = shuffledPlaylist || playlist;
 
     const currentTrack = searchArrItemByID(currentPlaylist, track);
@@ -136,6 +134,7 @@ const Player = ({
         <Row alignItems="center">
           <Col col xl="3">
             <PlayerControls
+              disabled={!playlist}
               closestTrackIsExist={closestTrackIsExist}
               setCurrentTrackClosest={setCurrentTrackClosest}
             />

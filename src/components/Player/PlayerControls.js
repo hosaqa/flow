@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
@@ -27,7 +28,7 @@ const SecondGroup = styled.span`
 
 const PlayerControls = ({
   playingNow,
-  playlist,
+  disabled,
   repeating,
   shuffledPlaylist,
   playToggle,
@@ -41,14 +42,14 @@ const PlayerControls = ({
       onClick={() => setCurrentTrackClosest(-1)}
       iconSize={28}
       pseudoSelActive
-      disabled={!closestTrackIsExist(-1)}
+      disabled={disabled || !closestTrackIsExist(-1)}
     >
       <SkipPreviousIcon />
     </PlayerButton>
     <PlayerButton
       onClick={() => playToggle()}
       iconSize={32}
-      disabled={!playlist}
+      disabled={disabled}
       pseudoSelActive
     >
       {!playingNow ? <PlayCircleOutlineIcon /> : <PauseCircleOutlineIcon />}
@@ -57,7 +58,7 @@ const PlayerControls = ({
       onClick={() => setCurrentTrackClosest(1)}
       iconSize={28}
       pseudoSelActive
-      disabled={!closestTrackIsExist(1)}
+      disabled={disabled || !closestTrackIsExist(1)}
     >
       <SkipNextIcon />
     </PlayerButton>
@@ -65,20 +66,32 @@ const PlayerControls = ({
       <PlayerButton
         onClick={repeatToggle}
         active={repeating}
-        disabled={!playlist}
+        disabled={disabled}
       >
         <RepeatIcon />
       </PlayerButton>
       <PlayerButton
         onClick={shuffleToggle}
         active={!!shuffledPlaylist}
-        disabled={!playlist}
+        disabled={disabled}
       >
         <ShuffleIcon />
       </PlayerButton>
     </SecondGroup>
   </Wrapper>
 );
+
+PlayerControls.propTypes = {
+  playingNow: PropTypes.bool,
+  disabled: PropTypes.bool,
+  shuffledPlaylist: PropTypes.array,
+  repeating: PropTypes.bool,
+  playToggle: PropTypes.func,
+  repeatToggle: PropTypes.func,
+  closestTrackIsExist: PropTypes.func,
+  setCurrentTrackClosest: PropTypes.func,
+  shuffleToggle: PropTypes.func,
+};
 
 export default connect(
   ({ player }) => player,
