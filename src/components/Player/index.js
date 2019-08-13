@@ -6,8 +6,8 @@ import raf from 'raf'; // requestAnimationFrame polyfill
 import styled from 'styled-components';
 import { Container, Row, Col, BaseCSS } from 'styled-bootstrap-grid';
 import PlayerControls from './PlayerControls';
-import Timeline from '../Timeline';
-import VolumeBar from '../VolumeBar';
+import TimelineControl from '../Timeline';
+import VolumeControl from '../VolumeControl';
 import PlayerQueue from './PlayerQueue';
 import { setTrackPosition } from '../../actions/TrackTimeActions';
 import {
@@ -51,6 +51,7 @@ const Player = ({
   fetchTrackResult,
 }) => {
   const playerRef = useRef(null);
+  const playerInstance = playerRef ? playerRef.current : null;
   let playerRaf = null;
 
   useEffect(() => {
@@ -112,12 +113,14 @@ const Player = ({
     raf.cancel(playerRaf);
   };
 
+  const interfaceDisabled = !playlist;
+
   const currentPlaylist = shuffledPlaylist || playlist;
 
   return (
     <PlayerWrapper>
       <BaseCSS />
-      {playlist && (
+      {!interfaceDisabled && (
         <ReactHowler
           ref={playerRef}
           src={searchArrItemByID(currentPlaylist, track).src}
@@ -134,16 +137,19 @@ const Player = ({
         <Row alignItems="center">
           <Col col xl="3">
             <PlayerControls
-              disabled={!playlist}
+              disabled={interfaceDisabled}
               closestTrackIsExist={closestTrackIsExist}
               setCurrentTrackClosest={setCurrentTrackClosest}
             />
           </Col>
           <Col col xl="6">
             <DraggableControls>
-              <Timeline setTrackPosition={value => setSeek(value)} />
+              <TimelineControl
+                setTrackPosition={value => setSeek(value)}
+                playerInstance={playerInstance}
+              />
               <span style={{ marginLeft: 'auto' }}>
-                <VolumeBar />
+                <VolumeControl disabled={interfaceDisabled} />
               </span>
             </DraggableControls>
           </Col>
