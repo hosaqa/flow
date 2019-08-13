@@ -12,7 +12,7 @@ import TrackInfo from '../UI/TrackInfo';
 
 import { searchArrItemByID } from '../../utils';
 
-const StyledQueue = styled.div`
+const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -43,7 +43,7 @@ const PlayerQueue = ({playlist, track}) => {
   const currentTrack = playlist ? searchArrItemByID(playlist, track) : null;
 
   return (
-    <StyledQueue>
+    <Wrapper>
 
       <TrackInfo {...currentTrack} />
       <Dropdown selector={playQueueButton(playlist)}>
@@ -74,7 +74,7 @@ const PlayerQueue = ({playlist, track}) => {
           </ScrollArea>
         </QueueBody>
       </Dropdown>
-    </StyledQueue>
+    </Wrapper>
   );
 };
 
