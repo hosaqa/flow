@@ -1,17 +1,18 @@
 import React from 'react';
 import ReactGA from 'react-ga';
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'emotion-theming';
+import { Global } from '@emotion/core';
 import { GridThemeProvider } from 'styled-bootstrap-grid';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from './store';
 
-import Header from '../components/Header';
-import Player from '../components/Player';
-import PageContent from '../components/PageContent';
-import ContentPlaylist from '../components/ContentPlaylist';
+import Header from './common/Header';
+import Player from '../player/Player';
+import PageContent from './common/PageContent';
+import ContentPlaylist from './common/ContentPlaylist';
 import { lightTheme, gridTheme } from './theme';
-import { GlobalStyle } from './theme/globalStyle';
+import { globalStyles } from './theme/globalStyles';
 
 const App = () => {
   //ReactGA.initialize('UA-92698247-2');
@@ -21,9 +22,9 @@ const App = () => {
     <Provider store={store}>
       <BrowserRouter>
         <ThemeProvider theme={lightTheme}>
+          <Global styles={globalStyles} />
           <GridThemeProvider gridTheme={gridTheme}>
             <>
-              <GlobalStyle />
               <Header />
               <PageContent>
                 <ContentPlaylist />

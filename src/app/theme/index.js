@@ -1,10 +1,15 @@
+const GRID_UNIT = 8;
+
 export const lightTheme = {
+  spacing: value => {
+    return GRID_UNIT * value;
+  },
   breakpoints: {
     xs: 0,
-    sm: 576,
-    md: 768,
-    lg: 992,
-    xl: 1200,
+    sm: GRID_UNIT * 72,
+    md: GRID_UNIT * 96,
+    lg: GRID_UNIT * 124,
+    xl: GRID_UNIT * 150,
   },
   colors: {
     border: '#dcdcdc',
@@ -34,20 +39,20 @@ export const lightTheme = {
 
 export const gridTheme = {
   breakpoints: {
-    xl: 1200,
-    lg: 992,
-    md: 768,
-    sm: 576,
-    xs: 575,
+    xs: 0,
+    sm: GRID_UNIT * 72,
+    md: GRID_UNIT * 96,
+    lg: GRID_UNIT * 124,
+    xl: GRID_UNIT * 150,
   },
   container: {
-    padding: 0,
+    padding: GRID_UNIT * 2,
     maxWidth: {
-      xl: 1024,
-      lg: 960,
-      md: 720,
-      sm: 540,
-      xs: 540,
+      xs: 'auto',
+      sm: GRID_UNIT * 60,
+      md: GRID_UNIT * 76,
+      lg: GRID_UNIT * 110,
+      xl: GRID_UNIT * 130,
     },
   },
 };
