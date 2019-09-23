@@ -33,7 +33,8 @@ const PlayerButton = styled.button`
   & > svg {
     vertical-align: middle;
     pointer-events: none;
-    font-size: ${({ iconSize }) => (iconSize ? `${iconSize}px` : '24px')};
+    font-size: ${({ theme, iconSize }) =>
+      iconSize ? `${iconSize}px` : theme.spacing(3)};
   }
 `;
 

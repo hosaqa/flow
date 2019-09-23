@@ -2,9 +2,10 @@ import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ReactHowler from 'react-howler';
+import onClickOutside from 'react-onclickoutside';
 import raf from 'raf'; // requestAnimationFrame polyfill
 import styled from '@emotion/styled';
-import { Container, Row, Col } from 'styled-bootstrap-grid';
+import { Container } from 'styled-bootstrap-grid';
 import RepeatIcon from '@material-ui/icons/Repeat';
 import ShuffleIcon from '@material-ui/icons/Shuffle';
 import TrackInfo from '../app/common/UI/TrackInfo';
@@ -23,22 +24,64 @@ import {
 } from './actions';
 import { searchArrItemByID } from '../utils';
 
-const PlayerWrapper = styled.div`
+const Wrapper = styled.section`
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  display: flex;
-  align-items: center;
-  padding: ${({ theme }) => theme.spacing(1)} 0;
+  padding: ${({ theme }) => theme.spacing(1)} 0
+    ${({ theme }) => theme.spacing(2)};
   background-color: ${({ inactive, theme }) =>
     inactive ? theme.colors.contentPreload : theme.colors.content};
   border-top: 1px solid ${({ theme }) => theme.colors.border};
-  transition: background-color ${({ theme }) => theme.transition};
+  transition: background-color ${({ theme }) => theme.transition},
+    transform ${({ theme }) => theme.transition};
+  transform: translateY(
+    ${({ theme, additionalControlsIsVisibled }) =>
+      additionalControlsIsVisibled ? 0 : theme.spacing(9)}
+  );
 
-  ${({ theme }) => theme.mediaQueries.up('md')} {
-    height: ${({ theme }) => theme.spacing(9)};
+  ${({ theme }) => theme.mediaQueries.up('lg')} {
+    /* height: ${({ theme }) => theme.spacing(9)}; */
+    transform: none;
   }
+`;
+
+const Inner = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+
+  ${({ theme }) => theme.mediaQueries.up('lg')} {
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+  }
+
+  ${({ theme }) => theme.mediaQueries.up('xl')} {
+    padding: 0 ${({ theme }) => theme.spacing(2)};
+  }
+`;
+
+const PlayControlsWrap = styled.div`
+  display: inline-block;
+  margin: 0 0 0 auto;
+  padding: 0 ${({ theme }) => theme.spacing(2)} 0
+    ${({ theme }) => theme.spacing(1)};
+
+  ${({ theme }) => theme.mediaQueries.up('lg')} {
+    order: -1;
+    padding: 0;
+    margin: 0 ${({ theme }) => theme.spacing(4)} 0 0;
+  }
+
+  ${({ theme }) => theme.mediaQueries.up('xl')} {
+    margin: 0 ${({ theme }) => theme.spacing(6)} 0 0;
+  }
+`;
+
+const TimelineControlWrap = styled.div`
+  width: 100%;
 `;
 
 const Player = ({
@@ -57,6 +100,11 @@ const Player = ({
   shuffleToggle,
 }) => {
   const [trackPosition, setTrackPosition] = useState(null);
+  const [
+    additionalControlsIsVisibled,
+    setAdditionalControlsVisibility,
+  ] = useState(false);
+
   const playerRef = useRef(null);
   let playerRaf = null;
 
@@ -124,8 +172,14 @@ const Player = ({
   const currentPlaylist = shuffledPlaylist || playlist;
   const currentTrack = playlist ? searchArrItemByID(playlist, track) : null;
 
+  Wrapper.handleClickOutside = () => setAdditionalControlsVisibility(false);
+
   return (
-    <PlayerWrapper>
+    <Wrapper
+      disableOnClickOutside={true}
+      additionalControlsIsVisibled={additionalControlsIsVisibled}
+      onClick={() => setAdditionalControlsVisibility(true)}
+    >
       {!interfaceDisabled && (
         <ReactHowler
           ref={playerRef}
@@ -140,34 +194,40 @@ const Player = ({
         />
       )}
       <Container>
-        <TrackInfo {...currentTrack} />
-        <PlayControls
-          disabled={interfaceDisabled}
-          closestTrackIsExist={closestTrackIsExist}
-          setCurrentTrackClosest={setCurrentTrackClosest}
-        />
-        <PlayerButton
-          onClick={repeatToggle}
-          active={repeating}
-          disabled={interfaceDisabled}
-        >
-          <RepeatIcon />
-        </PlayerButton>
-        <PlayerButton
-          onClick={shuffleToggle}
-          active={!!shuffledPlaylist}
-          disabled={interfaceDisabled}
-        >
-          <ShuffleIcon />
-        </PlayerButton>
-        <TimelineControl
-          trackPosition={trackPosition}
-          setTrackPosition={setSeek}
-        />
-        <VolumeControl disabled={interfaceDisabled} />
-        <PlayerQueue />
+        <Inner>
+          <TrackInfo {...currentTrack} />
+          <PlayControlsWrap>
+            <PlayControls
+              disabled={interfaceDisabled}
+              closestTrackIsExist={closestTrackIsExist}
+              setCurrentTrackClosest={setCurrentTrackClosest}
+            />
+          </PlayControlsWrap>
+          <TimelineControlWrap>
+            <TimelineControl
+              trackPosition={trackPosition}
+              setTrackPosition={setSeek}
+            />
+          </TimelineControlWrap>
+          <PlayerButton
+            onClick={repeatToggle}
+            active={repeating}
+            disabled={interfaceDisabled}
+          >
+            <RepeatIcon />
+          </PlayerButton>
+          <PlayerButton
+            onClick={shuffleToggle}
+            active={!!shuffledPlaylist}
+            disabled={interfaceDisabled}
+          >
+            <ShuffleIcon />
+          </PlayerButton>
+          <VolumeControl disabled={interfaceDisabled} />
+          <PlayerQueue />
+        </Inner>
       </Container>
-    </PlayerWrapper>
+    </Wrapper>
   );
 };
 
@@ -197,14 +257,21 @@ Player.propTypes = {
   shuffleToggle: PropTypes.func,
 };
 
-export default connect(
-  ({ player }) => ({ ...player }),
-  {
-    playToggle,
-    fetchPlaylist,
-    setCurrentTrack,
-    fetchTrackResult,
-    repeatToggle,
-    shuffleToggle,
-  }
-)(Player);
+const clickOutsideConfig = {
+  handleClickOutside: () => Wrapper.handleClickOutside,
+};
+
+export default onClickOutside(
+  connect(
+    ({ player }) => ({ ...player }),
+    {
+      playToggle,
+      fetchPlaylist,
+      setCurrentTrack,
+      fetchTrackResult,
+      repeatToggle,
+      shuffleToggle,
+    }
+  )(Player),
+  clickOutsideConfig
+);

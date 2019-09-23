@@ -12,7 +12,7 @@ export const gridTheme = {
   container: {
     padding: GRID_UNIT * 2,
     maxWidth: {
-      xs: 'auto',
+      xs: GRID_UNIT * 50,
       sm: GRID_UNIT * 60,
       md: GRID_UNIT * 76,
       lg: GRID_UNIT * 110,
@@ -35,6 +35,9 @@ export const lightTheme = {
         1}px)`,
   },
   colors: {
+    light: '#fff',
+    dark: '#000',
+    primary: '#ff6b6b',
     border: '#dcdcdc',
     content: '#f8f8f8',
     contentPreload: '#fff',
@@ -46,7 +49,7 @@ export const lightTheme = {
     fontSecondary: '#878787',
     accentPrimary: '#f90dc9',
     accentSecondary: '#ff1d1d',
-    theme: '#ff6b6b',
+
     colorDraggableBg: 'rgba(255, 112, 112, 0.50)',
     headerGradientFirst: '#ff6b6b',
     headerGradientSecond: '#ff486c',

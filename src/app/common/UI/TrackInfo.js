@@ -7,29 +7,31 @@ import MusicNote from '@material-ui/icons/MusicNote';
 const StyledTrackInfo = styled.div`
   display: flex;
   align-items: center;
-  max-width: 180px;
+  max-width: ${({ theme }) => theme.spacing(20)};
+
+  ${({ theme }) => theme.mediaQueries.up('sm')} {
+    max-width: ${({ theme }) => theme.spacing(22)};
+  }
 `;
 const ImgWrapper = styled.div`
-  width: 37px;
-  min-width: 37px;
-  height: 37px;
-  /* box-shadow: 1px 1px 1px rgba(0, 0, 0, .18); */
+  flex-shrink: 0;
+  width: ${({ theme }) => theme.spacing(4.5)};
+  height: ${({ theme }) => theme.spacing(4.5)};
 `;
 
 const ImgDefault = styled.div`
   width: 100%;
   height: 100%;
-  line-height: 37px;
+  line-height: ${({ theme }) => theme.spacing(4)};
   text-align: center;
-  font-size: 39px;
+  font-size: ${({ theme }) => theme.spacing(4)};
   font-weight: 700;
-  background-color: ${({ theme }) => theme.colors.theme};
-  color: #fff;
+  background-color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.light};
 `;
 
 const Text = styled.div`
-  padding: 0 0 0 10px;
-  margin: 0 15px 0 0;
+  padding: 0 0 0 ${({ theme }) => theme.spacing(1)};
 `;
 
 const Track = styled.div`

@@ -22,7 +22,11 @@ const PlayControls = ({
   closestTrackIsExist,
   setCurrentTrackClosest,
 }) => (
-  <ButtonsRow>
+  <ButtonsRow
+    onClick={e => {
+      e.stopPropagation();
+    }}
+  >
     <PlayerButton
       onClick={() => setCurrentTrackClosest(-1)}
       pseudoSelActive

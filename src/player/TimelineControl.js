@@ -22,28 +22,28 @@ const TimerDisplay = styled.div`
   text-align: center;
   display: inline-block;
   vertical-align: middle;
-  width: 28px;
+  width: ${({ theme }) => theme.spacing(4)};
   user-select: none;
   font-size: 14px;
-  transition: color 0.25s;
+  transition: color ${({ theme }) => theme.transition};
   color: ${({ theme, disabled }) =>
     disabled ? theme.colors.buttonDisabled : theme.colors.fontPrimary};
 `;
 
 const ProgressBarWrapper = styled.div`
-  margin: 0 12px;
+  margin: 0 ${({ theme }) => theme.spacing(1)};
   width: 100%;
-  height: 40px;
+  height: ${({ theme }) => theme.spacing(5)};
   display: flex;
   align-items: center;
 `;
 
 const Preloader = styled.div`
-  width: 25px;
+  width: ${({ theme }) => theme.spacing(3)};
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  bottom: -23px;
+  bottom: ${({ theme }) => theme.spacing(-3)};
 `;
 
 const TimelineControl = ({
