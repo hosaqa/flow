@@ -32,7 +32,7 @@ const TimerDisplay = styled.div`
 
 const ProgressBarWrapper = styled.div`
   margin: 0 12px;
-  width: 355px;
+  width: 100%;
   height: 40px;
   display: flex;
   align-items: center;

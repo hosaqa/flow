@@ -8,9 +8,6 @@ import ScrollArea from 'react-scrollbar';
 import Dropdown from '../app/common/UI/Dropdown';
 import PlayerButton from '../app/common/UI/PlayerButton';
 import Playlist from '../app/common/Playlist';
-import TrackInfo from '../app/common/UI/TrackInfo';
-
-import { searchArrItemByID } from '../utils';
 
 const Wrapper = styled.div`
   display: flex;
@@ -37,12 +34,9 @@ const playQueueButton = playlist => (
   </PlayerButton>
 );
 
-const PlayerQueue = ({ playlist, track }) => {
-  const currentTrack = playlist ? searchArrItemByID(playlist, track) : null;
-
+const PlayerQueue = ({ playlist }) => {
   return (
     <Wrapper>
-      <TrackInfo {...currentTrack} />
       <Dropdown selector={playQueueButton(playlist)}>
         <QueueBody>
           <ScrollArea
@@ -87,7 +81,6 @@ PlayerQueue.propTypes = {
       duration: PropTypes.number,
     })
   ),
-  track: PropTypes.number,
   playingNow: PropTypes.bool,
 };
 

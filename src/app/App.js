@@ -2,7 +2,7 @@ import React from 'react';
 import ReactGA from 'react-ga';
 import { ThemeProvider } from 'emotion-theming';
 import { Global } from '@emotion/core';
-import { GridThemeProvider } from 'styled-bootstrap-grid';
+import { GridThemeProvider, BaseCSS } from 'styled-bootstrap-grid';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from './store';
@@ -22,13 +22,14 @@ const App = () => {
     <Provider store={store}>
       <BrowserRouter>
         <ThemeProvider theme={lightTheme}>
+          <BaseCSS />
           <Global styles={globalStyles} />
           <GridThemeProvider gridTheme={gridTheme}>
             <>
-              <Header />
+              {/* <Header />
               <PageContent>
                 <ContentPlaylist />
-              </PageContent>
+              </PageContent> */}
               <Player />
             </>
           </GridThemeProvider>

@@ -4,8 +4,12 @@ import { connect } from 'react-redux';
 import ReactHowler from 'react-howler';
 import raf from 'raf'; // requestAnimationFrame polyfill
 import styled from '@emotion/styled';
-import { Container, Row, Col, BaseCSS } from 'styled-bootstrap-grid';
-import PlayerControls from './PlayerControls';
+import { Container, Row, Col } from 'styled-bootstrap-grid';
+import RepeatIcon from '@material-ui/icons/Repeat';
+import ShuffleIcon from '@material-ui/icons/Shuffle';
+import TrackInfo from '../app/common/UI/TrackInfo';
+import PlayerButton from '../app/common/UI/PlayerButton';
+import PlayControls from './PlayControls';
 import TimelineControl from './TimelineControl';
 import VolumeControl from './VolumeControl';
 import PlayerQueue from './PlayerQueue';
@@ -14,27 +18,27 @@ import {
   setCurrentTrack,
   fetchTrackResult,
   fetchPlaylist,
+  repeatToggle,
+  shuffleToggle,
 } from './actions';
 import { searchArrItemByID } from '../utils';
 
 const PlayerWrapper = styled.div`
   position: fixed;
-  background-color: ${({ inactive, theme }) =>
-    inactive ? theme.colors.contentPreload : theme.colors.content};
-  border-top: 1px solid ${({ theme }) => theme.colors.border};
   bottom: 0;
   left: 0;
   width: 100%;
-  transition: background-color 0.3s;
-  height: ${({ theme }) => theme.spacing(9)}px;
   display: flex;
   align-items: center;
-`;
+  padding: ${({ theme }) => theme.spacing(1)} 0;
+  background-color: ${({ inactive, theme }) =>
+    inactive ? theme.colors.contentPreload : theme.colors.content};
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
+  transition: background-color ${({ theme }) => theme.transition};
 
-const DraggableControls = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  ${({ theme }) => theme.mediaQueries.up('md')} {
+    height: ${({ theme }) => theme.spacing(9)};
+  }
 `;
 
 const Player = ({
@@ -49,6 +53,8 @@ const Player = ({
   fetchPlaylist,
   setCurrentTrack,
   fetchTrackResult,
+  repeatToggle,
+  shuffleToggle,
 }) => {
   const [trackPosition, setTrackPosition] = useState(null);
   const playerRef = useRef(null);
@@ -116,10 +122,10 @@ const Player = ({
   const interfaceDisabled = !playlist;
 
   const currentPlaylist = shuffledPlaylist || playlist;
-  //console.log(trackPosition);
+  const currentTrack = playlist ? searchArrItemByID(playlist, track) : null;
+
   return (
     <PlayerWrapper>
-      <BaseCSS />
       {!interfaceDisabled && (
         <ReactHowler
           ref={playerRef}
@@ -134,30 +140,32 @@ const Player = ({
         />
       )}
       <Container>
-        <Row alignItems="center">
-          <Col col xl="3">
-            <PlayerControls
-              disabled={interfaceDisabled}
-              closestTrackIsExist={closestTrackIsExist}
-              setCurrentTrackClosest={setCurrentTrackClosest}
-            />
-          </Col>
-          <Col col xl="6">
-            <DraggableControls>
-              <TimelineControl
-                rr={trackPosition}
-                trackPosition={trackPosition}
-                setTrackPosition={setSeek}
-              />
-              <span style={{ marginLeft: 'auto' }}>
-                <VolumeControl disabled={interfaceDisabled} />
-              </span>
-            </DraggableControls>
-          </Col>
-          <Col col xl="3">
-            <PlayerQueue />
-          </Col>
-        </Row>
+        <TrackInfo {...currentTrack} />
+        <PlayControls
+          disabled={interfaceDisabled}
+          closestTrackIsExist={closestTrackIsExist}
+          setCurrentTrackClosest={setCurrentTrackClosest}
+        />
+        <PlayerButton
+          onClick={repeatToggle}
+          active={repeating}
+          disabled={interfaceDisabled}
+        >
+          <RepeatIcon />
+        </PlayerButton>
+        <PlayerButton
+          onClick={shuffleToggle}
+          active={!!shuffledPlaylist}
+          disabled={interfaceDisabled}
+        >
+          <ShuffleIcon />
+        </PlayerButton>
+        <TimelineControl
+          trackPosition={trackPosition}
+          setTrackPosition={setSeek}
+        />
+        <VolumeControl disabled={interfaceDisabled} />
+        <PlayerQueue />
       </Container>
     </PlayerWrapper>
   );
@@ -185,6 +193,8 @@ Player.propTypes = {
   fetchPlaylist: PropTypes.func,
   setCurrentTrack: PropTypes.func,
   fetchTrackResult: PropTypes.func,
+  repeatToggle: PropTypes.func,
+  shuffleToggle: PropTypes.func,
 };
 
 export default connect(
@@ -194,5 +204,7 @@ export default connect(
     fetchPlaylist,
     setCurrentTrack,
     fetchTrackResult,
+    repeatToggle,
+    shuffleToggle,
   }
 )(Player);

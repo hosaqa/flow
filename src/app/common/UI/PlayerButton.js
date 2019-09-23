@@ -5,7 +5,8 @@ const PlayerButton = styled.button`
   -webkit-appearance: none;
   cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
   position: relative;
-  padding: 0 6px;
+  padding-left: ${({ theme }) => theme.spacing(0.5)};
+  padding-right: ${({ theme }) => theme.spacing(0.5)};
   border: 0;
   outline: 0;
   background-color: transparent;
