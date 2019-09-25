@@ -2,7 +2,8 @@ import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ReactHowler from 'react-howler';
-import onClickOutside from 'react-onclickoutside';
+import Swipe from 'react-easy-swipe';
+import OutsideClickHandler from 'react-outside-click-handler';
 import raf from 'raf'; // requestAnimationFrame polyfill
 import styled from '@emotion/styled';
 import { Container } from 'styled-bootstrap-grid';
@@ -22,7 +23,7 @@ import {
   repeatToggle,
   shuffleToggle,
 } from './actions';
-import { searchArrItemByID } from '../utils';
+import { searchArrItemByID, isDesktop } from '../utils';
 
 const Wrapper = styled.section`
   position: fixed;
@@ -167,67 +168,82 @@ const Player = ({
     raf.cancel(playerRaf);
   };
 
+  const handleSwipeUp = () => {
+    setAdditionalControlsVisibility(true);
+  };
+
   const interfaceDisabled = !playlist;
 
   const currentPlaylist = shuffledPlaylist || playlist;
   const currentTrack = playlist ? searchArrItemByID(playlist, track) : null;
 
-  Wrapper.handleClickOutside = () => setAdditionalControlsVisibility(false);
-
   return (
-    <Wrapper
-      disableOnClickOutside={true}
-      additionalControlsIsVisibled={additionalControlsIsVisibled}
-      onClick={() => setAdditionalControlsVisibility(true)}
+    <OutsideClickHandler
+      onOutsideClick={() => setAdditionalControlsVisibility(false)}
+      disabled={isDesktop() || !additionalControlsIsVisibled}
     >
-      {!interfaceDisabled && (
-        <ReactHowler
-          ref={playerRef}
-          src={searchArrItemByID(currentPlaylist, track).src}
-          playing={playingNow}
-          onPlay={setSeekPos}
-          onEnd={handleOnEnd}
-          onLoad={fetchTrackResult}
-          onLoadError={() => fetchTrackResult('Loading error')}
-          volume={volume}
-          mute={muted}
-        />
-      )}
-      <Container>
-        <Inner>
-          <TrackInfo {...currentTrack} />
-          <PlayControlsWrap>
-            <PlayControls
-              disabled={interfaceDisabled}
-              closestTrackIsExist={closestTrackIsExist}
-              setCurrentTrackClosest={setCurrentTrackClosest}
+      <Swipe
+        onSwipeUp={() => {
+          handleSwipeUp();
+        }}
+        onSwipeDown={() => {
+          setAdditionalControlsVisibility(false);
+        }}
+      >
+        <Wrapper
+          additionalControlsIsVisibled={additionalControlsIsVisibled}
+          onClick={() => setAdditionalControlsVisibility(true)}
+        >
+          {!interfaceDisabled && (
+            <ReactHowler
+              ref={playerRef}
+              src={searchArrItemByID(currentPlaylist, track).src}
+              playing={playingNow}
+              onPlay={setSeekPos}
+              onEnd={handleOnEnd}
+              onLoad={fetchTrackResult}
+              onLoadError={() => fetchTrackResult('Loading error')}
+              volume={volume}
+              mute={muted}
             />
-          </PlayControlsWrap>
-          <TimelineControlWrap>
-            <TimelineControl
-              trackPosition={trackPosition}
-              setTrackPosition={setSeek}
-            />
-          </TimelineControlWrap>
-          <PlayerButton
-            onClick={repeatToggle}
-            active={repeating}
-            disabled={interfaceDisabled}
-          >
-            <RepeatIcon />
-          </PlayerButton>
-          <PlayerButton
-            onClick={shuffleToggle}
-            active={!!shuffledPlaylist}
-            disabled={interfaceDisabled}
-          >
-            <ShuffleIcon />
-          </PlayerButton>
-          <VolumeControl disabled={interfaceDisabled} />
-          <PlayerQueue />
-        </Inner>
-      </Container>
-    </Wrapper>
+          )}
+          <Container>
+            <Inner>
+              <TrackInfo {...currentTrack} />
+              <PlayControlsWrap>
+                <PlayControls
+                  disabled={interfaceDisabled}
+                  closestTrackIsExist={closestTrackIsExist}
+                  setCurrentTrackClosest={setCurrentTrackClosest}
+                />
+              </PlayControlsWrap>
+              <TimelineControlWrap>
+                <TimelineControl
+                  trackPosition={trackPosition}
+                  setTrackPosition={setSeek}
+                />
+              </TimelineControlWrap>
+              <PlayerButton
+                onClick={repeatToggle}
+                active={repeating}
+                disabled={interfaceDisabled}
+              >
+                <RepeatIcon />
+              </PlayerButton>
+              <PlayerButton
+                onClick={shuffleToggle}
+                active={!!shuffledPlaylist}
+                disabled={interfaceDisabled}
+              >
+                <ShuffleIcon />
+              </PlayerButton>
+              <VolumeControl disabled={interfaceDisabled} />
+              <PlayerQueue />
+            </Inner>
+          </Container>
+        </Wrapper>
+      </Swipe>
+    </OutsideClickHandler>
   );
 };
 
@@ -257,21 +273,14 @@ Player.propTypes = {
   shuffleToggle: PropTypes.func,
 };
 
-const clickOutsideConfig = {
-  handleClickOutside: () => Wrapper.handleClickOutside,
-};
-
-export default onClickOutside(
-  connect(
-    ({ player }) => ({ ...player }),
-    {
-      playToggle,
-      fetchPlaylist,
-      setCurrentTrack,
-      fetchTrackResult,
-      repeatToggle,
-      shuffleToggle,
-    }
-  )(Player),
-  clickOutsideConfig
-);
+export default connect(
+  ({ player }) => ({ ...player }),
+  {
+    playToggle,
+    fetchPlaylist,
+    setCurrentTrack,
+    fetchTrackResult,
+    repeatToggle,
+    shuffleToggle,
+  }
+)(Player);
