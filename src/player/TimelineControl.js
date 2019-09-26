@@ -47,6 +47,7 @@ const Preloader = styled.div`
 `;
 
 const TimelineControl = ({
+  className,
   trackPosition,
   playlist,
   nowPlaying,
@@ -135,7 +136,7 @@ const TimelineControl = ({
 
   if (!playlist)
     return (
-      <TimeLineWrapper>
+      <TimeLineWrapper className={className}>
         <TimerDisplay disabled>--:--</TimerDisplay>
         <ProgressBarWrapper>
           <ProgressBar
@@ -162,7 +163,7 @@ const TimelineControl = ({
     : '0:00';
 
   return (
-    <TimeLineWrapper>
+    <TimeLineWrapper className={className}>
       <TimerDisplay>{trackPosition || '--:--'}</TimerDisplay>
       <ProgressBarWrapper
         ref={timelineRef}
@@ -189,6 +190,7 @@ const TimelineControl = ({
 };
 
 TimelineControl.propTypes = {
+  className: PropTypes.string,
   playlist: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,

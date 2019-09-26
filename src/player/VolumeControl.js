@@ -45,7 +45,14 @@ const VolumeSlider = styled.div`
     `}
 `;
 
-const VolumeControl = ({ disabled, volume, muted, setVolume, muteToggle }) => {
+const VolumeControl = ({
+  className,
+  disabled,
+  volume,
+  muted,
+  setVolume,
+  muteToggle,
+}) => {
   const [mouseButtonPressed, setMouseButtonPressed] = useState(false);
   const volumeControlRef = useRef(null);
 
@@ -97,7 +104,7 @@ const VolumeControl = ({ disabled, volume, muted, setVolume, muteToggle }) => {
   };
 
   return (
-    <Volume onWheel={ev => handleOnWheel(ev)}>
+    <Volume className={className} onWheel={ev => handleOnWheel(ev)}>
       <PlayerButton
         onClick={() => muteToggle()}
         hoverDisabled
@@ -127,6 +134,7 @@ const VolumeControl = ({ disabled, volume, muted, setVolume, muteToggle }) => {
 };
 
 VolumeControl.propTypes = {
+  className: PropTypes.string,
   disabled: PropTypes.bool,
   volume: PropTypes.number,
   setVolume: PropTypes.func,

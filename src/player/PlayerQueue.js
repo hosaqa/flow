@@ -34,42 +34,41 @@ const playQueueButton = playlist => (
   </PlayerButton>
 );
 
-const PlayerQueue = ({ playlist }) => {
-  return (
-    <Wrapper>
-      <Dropdown selector={playQueueButton(playlist)}>
-        <QueueBody>
-          <ScrollArea
-            speed={0.8}
-            smoothScrolling
-            className="area"
-            contentClassName="content"
-            horizontal={false}
-            style={{
-              padding: '0 10px 0 0',
-              height: '190px',
-            }}
-            verticalContainerStyle={{
-              opacity: '1',
-              backgroundColor: '#ededed',
-              width: '8px',
-              borderRadius: '0 3px 3px 0',
-            }}
-            verticalScrollbarStyle={{
-              borderRadius: '4px',
-              backgroundColor: '#ff6b6b',
-              marginLeft: '0',
-            }}
-          >
-            <Playlist />
-          </ScrollArea>
-        </QueueBody>
-      </Dropdown>
-    </Wrapper>
-  );
-};
+const PlayerQueue = ({ playlist, className }) => (
+  <Wrapper className={className}>
+    <Dropdown selector={playQueueButton(playlist)}>
+      <QueueBody>
+        <ScrollArea
+          speed={0.8}
+          smoothScrolling
+          className="area"
+          contentClassName="content"
+          horizontal={false}
+          style={{
+            padding: '0 10px 0 0',
+            height: '190px',
+          }}
+          verticalContainerStyle={{
+            opacity: '1',
+            backgroundColor: '#ededed',
+            width: '8px',
+            borderRadius: '0 3px 3px 0',
+          }}
+          verticalScrollbarStyle={{
+            borderRadius: '4px',
+            backgroundColor: '#ff6b6b',
+            marginLeft: '0',
+          }}
+        >
+          <Playlist />
+        </ScrollArea>
+      </QueueBody>
+    </Dropdown>
+  </Wrapper>
+);
 
 PlayerQueue.propTypes = {
+  className: PropTypes.string,
   playlist: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,

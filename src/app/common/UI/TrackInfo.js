@@ -10,6 +10,8 @@ const StyledTrackInfo = styled.div`
   max-width: ${({ theme }) => theme.spacing(20)};
 
   ${({ theme }) => theme.mediaQueries.up('sm')} {
+    min-width: ${({ theme }) => theme.spacing(22)};
+    width: ${({ theme }) => theme.spacing(22)};
     max-width: ${({ theme }) => theme.spacing(22)};
   }
 `;
@@ -55,10 +57,11 @@ const Artist = styled.div`
   overflow: hidden;
 `;
 
-const TrackInfo = ({ trackname, artist, img }) => {
+const TrackInfo = ({ className, trackname, artist, img }) => {
   if (!trackname) {
     return (
       <ContentLoader
+        className={className}
         height={40}
         width={130}
         speed={2}
@@ -77,7 +80,7 @@ const TrackInfo = ({ trackname, artist, img }) => {
   }
 
   return (
-    <StyledTrackInfo>
+    <StyledTrackInfo className={className}>
       <ImgWrapper>
         {img ? (
           <img src={img} alt={`${artist} - ${trackname}`} />
@@ -96,6 +99,7 @@ const TrackInfo = ({ trackname, artist, img }) => {
 };
 
 TrackInfo.propTypes = {
+  className: PropTypes.string,
   trackname: PropTypes.string,
   artist: PropTypes.string,
   img: PropTypes.string,

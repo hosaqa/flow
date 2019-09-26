@@ -16,43 +16,47 @@ const ButtonsRow = styled.div`
 `;
 
 const PlayControls = ({
+  className,
   playingNow,
   disabled,
   playToggle,
   closestTrackIsExist,
   setCurrentTrackClosest,
 }) => (
-  <ButtonsRow
-    onClick={e => {
-      e.stopPropagation();
-    }}
-  >
-    <PlayerButton
-      onClick={() => setCurrentTrackClosest(-1)}
-      pseudoSelActive
-      disabled={disabled || !closestTrackIsExist(-1)}
+  <div className={className}>
+    <ButtonsRow
+      onClick={e => {
+        e.stopPropagation();
+      }}
     >
-      <SkipPreviousIcon />
-    </PlayerButton>
-    <PlayerButton
-      onClick={() => playToggle()}
-      iconSize={32}
-      disabled={disabled}
-      pseudoSelActive
-    >
-      {!playingNow ? <PlayCircleOutlineIcon /> : <PauseCircleOutlineIcon />}
-    </PlayerButton>
-    <PlayerButton
-      onClick={() => setCurrentTrackClosest(1)}
-      pseudoSelActive
-      disabled={disabled || !closestTrackIsExist(1)}
-    >
-      <SkipNextIcon />
-    </PlayerButton>
-  </ButtonsRow>
+      <PlayerButton
+        onClick={() => setCurrentTrackClosest(-1)}
+        pseudoSelActive
+        disabled={disabled || !closestTrackIsExist(-1)}
+      >
+        <SkipPreviousIcon />
+      </PlayerButton>
+      <PlayerButton
+        onClick={() => playToggle()}
+        iconSize={32}
+        disabled={disabled}
+        pseudoSelActive
+      >
+        {!playingNow ? <PlayCircleOutlineIcon /> : <PauseCircleOutlineIcon />}
+      </PlayerButton>
+      <PlayerButton
+        onClick={() => setCurrentTrackClosest(1)}
+        pseudoSelActive
+        disabled={disabled || !closestTrackIsExist(1)}
+      >
+        <SkipNextIcon />
+      </PlayerButton>
+    </ButtonsRow>
+  </div>
 );
 
 PlayControls.propTypes = {
+  className: PropTypes.string,
   playingNow: PropTypes.bool,
   disabled: PropTypes.bool,
   playToggle: PropTypes.func,
