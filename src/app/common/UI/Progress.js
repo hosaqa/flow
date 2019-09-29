@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
+import Swipe from 'react-easy-swipe';
 import styled from '@emotion/styled/macro';
 
 const Track = styled.div`
@@ -66,36 +67,81 @@ const Wrapper = styled.div`
   }
 `;
 
-const ProgressBar = ({
+const Progress = ({
   disabled,
   active,
   direction,
-  filled,
   thumbRadius,
   thumbShowOnHover,
-}) => (
-  <Wrapper disabled={disabled}>
-    <Track disabled={disabled} active={active} direction={direction}>
-      {!disabled && (
-        <Filled direction={direction} filled={`${filled}%`}>
-          {thumbShowOnHover ? (
-            <ThumbHoverShown thumbRadius={thumbRadius} />
-          ) : (
-            <Thumb thumbRadius={thumbRadius} />
+  onСhange = () => {},
+}) => {
+  const trackRef = useRef(null);
+  const [filled, setFilled] = useState(10);
+
+  const setPosition = e => {
+    const {
+      top,
+      left,
+      width,
+      height,
+    } = trackRef.current.getBoundingClientRect();
+
+    const size = direction === 'horizontal' ? width : height;
+    const mousePosition =
+      direction === 'horizontal'
+        ? e.clientX - left
+        : height - (e.clientY - top);
+
+    const nextPosition = size / mousePosition;
+
+    let nextPositionPerCent = Math.trunc(100 / nextPosition);
+    nextPositionPerCent = Math.min(100, Math.trunc(100 / nextPosition));
+    nextPositionPerCent = Math.max(nextPositionPerCent, 0);
+
+    setFilled(nextPositionPerCent);
+    onСhange(nextPositionPerCent);
+  };
+
+  const handleClick = e => {
+    setPosition(e);
+  };
+
+  const handleSwipeMove = (position, e) => {
+    setPosition(e);
+  };
+
+  return (
+    <Wrapper disabled={disabled}>
+      <Swipe allowMouseEvents={true} onSwipeMove={handleSwipeMove}>
+        <Track
+          onClick={handleClick}
+          ref={trackRef}
+          disabled={disabled}
+          active={active}
+          direction={direction}
+        >
+          {!disabled && (
+            <Filled direction={direction} filled={`${filled}%`}>
+              {thumbShowOnHover ? (
+                <ThumbHoverShown thumbRadius={thumbRadius} />
+              ) : (
+                <Thumb thumbRadius={thumbRadius} />
+              )}
+            </Filled>
           )}
-        </Filled>
-      )}
-    </Track>
-  </Wrapper>
-);
+        </Track>
+      </Swipe>
+    </Wrapper>
+  );
+};
 
-export default ProgressBar;
-
-ProgressBar.propTypes = {
+Progress.propTypes = {
   disabled: PropTypes.bool,
   active: PropTypes.bool,
   direction: PropTypes.string,
-  filled: PropTypes.number,
   thumbRadius: PropTypes.number,
   thumbShowOnHover: PropTypes.bool,
+  onСhange: PropTypes.func,
 };
+
+export default Progress;
