@@ -68,6 +68,7 @@ const Wrapper = styled.div`
 `;
 
 const Progress = ({
+  filled,
   disabled,
   active,
   direction,
@@ -76,7 +77,7 @@ const Progress = ({
   onСhange = () => {},
 }) => {
   const trackRef = useRef(null);
-  const [filled, setFilled] = useState(10);
+  //const [filled, setFilled] = useState(10);
 
   const setPosition = e => {
     const {
@@ -98,7 +99,7 @@ const Progress = ({
     nextPositionPerCent = Math.min(100, Math.trunc(100 / nextPosition));
     nextPositionPerCent = Math.max(nextPositionPerCent, 0);
 
-    setFilled(nextPositionPerCent);
+    //setFilled(nextPositionPerCent);
     onСhange(nextPositionPerCent);
   };
 

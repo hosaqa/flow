@@ -12,7 +12,7 @@ import ShuffleIcon from '@material-ui/icons/Shuffle';
 import TrackInfo from '../app/common/UI/TrackInfo';
 import PlayerButton from '../app/common/UI/PlayerButton';
 import PlayControls from './PlayControls';
-import TimelineControl from './TimelineControl';
+import TimelineControlv from './TimelineControlv';
 import VolumeControl from './VolumeControl';
 import PlayerQueue from './PlayerQueue';
 import {
@@ -45,6 +45,7 @@ const Wrapper = styled.section`
   ${({ theme }) => theme.mediaQueries.up('lg')} {
     /* height: ${({ theme }) => theme.spacing(9)}; */
     transform: none;
+    padding: ${({ theme }) => theme.spacing(1)} 0};
   }
 `;
 
@@ -86,7 +87,7 @@ const PlayControlsStyled = styled(PlayControls)`
   }
 `;
 
-const TimelineControlStyled = styled(TimelineControl)`
+const TimelineControlStyled = styled(TimelineControlv)`
   width: 100%;
 
   ${({ theme }) => theme.mediaQueries.up('lg')} {
