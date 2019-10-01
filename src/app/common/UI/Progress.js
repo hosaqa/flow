@@ -52,14 +52,14 @@ const Thumb = styled.div`
 
 const ThumbHoverShown = styled(Thumb)`
   transition: transform 0.12s;
-  transform: scale(0);
+  transform: ${({ isSwiping }) => (isSwiping ? 'scale(1)' : 'scale(0)')};
 `;
 
 const Wrapper = styled.div`
-  height: 100%;
+  height: ${({ direction, thumbRadius }) =>
+    direction === 'horizontal' ? `${thumbRadius * 2}px` : '100%'};
   width: 100%;
   position: relative;
-  cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
   pointer-events: ${({ disabled }) => (disabled ? 'none' : 'auto')};
 
   &:hover ${ThumbHoverShown} {
@@ -74,12 +74,13 @@ const Progress = ({
   direction,
   thumbRadius,
   thumbShowOnHover,
+  onSwipe = () => {},
   onСhange = () => {},
 }) => {
   const trackRef = useRef(null);
-  //const [filled, setFilled] = useState(10);
+  const [filledWhenSwipe, setFilledWhenSwipe] = useState(null);
 
-  const setPosition = e => {
+  const setPosition = (e, isSwiping, callback) => {
     const {
       top,
       left,
@@ -99,21 +100,43 @@ const Progress = ({
     nextPositionPerCent = Math.min(100, Math.trunc(100 / nextPosition));
     nextPositionPerCent = Math.max(nextPositionPerCent, 0);
 
-    //setFilled(nextPositionPerCent);
-    onСhange(nextPositionPerCent);
+    if (isSwiping) setFilledWhenSwipe(nextPositionPerCent);
+
+    if (callback) callback(nextPositionPerCent);
   };
 
   const handleClick = e => {
-    setPosition(e);
+    setPosition(e, false, onСhange);
+  };
+
+  const handleSwipeStart = e => {
+    document.body.style.userSelect = 'none';
+    setPosition(e, true, onSwipe);
   };
 
   const handleSwipeMove = (position, e) => {
-    setPosition(e);
+    setPosition(e, true, onSwipe);
+  };
+
+  const handleSwipeEnd = e => {
+    document.body.style.userSelect = '';
+    setPosition(e, false, onСhange);
+    setFilledWhenSwipe(null);
   };
 
   return (
-    <Wrapper disabled={disabled}>
-      <Swipe allowMouseEvents={true} onSwipeMove={handleSwipeMove}>
+    <Wrapper
+      disabled={disabled}
+      direction={direction}
+      thumbRadius={thumbRadius}
+    >
+      <Swipe
+        style={{ width: '100%', height: '100%' }}
+        allowMouseEvents={true}
+        onSwipeStart={handleSwipeStart}
+        onSwipeMove={handleSwipeMove}
+        onSwipeEnd={handleSwipeEnd}
+      >
         <Track
           onClick={handleClick}
           ref={trackRef}
@@ -122,9 +145,15 @@ const Progress = ({
           direction={direction}
         >
           {!disabled && (
-            <Filled direction={direction} filled={`${filled}%`}>
+            <Filled
+              direction={direction}
+              filled={`${filledWhenSwipe || filled}%`}
+            >
               {thumbShowOnHover ? (
-                <ThumbHoverShown thumbRadius={thumbRadius} />
+                <ThumbHoverShown
+                  isSwiping={filledWhenSwipe !== null}
+                  thumbRadius={thumbRadius}
+                />
               ) : (
                 <Thumb thumbRadius={thumbRadius} />
               )}
@@ -137,11 +166,13 @@ const Progress = ({
 };
 
 Progress.propTypes = {
+  filled: PropTypes.number,
   disabled: PropTypes.bool,
   active: PropTypes.bool,
   direction: PropTypes.string,
   thumbRadius: PropTypes.number,
   thumbShowOnHover: PropTypes.bool,
+  onSwipe: PropTypes.func,
   onСhange: PropTypes.func,
 };
 
