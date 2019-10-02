@@ -27,22 +27,6 @@ const App = () => {
           <Global styles={globalStyles} />
           <GridThemeProvider gridTheme={gridTheme}>
             <>
-              <div style={{ padding: '50px' }}>
-                <Drag>
-                  <div
-                    style={{ height: '50px', width: '50px', background: 'red' }}
-                  ></div>
-                </Drag>
-
-                <div
-                  style={{
-                    margin: '20px 0 0',
-                    width: '500px',
-                    height: '100px',
-                  }}
-                ></div>
-              </div>
-
               {/* <Header />
               <PageContent>
                 <ContentPlaylist />

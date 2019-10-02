@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import styled from '@emotion/styled';
 
 import PlayListItem from './PlayListItem';
-import { searchArrItemByID } from '../../../utils';
 import { playToggle, setCurrentTrack } from '../../../player/actions';
 
 const List = styled.div`
@@ -12,7 +11,7 @@ const List = styled.div`
 `;
 
 const Playlist = ({
-  nonDefaultPlaylist,
+  data,
   track,
   playlist,
   shuffledPlaylist,
@@ -20,7 +19,7 @@ const Playlist = ({
   playingNow,
   setCurrentTrack,
 }) => {
-  if (!nonDefaultPlaylist && !playlist)
+  if (!data && !playlist)
     return (
       <List>
         <PlayListItem />
@@ -32,10 +31,9 @@ const Playlist = ({
       </List>
     );
 
-  let currentPlaylist = nonDefaultPlaylist || playlist;
-  currentPlaylist =
-    !nonDefaultPlaylist && shuffledPlaylist ? shuffledPlaylist : playlist;
-  const currentTrack = searchArrItemByID(playlist, track).id;
+  let currentPlaylist = data || playlist;
+  currentPlaylist = !data && shuffledPlaylist ? shuffledPlaylist : playlist;
+  const currentTrack = track.id;
 
   return (
     <List>
@@ -55,19 +53,23 @@ const Playlist = ({
   );
 };
 
+const playlistProp = PropTypes.arrayOf(
+  PropTypes.shape({
+    id: PropTypes.number,
+    artist: PropTypes.string,
+    trackname: PropTypes.string,
+    album: PropTypes.string,
+    src: PropTypes.string,
+    img: PropTypes.string,
+    duration: PropTypes.number,
+  })
+);
+
 Playlist.propTypes = {
-  playlist: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      artist: PropTypes.string,
-      trackname: PropTypes.string,
-      album: PropTypes.string,
-      src: PropTypes.string,
-      img: PropTypes.string,
-      duration: PropTypes.number,
-    })
-  ),
-  track: PropTypes.number,
+  data: playlistProp,
+  playlist: playlistProp,
+  shuffledPlaylist: playlistProp,
+  track: PropTypes.object,
   playToggle: PropTypes.func,
   setCurrentTrack: PropTypes.func,
   playingNow: PropTypes.bool,

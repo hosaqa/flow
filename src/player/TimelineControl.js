@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import styled from '@emotion/styled';
 
 import ProgressBar from '../app/common/UI/ProgressBar';
-import { searchArrItemByID, humanizeTrackTime } from '../utils';
+import { humanizeTrackTime } from '../utils';
 
 const Wrapper = styled.div`
   display: flex;
@@ -35,7 +35,6 @@ const ProgressBarStyled = styled(ProgressBar)`
 const TimelineControl = ({
   className,
   trackPosition,
-  playlist,
   nowPlaying,
   trackIsLoading,
   track,
@@ -43,22 +42,18 @@ const TimelineControl = ({
 }) => {
   const [fakeTrackPosition, setFakeTrackPosition] = useState(null);
 
-  const getTrackDuration = () => {
-    const currentTrack = searchArrItemByID(playlist, track);
-
-    if (currentTrack) return currentTrack.duration;
-  };
+  const trackDuration = track ? track.duration : null;
 
   const progress = parseFloat(
-    ((trackPosition / getTrackDuration()) * 100).toFixed(1)
+    ((trackPosition / trackDuration) * 100).toFixed(1)
   );
 
   const _setTrackPosition = nextPosition => {
-    setTrackPosition((getTrackDuration() / 100) * nextPosition);
+    setTrackPosition((trackDuration / 100) * nextPosition);
   };
 
   const handleSwipeMove = nextPosition => {
-    setFakeTrackPosition((getTrackDuration() / 100) * nextPosition);
+    setFakeTrackPosition((trackDuration / 100) * nextPosition);
   };
 
   const handleSwipeEnd = nextPosition => {
@@ -66,12 +61,12 @@ const TimelineControl = ({
     _setTrackPosition(nextPosition);
   };
 
-  const disabled = !playlist;
+  const disabled = !track;
 
   return (
     <Wrapper className={className}>
       <TimerDisplay disabled={disabled}>
-        {fakeTrackPosition
+        {fakeTrackPosition !== null
           ? humanizeTrackTime(fakeTrackPosition)
           : humanizeTrackTime(trackPosition)}
       </TimerDisplay>
@@ -88,7 +83,7 @@ const TimelineControl = ({
         onClick={_setTrackPosition}
       />
       <TimerDisplay disabled={disabled}>
-        {humanizeTrackTime(getTrackDuration())}
+        {humanizeTrackTime(trackDuration)}
       </TimerDisplay>
     </Wrapper>
   );
@@ -96,20 +91,9 @@ const TimelineControl = ({
 
 TimelineControl.propTypes = {
   className: PropTypes.string,
-  playlist: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      artist: PropTypes.string,
-      trackname: PropTypes.string,
-      album: PropTypes.string,
-      src: PropTypes.string,
-      img: PropTypes.string,
-      duration: PropTypes.number,
-    })
-  ),
   nowPlaying: PropTypes.bool,
   trackIsLoading: PropTypes.bool,
-  track: PropTypes.number,
+  track: PropTypes.object,
   trackPosition: PropTypes.number,
   setTrackPosition: PropTypes.func,
 };

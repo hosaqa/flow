@@ -17,17 +17,26 @@ const PlayerButton = styled.button`
       ? theme.colors.theme
       : theme.colors.button};
   transition: color 0.25s, transform 0.15s;
+  pointer-events: ${({ disabled }) => (disabled ? 'none' : 'auto')};
 
-  &:hover {
-    color: ${({ disabled, hoverDisabled, theme }) =>
-      !hoverDisabled && !disabled ? theme.colors.theme : null};
+  &:hover,
+  &:focus {
+    color: ${({ theme }) => theme.colors.primary};
   }
 
-  &:active {
-    & > svg {
-      color: ${({ theme, pseudoSelActive, disabled }) =>
-        pseudoSelActive && !disabled ? theme.colors.theme : null};
-    }
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+    -webkit-box-shadow: 0 0 0 20px transparent, inset 0 0 0 1px transparent;
+    box-shadow: 0 0 0 20px transparent, inset 0 0 0 1px transparent;
+    -webkit-transition: none;
+    transition: none;
+    border-radius: 500px;
   }
 
   & > svg {

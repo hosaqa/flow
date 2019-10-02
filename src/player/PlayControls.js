@@ -17,11 +17,11 @@ const ButtonsRow = styled.div`
 
 const PlayControls = ({
   className,
+  track,
   playingNow,
   disabled,
   playToggle,
-  closestTrackIsExist,
-  setCurrentTrackClosest,
+  setCurrentTrack,
 }) => (
   <div className={className}>
     <ButtonsRow
@@ -30,9 +30,8 @@ const PlayControls = ({
       }}
     >
       <PlayerButton
-        onClick={() => setCurrentTrackClosest(-1)}
-        pseudoSelActive
-        disabled={disabled || !closestTrackIsExist(-1)}
+        onClick={() => setCurrentTrack(track.prevTrack.id)}
+        disabled={disabled || !track.prevTrack}
       >
         <SkipPreviousIcon />
       </PlayerButton>
@@ -40,14 +39,12 @@ const PlayControls = ({
         onClick={() => playToggle()}
         iconSize={32}
         disabled={disabled}
-        pseudoSelActive
       >
         {!playingNow ? <PlayCircleOutlineIcon /> : <PauseCircleOutlineIcon />}
       </PlayerButton>
       <PlayerButton
-        onClick={() => setCurrentTrackClosest(1)}
-        pseudoSelActive
-        disabled={disabled || !closestTrackIsExist(1)}
+        onClick={() => setCurrentTrack(track.nextTrack.id)}
+        disabled={disabled || !track.nextTrack}
       >
         <SkipNextIcon />
       </PlayerButton>
@@ -57,11 +54,11 @@ const PlayControls = ({
 
 PlayControls.propTypes = {
   className: PropTypes.string,
+  track: PropTypes.object,
   playingNow: PropTypes.bool,
   disabled: PropTypes.bool,
   playToggle: PropTypes.func,
-  closestTrackIsExist: PropTypes.func,
-  setCurrentTrackClosest: PropTypes.func,
+  setCurrentTrack: PropTypes.func,
 };
 
 export default connect(

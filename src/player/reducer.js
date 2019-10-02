@@ -38,12 +38,22 @@ export function playerReducer(state = initialState, action) {
       return { ...state, playingNow: !state.playingNow };
 
     case SET_CURRENT_TRACK: {
+      const { playlist } = state;
       const { id, playingNow } = action.payload;
+
+      const currentTrack = searchArrItemByID(playlist, id);
+      const currentTrackIndex = playlist.indexOf(currentTrack);
+
+      let prevTrack = playlist[currentTrackIndex - 1];
+      prevTrack = prevTrack ? prevTrack : null;
+
+      let nextTrack = playlist[currentTrackIndex + 1];
+      nextTrack = nextTrack ? nextTrack : null;
 
       return {
         ...state,
-        track: searchArrItemByID(state.playlist, id).id,
-        playingNow: playingNow || state.playingNow,
+        track: { ...currentTrack, prevTrack: prevTrack, nextTrack: nextTrack },
+        playingNow: playingNow || state.playingNow, ///что это за ????
         trackIsLoading: true,
         fetchTrackError: null,
       };
@@ -90,10 +100,12 @@ export function playerReducer(state = initialState, action) {
       };
 
     case FETCH_PLAYLIST_SUCCESS: {
+      const { playlist } = action.payload;
+
       return {
         ...state,
         playlist: action.payload.playlist,
-        track: action.payload.playlist[0].id,
+        track: { ...playlist[0], prevTrack: null, nextTrack: playlist[1] },
         playlistIsLoading: false,
       };
     }

@@ -23,7 +23,7 @@ import {
   repeatToggle,
   shuffleToggle,
 } from './actions';
-import { searchArrItemByID, isDesktop, isNumeric } from '../utils';
+import { isDesktop, isNumeric } from '../utils';
 
 const Wrapper = styled.section`
   position: fixed;
@@ -54,7 +54,7 @@ const Quene = styled(PlayerQueue)`
   }
 `;
 
-const Inner = styled.div`
+const Row = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -125,7 +125,6 @@ const TrackInfoStyled = styled(TrackInfo)`
 const Player = ({
   muted,
   playingNow,
-  playlist,
   repeating,
   shuffledPlaylist,
   track,
@@ -167,60 +166,31 @@ const Player = ({
     setTrackPosition(trackPosition);
 
     playerRAF = raf(() => setSeekPos());
-
-    // if (playingNow) {
-    //   playerRAF = raf(() => setSeekPos());
-    // }
-  };
-
-  const closestTrackIsExist = index => {
-    const currentPlaylist = shuffledPlaylist || playlist;
-
-    const currentTrack = searchArrItemByID(currentPlaylist, track);
-    const currentTrackIndex = currentPlaylist.indexOf(currentTrack);
-
-    return !!currentPlaylist.includes(
-      currentPlaylist[currentTrackIndex + index]
-    );
-  };
-
-  const setCurrentTrackClosest = index => {
-    const currentPlaylist = shuffledPlaylist || playlist;
-
-    const currentTrack = searchArrItemByID(currentPlaylist, track);
-    const currentTrackIndex = currentPlaylist.indexOf(currentTrack);
-
-    const nextTrackIndex = currentTrackIndex + index;
-    if (closestTrackIsExist(index))
-      setCurrentTrack(currentPlaylist[nextTrackIndex].id);
-  };
-
-  const handleOnEnd = () => {
-    if (!repeating) {
-      const nextTrackExist = closestTrackIsExist(1);
-
-      if (!nextTrackExist) {
-        playToggle();
-
-        clearRAF();
-      } else {
-        setCurrentTrackClosest(1);
-      }
-    }
   };
 
   const clearRAF = () => {
     raf.cancel(playerRAF);
   };
 
+  const handleOnEnd = () => {
+    if (!repeating) {
+      const nextTrack = track.nextTrack;
+
+      if (!nextTrack) {
+        playToggle();
+
+        clearRAF();
+      } else {
+        setCurrentTrack(nextTrack.id);
+      }
+    }
+  };
+
   const handleSwipeUp = () => {
     setAdditionalControlsVisibility(true);
   };
 
-  const interfaceDisabled = !playlist;
-
-  const currentPlaylist = shuffledPlaylist || playlist;
-  const currentTrack = playlist ? searchArrItemByID(playlist, track) : null;
+  const interfaceDisabled = !track;
 
   return (
     <OutsideClickHandler
@@ -242,7 +212,7 @@ const Player = ({
           {!interfaceDisabled && (
             <ReactHowler
               ref={playerRef}
-              src={searchArrItemByID(currentPlaylist, track).src}
+              src={track.src}
               playing={playingNow}
               onPlay={setSeekPos}
               onEnd={handleOnEnd}
@@ -253,13 +223,9 @@ const Player = ({
             />
           )}
           <Container>
-            <Inner>
-              <TrackInfoStyled {...currentTrack} />
-              <PlayControlsStyled
-                disabled={interfaceDisabled}
-                closestTrackIsExist={closestTrackIsExist}
-                setCurrentTrackClosest={setCurrentTrackClosest}
-              />
+            <Row>
+              <TrackInfoStyled {...track} />
+              <PlayControlsStyled disabled={interfaceDisabled} />
               <TimelineControlStyled
                 trackPosition={trackPosition}
                 setTrackPosition={setSeek}
@@ -280,7 +246,7 @@ const Player = ({
               </ShuffleButton>
               <VolumeControlStyled disabled={interfaceDisabled} />
               <Quene />
-            </Inner>
+            </Row>
           </Container>
         </Wrapper>
       </Swipe>
@@ -291,20 +257,9 @@ const Player = ({
 Player.propTypes = {
   muted: PropTypes.bool,
   playingNow: PropTypes.bool,
-  playlist: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      artist: PropTypes.string,
-      trackname: PropTypes.string,
-      album: PropTypes.string,
-      src: PropTypes.string,
-      img: PropTypes.string,
-      duration: PropTypes.number,
-    })
-  ),
   repeating: PropTypes.bool,
   shuffledPlaylist: PropTypes.array,
-  track: PropTypes.number,
+  track: PropTypes.object,
   volume: PropTypes.number,
   playToggle: PropTypes.func,
   fetchPlaylist: PropTypes.func,
