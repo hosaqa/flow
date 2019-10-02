@@ -60,22 +60,23 @@ const Artist = styled.div`
 const TrackInfo = ({ className, trackname, artist, img }) => {
   if (!trackname) {
     return (
-      <ContentLoader
-        className={className}
-        height={40}
-        width={130}
-        speed={2}
-        primaryColor="#eee"
-        secondaryColor="#dadada"
-        style={{
-          width: '140px',
-          height: '40px',
-        }}
-      >
-        <rect x="47" y="6" width="68" height="8" />
-        <rect x="47" y="20" width="108" height="9" />
-        <rect x="0" y="0" width="37" height="37" />
-      </ContentLoader>
+      <StyledTrackInfo className={className}>
+        <ContentLoader
+          height={40}
+          width={130}
+          speed={2}
+          primaryColor="#eee"
+          secondaryColor="#dadada"
+          style={{
+            width: '140px',
+            height: '40px',
+          }}
+        >
+          <rect x="47" y="6" width="68" height="8" />
+          <rect x="47" y="20" width="108" height="9" />
+          <rect x="0" y="0" width="37" height="37" />
+        </ContentLoader>
+      </StyledTrackInfo>
     );
   }
 

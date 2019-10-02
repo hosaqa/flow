@@ -8,7 +8,7 @@ import PauseIcon from '@material-ui/icons/Pause';
 import PlayerButton from '../UI/PlayerButton';
 import TrackInfo from '../UI/TrackInfo';
 
-import { formatSecondsToMMSS } from '../../../utils';
+import { humanizeTrackTime } from '../../../utils';
 
 const Wrapper = styled.div`
   display: flex;
@@ -42,12 +42,6 @@ const TimeLabel = styled.div`
   font-size: 14px;
   margin-left: auto;
 `;
-
-const getTrackTime = ({ minutes, seconds }) => {
-  seconds = `${seconds}`.length < 2 ? `0${seconds}` : seconds;
-
-  return `${minutes}:${seconds}`;
-};
 
 const PlaylistItem = ({
   track,
@@ -85,7 +79,7 @@ const PlaylistItem = ({
         </PlayerButton>
       </ButtonWrapper>
       <TrackInfo {...track} withoutImage />
-      <TimeLabel>{formatSecondsToMMSS(track.duration)}</TimeLabel>
+      <TimeLabel>{humanizeTrackTime(track.duration)}</TimeLabel>
     </Wrapper>
   );
 };

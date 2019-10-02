@@ -12,7 +12,7 @@ import ShuffleIcon from '@material-ui/icons/Shuffle';
 import TrackInfo from '../app/common/UI/TrackInfo';
 import PlayerButton from '../app/common/UI/PlayerButton';
 import PlayControls from './PlayControls';
-import TimelineControlv from './TimelineControlv';
+import TimelineControl from './TimelineControl';
 import VolumeControl from './VolumeControl';
 import PlayerQueue from './PlayerQueue';
 import {
@@ -23,7 +23,7 @@ import {
   repeatToggle,
   shuffleToggle,
 } from './actions';
-import { searchArrItemByID, isDesktop } from '../utils';
+import { searchArrItemByID, isDesktop, isNumeric } from '../utils';
 
 const Wrapper = styled.section`
   position: fixed;
@@ -43,9 +43,8 @@ const Wrapper = styled.section`
   );
 
   ${({ theme }) => theme.mediaQueries.up('lg')} {
-    /* height: ${({ theme }) => theme.spacing(9)}; */
     transform: none;
-    padding: ${({ theme }) => theme.spacing(1)} 0};
+    padding: ${({ theme }) => theme.spacing(1)} 0;
   }
 `;
 
@@ -87,7 +86,7 @@ const PlayControlsStyled = styled(PlayControls)`
   }
 `;
 
-const TimelineControlStyled = styled(TimelineControlv)`
+const TimelineControlStyled = styled(TimelineControl)`
   width: 100%;
 
   ${({ theme }) => theme.mediaQueries.up('lg')} {
@@ -138,14 +137,15 @@ const Player = ({
   repeatToggle,
   shuffleToggle,
 }) => {
-  const [trackPosition, setTrackPosition] = useState(null);
+  const [trackPosition, setTrackPosition] = useState(0);
+
   const [
     additionalControlsIsVisibled,
     setAdditionalControlsVisibility,
   ] = useState(false);
 
   const playerRef = useRef(null);
-  let playerRaf = null;
+  let playerRAF = null;
 
   useEffect(() => {
     fetchPlaylist();
@@ -157,12 +157,15 @@ const Player = ({
   };
 
   const setSeekPos = () => {
-    setTrackPosition(playerRef.current.seek());
+    let trackPosition = playerRef.current.seek();
+    trackPosition = isNumeric(trackPosition) ? trackPosition : 0;
 
-    playerRaf = raf(() => setSeekPos());
+    setTrackPosition(trackPosition);
+
+    playerRAF = raf(() => setSeekPos());
 
     // if (playingNow) {
-    //   playerRaf = raf(() => setSeekPos());
+    //   playerRAF = raf(() => setSeekPos());
     // }
   };
 
@@ -203,7 +206,7 @@ const Player = ({
   };
 
   const clearRAF = () => {
-    raf.cancel(playerRaf);
+    raf.cancel(playerRAF);
   };
 
   const handleSwipeUp = () => {

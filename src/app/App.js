@@ -14,7 +14,6 @@ import ContentPlaylist from './common/ContentPlaylist';
 import { lightTheme, gridTheme } from './theme';
 import { globalStyles } from './theme/globalStyles';
 import Drag from './common/UI/Drag';
-import Progress from './common/UI/Progress';
 
 const App = () => {
   //ReactGA.initialize('UA-92698247-2');
@@ -41,14 +40,7 @@ const App = () => {
                     width: '500px',
                     height: '100px',
                   }}
-                >
-                  <Progress
-                    onСhange={v => {
-                      // console.log(v);
-                    }}
-                    direction={'vertical'}
-                  />
-                </div>
+                ></div>
               </div>
 
               {/* <Header />

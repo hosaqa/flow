@@ -1,11 +1,13 @@
 import { useMediaQuery } from 'react-responsive';
 import { gridTheme } from '../app/theme';
 
-const formatSecondsToMMSS = totalSeconds => {
-  if (!totalSeconds) return '0:00';
+const humanizeTrackTime = duration => {
+  if (!isNumeric(duration)) {
+    return '--:--';
+  }
 
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
+  const minutes = Math.floor(duration / 60);
+  const seconds = duration % 60;
 
   return `${minutes}:${Math.floor(seconds)
     .toString()
@@ -31,7 +33,11 @@ const getMousePosition = (ev, ref) => {
   };
 };
 
-const searchArrItemByID = (arr, id) => arr.find(item => item.id === id);
+const searchArrItemByID = (arr, id) => {
+  if (!arr || typeof id === 'undefined') return false;
+
+  return arr.find(item => item.id === id);
+};
 
 const getRandomInt = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min);
@@ -39,7 +45,7 @@ const getRandomInt = (min, max) =>
 const isDesktop = () => useMediaQuery({ minWidth: gridTheme.breakpoints.lg });
 
 export {
-  formatSecondsToMMSS,
+  humanizeTrackTime,
   isNumeric,
   countDigits,
   getMousePosition,
