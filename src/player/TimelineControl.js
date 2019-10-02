@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from '@emotion/styled';
@@ -41,6 +41,8 @@ const TimelineControl = ({
   track,
   setTrackPosition,
 }) => {
+  const [fakeTrackPosition, setFakeTrackPosition] = useState(null);
+
   const getTrackDuration = () => {
     const currentTrack = searchArrItemByID(playlist, track);
 
@@ -51,8 +53,17 @@ const TimelineControl = ({
     ((trackPosition / getTrackDuration()) * 100).toFixed(1)
   );
 
-  const handleChange = val => {
-    setTrackPosition((getTrackDuration() / 100) * val);
+  const _setTrackPosition = nextPosition => {
+    setTrackPosition((getTrackDuration() / 100) * nextPosition);
+  };
+
+  const handleSwipeMove = nextPosition => {
+    setFakeTrackPosition((getTrackDuration() / 100) * nextPosition);
+  };
+
+  const handleSwipeEnd = nextPosition => {
+    setFakeTrackPosition(null);
+    _setTrackPosition(nextPosition);
   };
 
   const disabled = !playlist;
@@ -60,7 +71,9 @@ const TimelineControl = ({
   return (
     <Wrapper className={className}>
       <TimerDisplay disabled={disabled}>
-        {humanizeTrackTime(trackPosition)}
+        {fakeTrackPosition
+          ? humanizeTrackTime(fakeTrackPosition)
+          : humanizeTrackTime(trackPosition)}
       </TimerDisplay>
       <ProgressBarStyled
         loading={trackIsLoading}
@@ -70,8 +83,9 @@ const TimelineControl = ({
         thumbRadius={6}
         axis="horizontal"
         progress={progress}
-        onSwipeEnd={handleChange}
-        onClick={handleChange}
+        onSwipeMove={handleSwipeMove}
+        onSwipeEnd={handleSwipeEnd}
+        onClick={_setTrackPosition}
       />
       <TimerDisplay disabled={disabled}>
         {humanizeTrackTime(getTrackDuration())}

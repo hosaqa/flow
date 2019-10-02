@@ -139,6 +139,10 @@ const Player = ({
 }) => {
   const [trackPosition, setTrackPosition] = useState(0);
 
+  useEffect(() => {
+    setTrackPosition(0);
+  }, [track]);
+
   const [
     additionalControlsIsVisibled,
     setAdditionalControlsVisibility,
