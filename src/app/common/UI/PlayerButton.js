@@ -10,19 +10,23 @@ const PlayerButton = styled.button`
   border: 0;
   outline: 0;
   background-color: transparent;
-  color: ${({ active, disabled, theme }) =>
+  color: ${({ activated, disabled, theme }) =>
     disabled
       ? theme.colors.buttonDisabled
-      : active
-      ? theme.colors.theme
+      : activated
+      ? theme.colors.primary
       : theme.colors.button};
   transition: color 0.25s, transform 0.15s;
   pointer-events: ${({ disabled }) => (disabled ? 'none' : 'auto')};
 
-  &:hover,
-  &:focus {
+  &:hover {
     color: ${({ theme }) => theme.colors.primary};
   }
+
+  
+  /* &:focus {
+    color: ${({ theme }) => theme.colors.primary};
+  } */
 
   &:after {
     content: '';

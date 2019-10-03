@@ -29,6 +29,23 @@ const initialState = {
   shuffledPlaylist: null,
 };
 
+const getClosestTracks = (currentTrackID, playlist) => {
+  const currentTrack = searchArrItemByID(playlist, currentTrackID);
+  const currentTrackIndex = playlist.indexOf(currentTrack);
+
+  let prevTrack = playlist[currentTrackIndex - 1];
+  prevTrack = prevTrack ? prevTrack : null;
+
+  let nextTrack = playlist[currentTrackIndex + 1];
+  nextTrack = nextTrack ? nextTrack : null;
+
+  return {
+    currentTrack,
+    prevTrack,
+    nextTrack,
+  };
+};
+
 export function playerReducer(state = initialState, action) {
   switch (action.type) {
     case REPEAT_TOGGLE:
@@ -38,21 +55,20 @@ export function playerReducer(state = initialState, action) {
       return { ...state, playingNow: !state.playingNow };
 
     case SET_CURRENT_TRACK: {
-      const { playlist } = state;
+      const { playlist, shuffledPlaylist } = state;
       const { id, playingNow } = action.payload;
 
-      const currentTrack = searchArrItemByID(playlist, id);
-      const currentTrackIndex = playlist.indexOf(currentTrack);
+      const currentPlaylist = shuffledPlaylist || playlist;
 
-      let prevTrack = playlist[currentTrackIndex - 1];
-      prevTrack = prevTrack ? prevTrack : null;
-
-      let nextTrack = playlist[currentTrackIndex + 1];
-      nextTrack = nextTrack ? nextTrack : null;
+      const closestTracks = getClosestTracks(id, currentPlaylist);
 
       return {
         ...state,
-        track: { ...currentTrack, prevTrack: prevTrack, nextTrack: nextTrack },
+        track: {
+          ...closestTracks.currentTrack,
+          prevTrack: closestTracks.prevTrack,
+          nextTrack: closestTracks.nextTrack,
+        },
         playingNow: playingNow || state.playingNow, ///что это за ????
         trackIsLoading: true,
         fetchTrackError: null,
@@ -66,23 +82,46 @@ export function playerReducer(state = initialState, action) {
       return { ...state, muted: !state.muted };
 
     case SHUFFLE_PLAYLIST_TOGGLE: {
-      if (state.shuffledPlaylist) {
-        return { ...state, shuffledPlaylist: null };
+      const { shuffledPlaylist, playlist, track } = state;
+
+      if (shuffledPlaylist) {
+        const closestTracks = getClosestTracks(track.id, playlist);
+
+        return {
+          ...state,
+          shuffledPlaylist: null,
+          track: {
+            ...track,
+            prevTrack: closestTracks.prevTrack,
+            nextTrack: closestTracks.nextTrack,
+          },
+        };
       }
 
-      const oldPlaylist = state.playlist;
-      const playlistLength = oldPlaylist.length;
+      const currentPlaylist = playlist;
+      const playlistLength = currentPlaylist.length;
 
       const prevIndexesSequence = [...Array(playlistLength).keys()];
-      const shuffledPlaylist = [];
+      const nextPlaylist = [];
 
       while (prevIndexesSequence.length > 0) {
         const getRandomIndex = getRandomInt(1, prevIndexesSequence.length) - 1;
 
-        shuffledPlaylist.push(oldPlaylist[prevIndexesSequence[getRandomIndex]]);
+        nextPlaylist.push(currentPlaylist[prevIndexesSequence[getRandomIndex]]);
         prevIndexesSequence.splice(getRandomIndex, 1);
       }
-      return { ...state, shuffledPlaylist };
+
+      const closestTracks = getClosestTracks(track.id, nextPlaylist);
+
+      return {
+        ...state,
+        shuffledPlaylist: nextPlaylist,
+        track: {
+          ...track,
+          prevTrack: closestTracks.prevTrack,
+          nextTrack: closestTracks.nextTrack,
+        },
+      };
     }
 
     case FETCH_TRACK_EXECUTED:

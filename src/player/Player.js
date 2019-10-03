@@ -232,14 +232,14 @@ const Player = ({
               />
               <RepeatButton
                 onClick={repeatToggle}
-                active={repeating}
+                activated={repeating}
                 disabled={interfaceDisabled}
               >
                 <RepeatIcon />
               </RepeatButton>
               <ShuffleButton
                 onClick={shuffleToggle}
-                active={!!shuffledPlaylist}
+                activated={!!shuffledPlaylist}
                 disabled={interfaceDisabled}
               >
                 <ShuffleIcon />
