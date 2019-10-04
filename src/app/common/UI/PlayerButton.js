@@ -1,14 +1,17 @@
+import React, { useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 
-const PlayerButton = styled.button`
+const Button = styled.button`
   -webkit-user-select: none;
   -webkit-appearance: none;
   cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
   position: relative;
-  padding-left: ${({ theme }) => theme.spacing(0.5)};
-  padding-right: ${({ theme }) => theme.spacing(0.5)};
+  padding: 0;
+  margin-left: ${({ theme }) => theme.spacing(0.5)};
+  margin-right: ${({ theme }) => theme.spacing(0.5)};
   border: 0;
-  outline: 0;
+  outline: none;
   background-color: transparent;
   color: ${({ activated, disabled, theme }) =>
     disabled
@@ -23,24 +26,9 @@ const PlayerButton = styled.button`
     color: ${({ theme }) => theme.colors.primary};
   }
 
-  
-  /* &:focus {
-    color: ${({ theme }) => theme.colors.primary};
-  } */
-
-  &:after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    pointer-events: none;
-    -webkit-box-shadow: 0 0 0 20px transparent, inset 0 0 0 1px transparent;
-    box-shadow: 0 0 0 20px transparent, inset 0 0 0 1px transparent;
-    -webkit-transition: none;
-    transition: none;
-    border-radius: 500px;
+  &:focus {
+    outline: rgba(131, 192, 253, 0.5) solid 3px;
+    outline-offset: 1px;
   }
 
   & > svg {
@@ -50,5 +38,42 @@ const PlayerButton = styled.button`
       iconSize ? `${iconSize}px` : theme.spacing(3)};
   }
 `;
+
+const PlayerButton = props => {
+  const [focused, setFocused] = useState(false);
+  const buttonRef = useRef(null);
+
+  const handleClick = e => {
+    buttonRef.current.blur();
+
+    if (props.onClick) props.onClick(e);
+  };
+
+  const handleMouseDown = e => {
+    e.preventDefault();
+    buttonRef.current.blur();
+    buttonRef.current.focusf();
+
+    if (props.onMouseDown) props.onMouseDown(e);
+  };
+
+  return (
+    <Button
+      ref={buttonRef}
+      {...props}
+      focused={focused}
+      onClick={handleClick}
+      onMouseDown={handleMouseDown}
+    >
+      {props.children}
+    </Button>
+  );
+};
+
+PlayerButton.propTypes = {
+  onClick: PropTypes.func,
+  onMouseDown: PropTypes.func,
+  children: PropTypes.node,
+};
 
 export default PlayerButton;
