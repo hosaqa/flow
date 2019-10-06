@@ -1,8 +1,6 @@
-import React, { useRef, useState } from 'react';
-import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 
-const Button = styled.button`
+const PlayerButton = styled.button`
   -webkit-user-select: none;
   -webkit-appearance: none;
   cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
@@ -26,7 +24,7 @@ const Button = styled.button`
     color: ${({ theme }) => theme.colors.primary};
   }
 
-  &:focus {
+  &[data-focus-visible-added]:focus {
     outline: rgba(131, 192, 253, 0.5) solid 3px;
     outline-offset: 1px;
   }
@@ -38,42 +36,5 @@ const Button = styled.button`
       iconSize ? `${iconSize}px` : theme.spacing(3)};
   }
 `;
-
-const PlayerButton = props => {
-  const [focused, setFocused] = useState(false);
-  const buttonRef = useRef(null);
-
-  const handleClick = e => {
-    buttonRef.current.blur();
-
-    if (props.onClick) props.onClick(e);
-  };
-
-  const handleMouseDown = e => {
-    e.preventDefault();
-    buttonRef.current.blur();
-    buttonRef.current.focusf();
-
-    if (props.onMouseDown) props.onMouseDown(e);
-  };
-
-  return (
-    <Button
-      ref={buttonRef}
-      {...props}
-      focused={focused}
-      onClick={handleClick}
-      onMouseDown={handleMouseDown}
-    >
-      {props.children}
-    </Button>
-  );
-};
-
-PlayerButton.propTypes = {
-  onClick: PropTypes.func,
-  onMouseDown: PropTypes.func,
-  children: PropTypes.node,
-};
 
 export default PlayerButton;

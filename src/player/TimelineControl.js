@@ -40,7 +40,7 @@ const TimelineControl = ({
   track,
   setTrackPosition,
 }) => {
-  const [fakeTrackPosition, setFakeTrackPosition] = useState(null);
+  const [nextTrackPosition, setNextTrackPosition] = useState(null);
 
   const trackDuration = track ? track.duration : null;
 
@@ -53,11 +53,11 @@ const TimelineControl = ({
   };
 
   const handleSwipeMove = nextPosition => {
-    setFakeTrackPosition((trackDuration / 100) * nextPosition);
+    setNextTrackPosition((trackDuration / 100) * nextPosition);
   };
 
   const handleSwipeEnd = nextPosition => {
-    setFakeTrackPosition(null);
+    setNextTrackPosition(null);
     _setTrackPosition(nextPosition);
   };
 
@@ -66,8 +66,8 @@ const TimelineControl = ({
   return (
     <Wrapper className={className}>
       <TimerDisplay disabled={disabled}>
-        {fakeTrackPosition !== null
-          ? humanizeTrackTime(fakeTrackPosition)
+        {nextTrackPosition !== null
+          ? humanizeTrackTime(nextTrackPosition)
           : humanizeTrackTime(trackPosition)}
       </TimerDisplay>
       <ProgressBarStyled
