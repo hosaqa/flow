@@ -13,10 +13,10 @@ const PlayerButton = styled.button`
   background-color: transparent;
   color: ${({ activated, disabled, theme }) =>
     disabled
-      ? theme.colors.buttonDisabled
+      ? theme.palette.action.disabled
       : activated
       ? theme.colors.primary
-      : theme.colors.button};
+      : theme.palette.text.primary};
   transition: color 0.25s, transform 0.15s;
   pointer-events: ${({ disabled }) => (disabled ? 'none' : 'auto')};
 
@@ -25,7 +25,7 @@ const PlayerButton = styled.button`
   }
 
   &[data-focus-visible-added]:focus {
-    outline: rgba(131, 192, 253, 0.5) solid 3px;
+    outline: ${({ theme }) => `${theme.palette.action.focus} solid 3px`};
     outline-offset: 1px;
   }
 

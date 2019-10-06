@@ -1,3 +1,6 @@
+import Color from 'color';
+import tinycolor from 'tinycolor2';
+
 const GRID_UNIT = 8;
 const BORDER_RADIUS_COEFFICIENT = 3;
 
@@ -21,7 +24,21 @@ export const gridTheme = {
   },
 };
 
+const common = {
+  dark: tinycolor('#000'),
+  main: tinycolor('#ff6b6b'),
+};
+console.log(common.main.getAlpha(50));
 export const lightTheme = {
+  palette: {
+    text: {
+      primary: common.dark.toString(),
+    },
+    action: {
+      disabled: common.dark.lighten(80).toString(),
+      focus: common.main.setAlpha(0.35).toString(),
+    },
+  },
   spacing: value => {
     return `${GRID_UNIT * value}px`;
   },
