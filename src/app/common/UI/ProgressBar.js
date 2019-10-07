@@ -28,8 +28,10 @@ const loadingAnimation = (firstColor, secondColor) => {
 };
 
 const Track = styled.div`
-  height: ${({ axis }) => (axis === 'horizontal' ? '4px' : '100%')};
-  width: ${({ axis }) => (axis === 'vertical' ? '4px' : '100%')};
+  height: ${({ axis, theme }) =>
+    axis === 'horizontal' ? theme.spacing(0.5) : '100%'};
+  width: ${({ axis, theme }) =>
+    axis === 'vertical' ? theme.spacing(0.5) : '100%'};
   position: absolute;
   left: 0;
   right: 0;
@@ -67,12 +69,11 @@ const FilledSpace = styled.div`
   position: absolute;
   bottom: 0;
   left: 0;
-  height: ${({ axis, progress }) => (axis === 'horizontal' ? '4px' : progress)};
-  width: ${({ axis, progress }) => (axis === 'vertical' ? '4px' : progress)};
-  background-color: ${({ theme }) => {
-    console.log('cyka', theme.palette.primary.normal);
-    return theme.palette.primary.normal;
-  }};
+  height: ${({ axis, progress, theme }) =>
+    axis === 'horizontal' ? theme.spacing(0.5) : progress};
+  width: ${({ axis, progress, theme }) =>
+    axis === 'vertical' ? theme.spacing(0.5) : progress};
+  background-color: ${({ theme }) => theme.palette.primary.normal};
   border-radius: ${({ theme }) => theme.borderRadius(1)};
 `;
 

@@ -25,26 +25,41 @@ export const gridTheme = {
 };
 
 const common = {
-  dark: tinycolor('#000'),
-  main: tinycolor('#ff6b6b'),
+  dark: '#000',
+  light: '#fff',
+  main: '#ff6b6b',
 };
 
 export const lightTheme = {
   palette: {
     text: {
-      primary: common.dark.toString(),
+      primary: tinycolor(common.dark).toString(),
     },
     primary: {
-      // translucent: common.main.setAlpha(0.3).toString(),
-      translucent: common.main.lighten(50).toString(),
-      normal: common.main.toString(),
-      light: common.main.lighten(20).toString(),
-      dark: common.main.darken(20).toHexString(),
+      translucent: tinycolor(common.main)
+        .setAlpha(0.5)
+        .toString(),
+      normal: tinycolor(common.main).toString(),
+      light: tinycolor(common.main)
+        .lighten(20)
+        .toString(),
+      dark: tinycolor(common.main)
+        .darken(20)
+        .toHexString(),
     },
-    background: {},
+    border: {
+      primary: tinycolor(common.light).darken(12),
+    },
+    background: {
+      primary: tinycolor(common.light).darken(2.5),
+    },
     action: {
-      disabled: common.dark.lighten(80).toString(),
-      focus: common.main.setAlpha(0.35).toString(),
+      disabled: tinycolor(common.dark)
+        .lighten(80)
+        .toString(),
+      focus: tinycolor(common.main)
+        .setAlpha(0.35)
+        .toString(),
     },
   },
   transition: {
