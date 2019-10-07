@@ -4,17 +4,14 @@ import styled from '@emotion/styled';
 import { TransitionGroup } from 'react-transition-group';
 import transition from 'styled-transition-group';
 
-const DropdownWrapper = styled.div`
-  position: relative;
-`;
-const DropdownSelector = styled.div`
+const Wrapper = styled.div`
   position: relative;
 `;
 
-const DropdownContent = styled.div`
+const Content = styled.div`
   display: block;
 `;
-const DropdownContentAnimated = transition(DropdownContent).attrs({
+const ContentAnimated = transition(Content).attrs({
   timeout: 200,
 })`
   transform-origin: right bottom;
@@ -42,56 +39,19 @@ const DropdownContentAnimated = transition(DropdownContent).attrs({
   }
 `;
 
-export default class Dropdown extends Component {
-  state = {
-    isOpen: false,
-  };
-
-  getDropdownRef = node => {
-    this.dropdown = node;
-  };
-
-  handleClickOutside = ev =>
-    !this.dropdown.contains(ev.target) && this.setState({ isOpen: false });
-
-  handleSelectorClick = () => {
-    this.setState(
-      prevState => ({
-        isOpen: !prevState.isOpen,
-      }),
-      () => {
-        const { isOpen } = this.state;
-        if (isOpen) {
-          document.addEventListener('click', this.handleClickOutside);
-        } else {
-          document.removeEventListener('click', this.handleClickOutside);
-        }
-      }
-    );
-  };
-
-  render() {
-    const { selector, children } = this.props;
-    const { isOpen } = this.state;
-
-    return (
-      <DropdownWrapper ref={this.getDropdownRef}>
-        <DropdownSelector onClick={this.handleSelectorClick}>
-          {selector}
-        </DropdownSelector>
-        <TransitionGroup timeout={200}>
-          {isOpen && (
-            <DropdownContentAnimated timeout={200}>
-              {children}
-            </DropdownContentAnimated>
-          )}
-        </TransitionGroup>
-      </DropdownWrapper>
-    );
-  }
-}
+const Dropdown = ({ isOpen, children }) => {
+  return (
+    <Wrapper>
+      <TransitionGroup timeout={200}>
+        {isOpen && <ContentAnimated timeout={200}>{children}</ContentAnimated>}
+      </TransitionGroup>
+    </Wrapper>
+  );
+};
 
 Dropdown.propTypes = {
-  selector: PropTypes.node.isRequired,
-  children: PropTypes.node.isRequired,
+  isOpen: PropTypes.bool,
+  children: PropTypes.node,
 };
+
+export default Dropdown;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from '@emotion/styled';
@@ -28,44 +28,51 @@ const QueueBody = styled.div`
   box-shadow: ${({ theme }) => theme.shadows.primary};
 `;
 
-const playQueueButton = playlist => (
-  <PlayerButton disabled={!playlist}>
-    <PlaylistPlayIcon />
-  </PlayerButton>
-);
+const PlayerQueue = ({ playlist, className }) => {
+  const [isOpen, setVisibility] = useState(false);
 
-const PlayerQueue = ({ playlist, className }) => (
-  <Wrapper className={className}>
-    <Dropdown selector={playQueueButton(playlist)}>
-      <QueueBody>
-        <ScrollArea
-          speed={0.8}
-          smoothScrolling
-          className="area"
-          contentClassName="content"
-          horizontal={false}
-          style={{
-            padding: '0 10px 0 0',
-            height: '190px',
-          }}
-          verticalContainerStyle={{
-            opacity: '1',
-            backgroundColor: '#ededed',
-            width: '8px',
-            borderRadius: '0 3px 3px 0',
-          }}
-          verticalScrollbarStyle={{
-            borderRadius: '4px',
-            backgroundColor: '#ff6b6b',
-            marginLeft: '0',
-          }}
-        >
-          <Playlist />
-        </ScrollArea>
-      </QueueBody>
-    </Dropdown>
-  </Wrapper>
-);
+  const visibilityToggle = () => setVisibility(!isOpen);
+
+  const handleClick = () => {
+    visibilityToggle();
+  };
+
+  return (
+    <Wrapper className={className}>
+      <PlayerButton onClick={handleClick} disabled={!playlist}>
+        <PlaylistPlayIcon />
+      </PlayerButton>
+      <Dropdown isOpen={isOpen}>
+        <QueueBody>
+          <ScrollArea
+            speed={0.8}
+            smoothScrolling
+            className="area"
+            contentClassName="content"
+            horizontal={false}
+            style={{
+              padding: '0 10px 0 0',
+              height: '190px',
+            }}
+            verticalContainerStyle={{
+              opacity: '1',
+              backgroundColor: '#ededed',
+              width: '8px',
+              borderRadius: '0 3px 3px 0',
+            }}
+            verticalScrollbarStyle={{
+              borderRadius: '4px',
+              backgroundColor: '#ff6b6b',
+              marginLeft: '0',
+            }}
+          >
+            <Playlist />
+          </ScrollArea>
+        </QueueBody>
+      </Dropdown>
+    </Wrapper>
+  );
+};
 
 PlayerQueue.propTypes = {
   className: PropTypes.string,

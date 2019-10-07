@@ -33,13 +33,13 @@ const common = {
 export const lightTheme = {
   palette: {
     text: {
-      primary: tinycolor(common.dark).toString(),
+      primary: common.dark,
     },
     primary: {
       translucent: tinycolor(common.main)
         .setAlpha(0.5)
         .toString(),
-      normal: tinycolor(common.main).toString(),
+      normal: common.main,
       light: tinycolor(common.main)
         .lighten(20)
         .toString(),
@@ -48,15 +48,13 @@ export const lightTheme = {
         .toHexString(),
     },
     border: {
-      primary: tinycolor(common.light).darken(12),
+      primary: '#dcdcdc',
     },
     background: {
-      primary: tinycolor(common.light).darken(2.5),
+      primary: '#f8f8f8',
     },
     action: {
-      disabled: tinycolor(common.dark)
-        .lighten(80)
-        .toString(),
+      disabled: '#dedede',
       focus: tinycolor(common.main)
         .setAlpha(0.35)
         .toString(),

@@ -32,11 +32,10 @@ const Wrapper = styled.section`
   width: 100%;
   padding: ${({ theme }) => theme.spacing(1)} 0
     ${({ theme }) => theme.spacing(2)};
-  background-color: ${({ inactive, theme }) =>
-    inactive ? theme.colors.contentPreload : theme.colors.content};
-  border-top: 1px solid ${({ theme }) => theme.colors.border};
-  transition: background-color ${({ theme }) => theme.transition},
-    transform ${({ theme }) => theme.transition};
+  background-color: ${({ theme }) => theme.palette.background.primary};
+  border-top: 1px solid ${({ theme }) => theme.palette.border.primary};
+  transition: background-color ${({ theme }) => theme.transition.default}ms,
+    transform ${({ theme }) => theme.transition.default}ms;
   transform: translateY(
     ${({ theme, additionalControlsIsVisibled }) =>
       additionalControlsIsVisibled ? 0 : theme.spacing(9)}
