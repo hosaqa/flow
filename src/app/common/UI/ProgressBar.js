@@ -36,24 +36,24 @@ const Track = styled.div`
   top: 0;
   bottom: 0;
   margin: auto;
-  border-radius: 2px;
+  border-radius: ${({ theme }) => theme.borderRadius(1)};
   background-color: ${({ isDisabled, theme }) =>
-    isDisabled ? theme.colors.buttonDisabled : theme.colors.colorDraggableBg};
-  box-shadow: ${({ active }) =>
-    active ? '2px 2px 2px rgba(0, 0, 0, .1)' : 'none'};
-  transition: box-shadow 0.35s, background-color 0.25s;
+    isDisabled
+      ? theme.palette.action.disabled
+      : theme.palette.primary.translucent};
+  transition: background-color ${({ theme }) => theme.transition.default}ms;
 
   &:before {
     content: '';
-    display: ${({ isLoading }) => (isLoading ? 'block' : 'none')};
+    display: ${({ isLoading }) => (isLoading ? '' : 'none')};
     position: absolute;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    border-radius: 2px;
+    border-radius: ${({ theme }) => theme.borderRadius(1)};
     background-color: transparent;
-    transition: background-color 0.25s;
+    transition: background-color ${({ theme }) => theme.transition.default}ms;
     animation: ${({ theme }) =>
         loadingAnimation(
           theme.colors.colorDraggableBg,
@@ -69,12 +69,11 @@ const FilledSpace = styled.div`
   left: 0;
   height: ${({ axis, progress }) => (axis === 'horizontal' ? '4px' : progress)};
   width: ${({ axis, progress }) => (axis === 'vertical' ? '4px' : progress)};
-  background-image: linear-gradient(
-    154deg,
-    ${({ theme }) => theme.colors.accentPrimary},
-    ${({ theme }) => theme.colors.accentSecondary}
-  );
-  border-radius: 2px;
+  background-color: ${({ theme }) => {
+    console.log('cyka', theme.palette.primary.normal);
+    return theme.palette.primary.normal;
+  }};
+  border-radius: ${({ theme }) => theme.borderRadius(1)};
 `;
 
 const Thumb = styled.div`

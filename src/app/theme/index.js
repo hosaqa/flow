@@ -2,7 +2,7 @@ import Color from 'color';
 import tinycolor from 'tinycolor2';
 
 const GRID_UNIT = 8;
-const BORDER_RADIUS_COEFFICIENT = 3;
+const BORDER_RADIUS_COEFFICIENT = 2;
 
 export const gridTheme = {
   breakpoints: {
@@ -28,16 +28,28 @@ const common = {
   dark: tinycolor('#000'),
   main: tinycolor('#ff6b6b'),
 };
-console.log(common.main.getAlpha(50));
+
 export const lightTheme = {
   palette: {
     text: {
       primary: common.dark.toString(),
     },
+    primary: {
+      // translucent: common.main.setAlpha(0.3).toString(),
+      translucent: common.main.lighten(50).toString(),
+      normal: common.main.toString(),
+      light: common.main.lighten(20).toString(),
+      dark: common.main.darken(20).toHexString(),
+    },
+    background: {},
     action: {
       disabled: common.dark.lighten(80).toString(),
       focus: common.main.setAlpha(0.35).toString(),
     },
+  },
+  transition: {
+    short: 150,
+    default: 250,
   },
   spacing: value => {
     return `${GRID_UNIT * value}px`;
@@ -72,7 +84,6 @@ export const lightTheme = {
     headerGradientSecond: '#ff486c',
     headerGradientThird: '#ff1d6e',
   },
-  transition: '.25s',
   shadows: {
     primary:
       '1px 3px 4px rgba(0, 0, 0, 0.12), -1px -1px 2px rgba(0, 0, 0, 0.05)',
