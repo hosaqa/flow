@@ -1,4 +1,3 @@
-import Color from 'color';
 import tinycolor from 'tinycolor2';
 
 const GRID_UNIT = 8;
@@ -64,8 +63,8 @@ export const lightTheme = {
     short: 150,
     default: 250,
   },
-  spacing: value => {
-    return `${GRID_UNIT * value}px`;
+  spacing: increment => {
+    return `${GRID_UNIT * increment}px`;
   },
   borderRadius: increment => `${BORDER_RADIUS_COEFFICIENT * increment}px`,
   breakpoints: gridTheme.breakpoints,

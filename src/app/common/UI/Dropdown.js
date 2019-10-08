@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import OutsideClickHandler from 'react-outside-click-handler';
 import styled from '@emotion/styled';
 import { TransitionGroup } from 'react-transition-group';
 import transition from 'styled-transition-group';
@@ -39,19 +40,31 @@ const ContentAnimated = transition(Content).attrs({
   }
 `;
 
-const Dropdown = ({ isOpen, children }) => {
+const Dropdown = ({ children, isOpen, onClickOutside }) => {
   return (
-    <Wrapper>
-      <TransitionGroup timeout={200}>
-        {isOpen && <ContentAnimated timeout={200}>{children}</ContentAnimated>}
-      </TransitionGroup>
-    </Wrapper>
+    <OutsideClickHandler
+      onOutsideClick={e => {
+        console.log(e);
+        onClickOutside();
+      }}
+      disabled={!isOpen}
+      useCapture={true}
+    >
+      <Wrapper>
+        <TransitionGroup timeout={200}>
+          {isOpen && (
+            <ContentAnimated timeout={200}>{children}</ContentAnimated>
+          )}
+        </TransitionGroup>
+      </Wrapper>
+    </OutsideClickHandler>
   );
 };
 
 Dropdown.propTypes = {
-  isOpen: PropTypes.bool,
   children: PropTypes.node,
+  isOpen: PropTypes.bool,
+  onClickOutside: PropTypes.func,
 };
 
 export default Dropdown;

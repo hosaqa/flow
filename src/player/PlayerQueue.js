@@ -33,7 +33,8 @@ const PlayerQueue = ({ playlist, className }) => {
 
   const visibilityToggle = () => setVisibility(!isOpen);
 
-  const handleClick = () => {
+  const handleClick = e => {
+    console.log('button');
     visibilityToggle();
   };
 
@@ -42,7 +43,7 @@ const PlayerQueue = ({ playlist, className }) => {
       <PlayerButton onClick={handleClick} disabled={!playlist}>
         <PlaylistPlayIcon />
       </PlayerButton>
-      <Dropdown isOpen={isOpen}>
+      <Dropdown isOpen={isOpen} onClickOutside={handleClick}>
         <QueueBody>
           <ScrollArea
             speed={0.8}
