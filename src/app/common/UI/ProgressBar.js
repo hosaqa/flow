@@ -120,7 +120,7 @@ const ProgressBar = ({
   const trackRef = useRef(null);
   const [progressWhenSwipe, setProgressWhenSwipe] = useState(null);
 
-  const setPosition = (e, isSwiping, callback) => {
+  const setPosition = (e, isSwiping, callback, ___name) => {
     const {
       top,
       left,
@@ -129,8 +129,14 @@ const ProgressBar = ({
     } = trackRef.current.getBoundingClientRect();
 
     const size = axis === 'horizontal' ? width : height;
+
+    console.log(e, ___name, e.targetTouch);
+
+    const clientX = e.clientX ? e.clientX : e.changedTouches[0].clientX;
+    const clientY = e.clientY ? e.clientY : e.changedTouches[0].clientY;
+
     const mousePosition =
-      axis === 'horizontal' ? e.clientX - left : height - (e.clientY - top);
+      axis === 'horizontal' ? clientX - left : height - (clientY - top);
 
     const nextPosition = size / mousePosition;
 
@@ -144,29 +150,29 @@ const ProgressBar = ({
   };
 
   const handleClick = e => {
-    if (loading || disabled) return false;
-
-    setPosition(e, false, onClick);
+    // if (loading || disabled) return false;
+    // console.log('click');
+    // setPosition(e, false, onClick);
   };
 
   const handleSwipeStart = e => {
     if (loading || disabled) return false;
-
+    //console.log('start');
     document.body.style.userSelect = 'none';
-    setPosition(e, true, onSwipeStart);
+    setPosition(e, true, onSwipeStart, 'start');
   };
 
   const handleSwipeMove = (position, e) => {
     if (loading || disabled) return false;
-
-    setPosition(e, true, onSwipeMove);
+    //console.log('move');
+    setPosition(e, true, onSwipeMove, 'move');
   };
 
   const handleSwipeEnd = e => {
     if (loading || disabled) return false;
-
+    //console.log('end');
     document.body.style.userSelect = '';
-    setPosition(e, false, onSwipeEnd);
+    setPosition(e, false, onSwipeEnd, 'end');
     setProgressWhenSwipe(null);
   };
 

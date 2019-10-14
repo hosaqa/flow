@@ -34,7 +34,6 @@ const PlayerQueue = ({ playlist, className }) => {
   const visibilityToggle = () => setVisibility(!isOpen);
 
   const handleClick = e => {
-    console.log('button');
     visibilityToggle();
   };
 

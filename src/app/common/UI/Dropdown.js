@@ -44,7 +44,6 @@ const Dropdown = ({ children, isOpen, onClickOutside }) => {
   return (
     <OutsideClickHandler
       onOutsideClick={e => {
-        console.log(e);
         onClickOutside();
       }}
       disabled={!isOpen}
