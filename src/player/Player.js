@@ -246,7 +246,8 @@ const Player = ({
                 <ShuffleIcon />
               </ShuffleButton>
               {/* <VolumeControlStyled disabled={interfaceDisabled} />
-              <Quene /> */}
+               */}
+              <Quene />
             </Row>
           </Container>
         </Wrapper>

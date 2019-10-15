@@ -28,8 +28,8 @@ const ImgDefault = styled.div`
   text-align: center;
   font-size: ${({ theme }) => theme.spacing(4)};
   font-weight: 700;
-  background-color: ${({ theme }) => theme.colors.primary};
-  color: ${({ theme }) => theme.colors.light};
+  background-color: ${({ theme }) => theme.palette.primary.normal};
+  color: ${({ theme }) => theme.palette.white};
 `;
 
 const Text = styled.div`
@@ -37,7 +37,7 @@ const Text = styled.div`
 `;
 
 const Track = styled.div`
-  color: ${({ theme }) => theme.colors.fontPrimary};
+  color: ${({ theme }) => theme.palette.text.primary};
   font-size: 14px;
   line-height: 20px;
   font-weight: 700;
@@ -50,7 +50,7 @@ const Track = styled.div`
 const Artist = styled.div`
   font-size: 12px;
   line-height: 17px;
-  color: ${({ theme }) => theme.colors.fontSecondary};
+  color: ${({ theme }) => theme.palette.text.secondary};
   max-width: 130px;
   white-space: nowrap;
   text-overflow: ellipsis;

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import styled from '@emotion/styled';
 
 import ProgressBar from '../app/common/UI/ProgressBar';
+import Loader from '../app/common/UI/Loader';
 import { humanizeTrackTime } from '../utils';
 
 const Wrapper = styled.div`
@@ -12,7 +13,7 @@ const Wrapper = styled.div`
   position: relative;
 `;
 
-const TimerDisplay = styled.div`
+const TimeDisplay = styled.div`
   text-align: center;
   display: inline-block;
   vertical-align: middle;
@@ -32,6 +33,13 @@ const ProgressBarStyled = styled(ProgressBar)`
 
   ${({ theme }) => theme.mediaQueries.up('lg')} {
   }
+`;
+
+const LoaderStyled = styled(Loader)`
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 100%;
 `;
 
 const TimelineControl = ({
@@ -67,11 +75,11 @@ const TimelineControl = ({
 
   return (
     <Wrapper className={className}>
-      <TimerDisplay disabled={disabled}>
+      <TimeDisplay disabled={disabled}>
         {nextTrackPosition !== null
           ? humanizeTrackTime(nextTrackPosition)
           : humanizeTrackTime(trackPosition)}
-      </TimerDisplay>
+      </TimeDisplay>
       <ProgressBarStyled
         loading={trackIsLoading}
         disabled={disabled}
@@ -83,9 +91,10 @@ const TimelineControl = ({
         onSwipeMove={handleSwipeMove}
         onSwipeEnd={handleSwipeEnd}
       />
-      <TimerDisplay disabled={disabled}>
+      {trackIsLoading && <LoaderStyled size={0.5} />}
+      <TimeDisplay disabled={disabled}>
         {humanizeTrackTime(trackDuration)}
-      </TimerDisplay>
+      </TimeDisplay>
     </Wrapper>
   );
 };

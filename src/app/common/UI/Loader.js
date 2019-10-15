@@ -7,14 +7,17 @@ const animation = (initialColor, endingColor) => {
   return keyframes`
   0% {
     background-color: ${initialColor};
+    transform: scale(1);
   }
 
   50% {
     background-color: ${endingColor};
+    transform: scale(1.1);
   }
 
   100% {
     background-color: ${initialColor};
+    transform: scale(1);
   }
 `;
 };
@@ -23,6 +26,7 @@ const Wrapper = styled.div`
   position: relative;
   display: inline-flex;
   align-items: center;
+  pointer-events: none;
 `;
 
 const Circle = styled.span`
@@ -31,11 +35,10 @@ const Circle = styled.span`
   width: ${({ theme, size }) => theme.spacing(size)};
   margin: 0 ${({ theme, size }) => theme.spacing(size / 2)};
   border-radius: 50%;
-  background-color: ${({ theme }) => theme.palette.primary.translucent};
+  background-color: ${({ theme }) => theme.palette.primary.light};
   animation-name: ${({ theme }) =>
-    animation(theme.palette.primary.translucent, theme.palette.primary.normal)};
+    animation(theme.palette.primary.light, theme.palette.primary.normal)};
   animation-duration: 1400ms;
-
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   animation-delay: ${({ animationDelay }) =>
@@ -43,17 +46,16 @@ const Circle = styled.span`
   animation-fill-mode: both;
 `;
 
-const Loader = ({ size = 1 }) => {
-  return (
-    <Wrapper>
-      <Circle size={size} />
-      <Circle size={size} animationDelay={200} />
-      <Circle size={size} animationDelay={400} />
-    </Wrapper>
-  );
-};
+const Loader = ({ className, size = 1 }) => (
+  <Wrapper className={className}>
+    <Circle size={size} />
+    <Circle size={size} animationDelay={200} />
+    <Circle size={size} animationDelay={400} />
+  </Wrapper>
+);
 
 Loader.propTypes = {
+  className: PropTypes.string,
   size: PropTypes.number,
 };
 

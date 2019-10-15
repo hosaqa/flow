@@ -23,8 +23,8 @@ const QueueBody = styled.div`
   height: 190px;
   padding: 0;
   text-align: left;
-  border-radius: ${({ theme }) => theme.borderRadius};
-  background-color: ${({ theme }) => theme.colors.contentPreload};
+  border-radius: ${({ theme }) => theme.borderRadius(2)};
+  background-color: ${({ theme }) => theme.palette.background.secondary};
   box-shadow: ${({ theme }) => theme.shadows.primary};
 `;
 
@@ -44,30 +44,7 @@ const PlayerQueue = ({ playlist, className }) => {
       </PlayerButton>
       <Dropdown isOpen={isOpen} onClickOutside={handleClick}>
         <QueueBody>
-          <ScrollArea
-            speed={0.8}
-            smoothScrolling
-            className="area"
-            contentClassName="content"
-            horizontal={false}
-            style={{
-              padding: '0 10px 0 0',
-              height: '190px',
-            }}
-            verticalContainerStyle={{
-              opacity: '1',
-              backgroundColor: '#ededed',
-              width: '8px',
-              borderRadius: '0 3px 3px 0',
-            }}
-            verticalScrollbarStyle={{
-              borderRadius: '4px',
-              backgroundColor: '#ff6b6b',
-              marginLeft: '0',
-            }}
-          >
-            <Playlist />
-          </ScrollArea>
+          <Playlist />
         </QueueBody>
       </Dropdown>
     </Wrapper>

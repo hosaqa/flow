@@ -1,69 +1,67 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import OutsideClickHandler from 'react-outside-click-handler';
+import ScrollArea from 'react-scrollbar';
 import styled from '@emotion/styled';
-import { TransitionGroup } from 'react-transition-group';
-import transition from 'styled-transition-group';
+import { useTheme } from 'emotion-theming';
+import { Transition } from 'react-transition-group';
+//import {} from '../../common/theme';
 
 const Wrapper = styled.div`
   position: relative;
 `;
 
 const Content = styled.div`
-  display: block;
-`;
-const ContentAnimated = transition(Content).attrs({
-  timeout: 200,
-})`
   transform-origin: right bottom;
-
-  &:enter {
-    opacity: 0.01;
-    transform: scale(.97);
-  }
-
-  &:enter-active {
-    opacity: 1;
-    transition: opacity 200ms ease-in, transform 200ms ease-in;
-    transform: scale(1);
-  }
-
-  &:exit {
-    opacity: 1;
-    transform: scale(1);
-  }
-  
-  &:exit-active {
-    opacity: 0.01;
-    transform: scale(.97);
-    transition: opacity 150ms ease-in, transform 150ms ease-in;
-  }
+  opacity: ${({ state }) =>
+    state === 'entering' || state === 'entered' ? 1 : 0};
+  transform: ${({ state }) =>
+    state === 'entering' || state === 'entered' ? 'scale(1)' : 'scale(0.95)'};
+  transition: ${({ theme }) =>
+    `opacity ${theme.transitions.short}ms ease-in, transform ${theme.transitions.short}ms ease-in`};
 `;
 
-const Dropdown = ({ children, isOpen, onClickOutside }) => {
+const Dropdown = ({ children, isOpen }) => {
+  const theme = useTheme();
+
   return (
-    <OutsideClickHandler
-      onOutsideClick={e => {
-        onClickOutside();
-      }}
-      disabled={!isOpen}
-      useCapture={true}
-    >
-      <Wrapper>
-        <TransitionGroup timeout={200}>
-          {isOpen && (
-            <ContentAnimated timeout={200}>{children}</ContentAnimated>
-          )}
-        </TransitionGroup>
-      </Wrapper>
-    </OutsideClickHandler>
+    <Wrapper>
+      <Transition in={isOpen} timeout={theme.transitions.short}>
+        {state => (
+          <Content state={state}>
+            <ScrollArea
+              speed={0.8}
+              smoothScrolling
+              className="area"
+              contentClassName="content"
+              horizontal={false}
+              style={{
+                padding: '0 10px 0 0',
+                height: '190px',
+              }}
+              verticalContainerStyle={{
+                opacity: '1',
+                backgroundColor: '#ededed',
+                width: '8px',
+                borderRadius: '0 3px 3px 0',
+              }}
+              verticalScrollbarStyle={{
+                borderRadius: '4px',
+                backgroundColor: '#ff6b6b',
+                marginLeft: '0',
+              }}
+            >
+              {children}
+            </ScrollArea>
+          </Content>
+        )}
+      </Transition>
+    </Wrapper>
   );
 };
 
 Dropdown.propTypes = {
   children: PropTypes.node,
   isOpen: PropTypes.bool,
-  onClickOutside: PropTypes.func,
 };
 
 export default Dropdown;

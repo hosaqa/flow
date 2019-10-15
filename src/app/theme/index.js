@@ -34,6 +34,7 @@ export const lightTheme = {
     white: common.light,
     text: {
       primary: common.dark,
+      secondary: '#878787',
     },
     primary: {
       translucent: tinycolor(common.main)
@@ -53,6 +54,7 @@ export const lightTheme = {
     },
     background: {
       primary: '#f8f8f8',
+      secondary: common.light,
     },
     action: {
       disabled: '#dedede',
