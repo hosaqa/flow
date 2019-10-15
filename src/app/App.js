@@ -14,6 +14,7 @@ import ContentPlaylist from './common/ContentPlaylist';
 import { lightTheme, gridTheme } from './theme';
 import { globalStyles } from './theme/globalStyles';
 import Drag from './common/UI/Drag';
+import Loader from './common/UI/Loader';
 
 const App = () => {
   //ReactGA.initialize('UA-92698247-2');
@@ -31,6 +32,9 @@ const App = () => {
               <PageContent>
                 <ContentPlaylist />
               </PageContent> */}
+              <div style={{ padding: '20px' }}>
+                <Loader />
+              </div>
               <Player />
             </>
           </GridThemeProvider>
