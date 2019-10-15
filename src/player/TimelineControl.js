@@ -19,17 +19,19 @@ const TimerDisplay = styled.div`
   width: ${({ theme }) => theme.spacing(4)};
   user-select: none;
   font-size: 14px;
-  transition: color ${({ theme }) => theme.transition};
+  transition: color ${({ theme }) => theme.transitions.short};
   color: ${({ theme, disabled }) =>
-    disabled ? theme.colors.buttonDisabled : theme.colors.fontPrimary};
+    disabled ? theme.palette.action.disabled : theme.palette.text.primary};
 `;
 
 const ProgressBarStyled = styled(ProgressBar)`
   margin: 0 ${({ theme }) => theme.spacing(1)};
   width: 100%;
-  height: ${({ theme }) => theme.spacing(5)};
   display: flex;
   align-items: center;
+
+  ${({ theme }) => theme.mediaQueries.up('lg')} {
+  }
 `;
 
 const TimelineControl = ({
@@ -80,7 +82,6 @@ const TimelineControl = ({
         progress={progress}
         onSwipeMove={handleSwipeMove}
         onSwipeEnd={handleSwipeEnd}
-        onClick={_setTrackPosition}
       />
       <TimerDisplay disabled={disabled}>
         {humanizeTrackTime(trackDuration)}

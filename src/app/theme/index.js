@@ -31,12 +31,13 @@ const common = {
 
 export const lightTheme = {
   palette: {
+    white: common.light,
     text: {
       primary: common.dark,
     },
     primary: {
       translucent: tinycolor(common.main)
-        .setAlpha(0.5)
+        .setAlpha(0.4)
         .toString(),
       normal: common.main,
       light: tinycolor(common.main)
@@ -46,6 +47,7 @@ export const lightTheme = {
         .darken(20)
         .toHexString(),
     },
+    secondary: '#ff1d6e',
     border: {
       primary: '#dcdcdc',
     },
@@ -59,7 +61,18 @@ export const lightTheme = {
         .toString(),
     },
   },
-  transition: {
+  shadows: {
+    primary:
+      '1px 3px 4px rgba(0, 0, 0, 0.12), -1px -1px 2px rgba(0, 0, 0, 0.05)',
+    secondary: '0 4px 4px rgba(0, 0, 0, .05)',
+    around: `1px 1px 1px ${tinycolor(common.dark)
+      .setAlpha(0.35)
+      .toString()},
+    -1px -1px 1px ${tinycolor(common.dark)
+      .setAlpha(0.25)
+      .toString()}`,
+  },
+  transitions: {
     short: 150,
     default: 250,
   },
@@ -74,31 +87,5 @@ export const lightTheme = {
     down: breakpoint =>
       `@media screen and (max-width: ${gridTheme.breakpoints[breakpoint] -
         1}px)`,
-  },
-  colors: {
-    light: '#fff',
-    dark: '#000',
-    primary: '#ff6b6b',
-    border: '#dcdcdc',
-    content: '#f8f8f8',
-    contentPreload: '#fff',
-    skeleton: '#eee',
-    skeletonSecondary: '#dadada',
-    button: '#000',
-    buttonDisabled: '#dedede',
-    fontPrimary: '#1f2023',
-    fontSecondary: '#878787',
-    accentPrimary: '#f90dc9',
-    accentSecondary: '#ff1d1d',
-
-    colorDraggableBg: 'rgba(255, 112, 112, 0.50)',
-    headerGradientFirst: '#ff6b6b',
-    headerGradientSecond: '#ff486c',
-    headerGradientThird: '#ff1d6e',
-  },
-  shadows: {
-    primary:
-      '1px 3px 4px rgba(0, 0, 0, 0.12), -1px -1px 2px rgba(0, 0, 0, 0.05)',
-    secondary: '0 4px 4px rgba(0, 0, 0, .05)',
   },
 };

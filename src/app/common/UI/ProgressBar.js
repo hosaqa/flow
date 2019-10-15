@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Swipe from 'react-easy-swipe';
 import styled from '@emotion/styled/macro';
-import { keyframes } from '@emotion/core';
 
 const Wrapper = styled.div`
   height: ${({ axis, thumbRadius }) =>
@@ -12,20 +11,6 @@ const Wrapper = styled.div`
   position: relative;
   pointer-events: ${({ isDisabled }) => (isDisabled ? 'none' : 'auto')};
 `;
-
-const loadingAnimation = (firstColor, secondColor) => {
-  return keyframes`
-  0% {
-    background-color: ${firstColor};
-  }
-  50% {
-    background-color: ${secondColor};
-  }
-  100% {
-    background-color: ${firstColor};
-  }
-`;
-};
 
 const Track = styled.div`
   height: ${({ axis, theme }) =>
@@ -43,26 +28,7 @@ const Track = styled.div`
     isDisabled
       ? theme.palette.action.disabled
       : theme.palette.primary.translucent};
-  transition: background-color ${({ theme }) => theme.transition.default}ms;
-
-  &:before {
-    content: '';
-    display: ${({ isLoading }) => (isLoading ? '' : 'none')};
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: ${({ theme }) => theme.borderRadius(1)};
-    background-color: transparent;
-    transition: background-color ${({ theme }) => theme.transition.default}ms;
-    animation: ${({ theme }) =>
-        loadingAnimation(
-          theme.colors.colorDraggableBg,
-          theme.colors.accentSecondary
-        )}
-      1s ease infinite;
-  }
+  transition: background-color ${({ theme }) => theme.transitions.default}ms;
 `;
 
 const FilledSpace = styled.div`
@@ -73,7 +39,8 @@ const FilledSpace = styled.div`
     axis === 'horizontal' ? theme.spacing(0.5) : progress};
   width: ${({ axis, progress, theme }) =>
     axis === 'vertical' ? theme.spacing(0.5) : progress};
-  background-color: ${({ theme }) => theme.palette.primary.normal};
+  background: ${({ theme }) =>
+    `linear-gradient(154deg, ${theme.palette.primary.normal}, ${theme.palette.secondary})`};
   border-radius: ${({ theme }) => theme.borderRadius(1)};
 `;
 
@@ -86,10 +53,9 @@ const Thumb = styled.div`
   width: ${({ thumbRadius }) => (thumbRadius ? thumbRadius * 2 : 8)}px;
   height: ${({ thumbRadius }) => (thumbRadius ? thumbRadius * 2 : 8)}px;
   border-radius: 50%;
-  background-color: #fff;
-  box-shadow: 1px 1px 1px rgba(20, 20, 20, 0.4),
-    -1px -1px 1px rgba(96, 96, 96, 0.25);
-  transition: transform 0.12s;
+  background-color: ${({ theme }) => theme.palette.white};
+  box-shadow: ${({ theme }) => theme.shadows.around};
+  transition: transform ${({ theme }) => theme.transitions.short}ms;
   transform: ${({ isSwiping, thumbShowOnHover }) =>
     thumbShowOnHover && !isSwiping
       ? 'scale(0)'
@@ -115,12 +81,11 @@ const ProgressBar = ({
   onSwipeStart = () => {},
   onSwipeMove = () => {},
   onSwipeEnd = () => {},
-  onClick = () => {},
 }) => {
   const trackRef = useRef(null);
   const [progressWhenSwipe, setProgressWhenSwipe] = useState(null);
 
-  const setPosition = (e, isSwiping, callback, ___name) => {
+  const setPosition = (e, isSwiping, callback) => {
     const {
       top,
       left,
@@ -130,15 +95,13 @@ const ProgressBar = ({
 
     const size = axis === 'horizontal' ? width : height;
 
-    console.log(e, ___name, e.targetTouch);
-
     const clientX = e.clientX ? e.clientX : e.changedTouches[0].clientX;
     const clientY = e.clientY ? e.clientY : e.changedTouches[0].clientY;
 
-    const mousePosition =
+    const clientPosition =
       axis === 'horizontal' ? clientX - left : height - (clientY - top);
 
-    const nextPosition = size / mousePosition;
+    const nextPosition = size / clientPosition;
 
     let nextPositionPerCent = Math.trunc(100 / nextPosition);
     nextPositionPerCent = Math.min(100, Math.trunc(100 / nextPosition));
@@ -149,30 +112,30 @@ const ProgressBar = ({
     if (callback) callback(nextPositionPerCent);
   };
 
-  const handleClick = e => {
-    // if (loading || disabled) return false;
-    // console.log('click');
-    // setPosition(e, false, onClick);
-  };
-
   const handleSwipeStart = e => {
     if (loading || disabled) return false;
-    //console.log('start');
+
+    e.stopPropagation();
+
     document.body.style.userSelect = 'none';
-    setPosition(e, true, onSwipeStart, 'start');
+    setPosition(e, true, onSwipeStart);
   };
 
   const handleSwipeMove = (position, e) => {
     if (loading || disabled) return false;
-    //console.log('move');
-    setPosition(e, true, onSwipeMove, 'move');
+
+    e.stopPropagation();
+
+    setPosition(e, true, onSwipeMove);
   };
 
   const handleSwipeEnd = e => {
     if (loading || disabled) return false;
-    //console.log('end');
+
+    e.stopPropagation();
+
     document.body.style.userSelect = '';
-    setPosition(e, false, onSwipeEnd, 'end');
+    setPosition(e, false, onSwipeEnd);
     setProgressWhenSwipe(null);
   };
 
@@ -191,7 +154,6 @@ const ProgressBar = ({
         onSwipeEnd={handleSwipeEnd}
       >
         <Track
-          onClick={handleClick}
           ref={trackRef}
           isLoading={loading}
           isDisabled={disabled}
@@ -230,7 +192,6 @@ ProgressBar.propTypes = {
   onSwipeStart: PropTypes.func,
   onSwipeMove: PropTypes.func,
   onSwipeEnd: PropTypes.func,
-  onClick: PropTypes.func,
 };
 
 export default ProgressBar;

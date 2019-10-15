@@ -20,13 +20,9 @@ const PlayerButton = styled.button`
       : activated
       ? theme.palette.primary.normal
       : theme.palette.text.primary};
-  transition: color ${({ theme }) => theme.transition.default}ms,
-    transform ${({ theme }) => theme.transition.short}ms;
+  transition: color ${({ theme }) => theme.transitions.default}ms,
+    transform ${({ theme }) => theme.transitions.short}ms;
   pointer-events: ${({ disabled }) => (disabled ? 'none' : 'auto')};
-
-  &:hover {
-    color: ${({ theme }) => theme.palette.primary.dark};
-  }
 
   &:active {
     transform: scale(1.25);

@@ -34,8 +34,8 @@ const Wrapper = styled.section`
     ${({ theme }) => theme.spacing(2)};
   background-color: ${({ theme }) => theme.palette.background.primary};
   border-top: 1px solid ${({ theme }) => theme.palette.border.primary};
-  transition: background-color ${({ theme }) => theme.transition.default}ms,
-    transform ${({ theme }) => theme.transition.default}ms;
+  transition: background-color ${({ theme }) => theme.transitions.default}ms,
+    transform ${({ theme }) => theme.transitions.default}ms;
   transform: translateY(
     ${({ theme, additionalControlsIsVisibled }) =>
       additionalControlsIsVisibled ? 0 : theme.spacing(9)}
@@ -87,9 +87,11 @@ const PlayControlsStyled = styled(PlayControls)`
 
 const TimelineControlStyled = styled(TimelineControl)`
   width: 100%;
+  margin: ${({ theme }) => theme.spacing(1.5)} 0;
 
   ${({ theme }) => theme.mediaQueries.up('lg')} {
     order: 4;
+    margin: 0;
   }
 `;
 
@@ -223,7 +225,7 @@ const Player = ({
           )}
           <Container>
             <Row>
-              <TrackInfoStyled {...track} />
+              {/* <TrackInfoStyled {...track} /> */}
               <PlayControlsStyled disabled={interfaceDisabled} />
               <TimelineControlStyled
                 trackPosition={trackPosition}
@@ -243,8 +245,8 @@ const Player = ({
               >
                 <ShuffleIcon />
               </ShuffleButton>
-              <VolumeControlStyled disabled={interfaceDisabled} />
-              <Quene />
+              {/* <VolumeControlStyled disabled={interfaceDisabled} />
+              <Quene /> */}
             </Row>
           </Container>
         </Wrapper>
