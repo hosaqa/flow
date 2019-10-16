@@ -55,6 +55,7 @@ export const lightTheme = {
     background: {
       primary: '#f8f8f8',
       secondary: common.light,
+      alt: 'rgb(237, 237, 237)',
     },
     action: {
       disabled: '#dedede',

@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
-import ScrollArea from 'react-scrollbar';
+import { Scrollbars } from 'react-custom-scrollbars';
 import styled from '@emotion/styled';
 import { useTheme } from 'emotion-theming';
 import { Transition } from 'react-transition-group';
-//import {} from '../../common/theme';
 
 const Wrapper = styled.div`
   position: relative;
@@ -18,37 +17,85 @@ const Content = styled.div`
     state === 'entering' || state === 'entered' ? 'scale(1)' : 'scale(0.95)'};
   transition: ${({ theme }) =>
     `opacity ${theme.transitions.short}ms ease-in, transform ${theme.transitions.short}ms ease-in`};
+  position: absolute;
+  bottom: 90px;
+  right: 0;
+  width: 290px;
+  height: 190px;
+  padding: 0;
+  text-align: left;
+  border-radius: ${({ theme }) => theme.borderRadius(2)};
+  background-color: ${({ theme }) => theme.palette.background.secondary};
+  box-shadow: ${({ theme }) => theme.shadows.primary};
 `;
 
-const Dropdown = ({ children, isOpen }) => {
+const ScrollArea = styled(Scrollbars)`
+  padding: 0;
+  height: 190px;
+`;
+
+const ScrollTrack = styled.div`
+  visibility: ${({ scrollBarEnabled }) =>
+    scrollBarEnabled ? 'visible' : 'hidden'};
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  width: ${({ theme }) => theme.spacing(1)};
+  border-radius: ${({ theme }) =>
+    `0 ${theme.borderRadius(2)} ${theme.borderRadius(2)} 0`};
+  background-color: ${({ theme }) => theme.palette.background.alt};
+`;
+
+const ScrollThumb = styled.div`
+  background-color: ${({ theme }) => theme.palette.primary.normal};
+  border-radius: ${({ theme }) => theme.borderRadius(2)};
+`;
+
+const ScrollView = styled.div`
+  padding-right: ${({ theme, scrollBarEnabled }) =>
+    scrollBarEnabled ? theme.spacing(2) : '0'};
+`;
+
+const Dropdown = ({ children, isOpen, height, width }) => {
+  const refScrollArea = useRef(null);
   const theme = useTheme();
+
+  const instanceScrollArea = (refScrollArea || {}).current || {};
+  const infoScrollArea =
+    (instanceScrollArea.getValues && instanceScrollArea.getValues()) || {};
+
+  const scrollBarEnabled =
+    infoScrollArea.clientHeight < infoScrollArea.scrollHeight ? true : false;
+
+  const contentWidth =
+    width > window.innerWidth - 32 ? window.innerWidth - 32 : width;
 
   return (
     <Wrapper>
       <Transition in={isOpen} timeout={theme.transitions.short}>
         {state => (
-          <Content state={state}>
+          <Content state={state} width={contentWidth}>
             <ScrollArea
-              speed={0.8}
-              smoothScrolling
-              className="area"
-              contentClassName="content"
-              horizontal={false}
-              style={{
-                padding: '0 10px 0 0',
-                height: '190px',
-              }}
-              verticalContainerStyle={{
-                opacity: '1',
-                backgroundColor: '#ededed',
-                width: '8px',
-                borderRadius: '0 3px 3px 0',
-              }}
-              verticalScrollbarStyle={{
-                borderRadius: '4px',
-                backgroundColor: '#ff6b6b',
-                marginLeft: '0',
-              }}
+              ref={refScrollArea}
+              renderTrackVertical={({ ...props }) => (
+                <ScrollTrack
+                  scrollBarEnabled={scrollBarEnabled}
+                  className="track"
+                  {...props}
+                />
+              )}
+              renderThumbVertical={({ style, ...props }) => (
+                <ScrollThumb className="thumb" {...props} style={style} />
+              )}
+              renderView={({ style, ...props }) => (
+                <ScrollView
+                  scrollBarEnabled={scrollBarEnabled}
+                  style={style}
+                  {...props}
+                  className="view"
+                />
+              )}
             >
               {children}
             </ScrollArea>
@@ -62,6 +109,8 @@ const Dropdown = ({ children, isOpen }) => {
 Dropdown.propTypes = {
   children: PropTypes.node,
   isOpen: PropTypes.bool,
+  height: PropTypes.number,
+  width: PropTypes.number,
 };
 
 export default Dropdown;
