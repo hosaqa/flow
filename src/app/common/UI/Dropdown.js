@@ -42,6 +42,7 @@ const ScrollThumb = styled.div`
 const ScrollView = styled.div`
   padding-right: ${({ theme, scrollBarEnabled }) =>
     scrollBarEnabled ? theme.spacing(2) : '0'};
+  -webkit-overflow-scrolling: touch;
 `;
 
 const Dropdown = ({ className, children, isOpen }) => {
