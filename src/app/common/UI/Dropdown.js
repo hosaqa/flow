@@ -5,12 +5,7 @@ import styled from '@emotion/styled';
 import { useTheme } from 'emotion-theming';
 import { Transition } from 'react-transition-group';
 
-const Wrapper = styled.div`
-  position: relative;
-`;
-
 const Content = styled.div`
-  transform-origin: right bottom;
   opacity: ${({ state }) =>
     state === 'entering' || state === 'entered' ? 1 : 0};
   transform: ${({ state }) =>
@@ -18,20 +13,10 @@ const Content = styled.div`
   transition: ${({ theme }) =>
     `opacity ${theme.transitions.short}ms ease-in, transform ${theme.transitions.short}ms ease-in`};
   position: absolute;
-  bottom: 90px;
-  right: 0;
-  width: 290px;
-  height: 190px;
   padding: 0;
-  text-align: left;
   border-radius: ${({ theme }) => theme.borderRadius(2)};
   background-color: ${({ theme }) => theme.palette.background.secondary};
   box-shadow: ${({ theme }) => theme.shadows.primary};
-`;
-
-const ScrollArea = styled(Scrollbars)`
-  padding: 0;
-  height: 190px;
 `;
 
 const ScrollTrack = styled.div`
@@ -57,7 +42,7 @@ const ScrollView = styled.div`
     scrollBarEnabled ? theme.spacing(2) : '0'};
 `;
 
-const Dropdown = ({ children, isOpen, height, width }) => {
+const Dropdown = ({ className, children, isOpen }) => {
   const refScrollArea = useRef(null);
   const theme = useTheme();
 
@@ -68,45 +53,44 @@ const Dropdown = ({ children, isOpen, height, width }) => {
   const scrollBarEnabled =
     infoScrollArea.clientHeight < infoScrollArea.scrollHeight ? true : false;
 
-  const contentWidth =
-    width > window.innerWidth - 32 ? window.innerWidth - 32 : width;
-
   return (
-    <Wrapper>
-      <Transition in={isOpen} timeout={theme.transitions.short}>
-        {state => (
-          <Content state={state} width={contentWidth}>
-            <ScrollArea
-              ref={refScrollArea}
-              renderTrackVertical={({ ...props }) => (
-                <ScrollTrack
-                  scrollBarEnabled={scrollBarEnabled}
-                  className="track"
-                  {...props}
-                />
-              )}
-              renderThumbVertical={({ style, ...props }) => (
-                <ScrollThumb className="thumb" {...props} style={style} />
-              )}
-              renderView={({ style, ...props }) => (
-                <ScrollView
-                  scrollBarEnabled={scrollBarEnabled}
-                  style={style}
-                  {...props}
-                  className="view"
-                />
-              )}
-            >
-              {children}
-            </ScrollArea>
-          </Content>
-        )}
-      </Transition>
-    </Wrapper>
+    <Transition in={isOpen} timeout={theme.transitions.short}>
+      {state => (
+        <Content className={className} state={state}>
+          <Scrollbars
+            mobileNative={false}
+            universal={true}
+            ref={refScrollArea}
+            renderTrackVertical={({ style, ...props }) => (
+              <ScrollTrack
+                scrollBarEnabled={scrollBarEnabled}
+                className="track"
+                style={style}
+                {...props}
+              />
+            )}
+            renderThumbVertical={({ style, ...props }) => (
+              <ScrollThumb className="thumb" {...props} style={style} />
+            )}
+            renderView={({ style, ...props }) => (
+              <ScrollView
+                scrollBarEnabled={scrollBarEnabled}
+                style={style}
+                {...props}
+                className="view"
+              />
+            )}
+          >
+            {children}
+          </Scrollbars>
+        </Content>
+      )}
+    </Transition>
   );
 };
 
 Dropdown.propTypes = {
+  className: PropTypes.string,
   children: PropTypes.node,
   isOpen: PropTypes.bool,
   height: PropTypes.number,

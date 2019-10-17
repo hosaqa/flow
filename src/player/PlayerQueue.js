@@ -8,9 +8,29 @@ import PlayerButton from '../app/common/UI/PlayerButton';
 import Playlist from '../app/common/Playlist';
 
 const Wrapper = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
+`;
+
+const DropdownPlaylist = styled(Dropdown)`
+  position: fixed;
+  transform-origin: right bottom;
+  bottom: 90px;
+  right: 0;
+  left: 0;
+  margin: auto;
+  width: ${({ theme }) => theme.spacing(36)};
+  height: 75vh;
+
+  ${({ theme }) => theme.mediaQueries.up('lg')} {
+    transform-origin: right bottom;
+    bottom: 90px;
+    right: 0;
+    width: 290px;
+    height: 190px;
+  }
 `;
 
 const PlayerQueue = ({ playlist, className }) => {
@@ -27,9 +47,9 @@ const PlayerQueue = ({ playlist, className }) => {
       <PlayerButton onClick={handleClick} disabled={!playlist}>
         <PlaylistPlayIcon />
       </PlayerButton>
-      <Dropdown isOpen={isOpen} onClickOutside={handleClick}>
+      <DropdownPlaylist isOpen={isOpen} onClickOutside={handleClick}>
         <Playlist />
-      </Dropdown>
+      </DropdownPlaylist>
     </Wrapper>
   );
 };
