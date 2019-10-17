@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from '@emotion/styled';
+import OutsideClickHandler from 'react-outside-click-handler';
 import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay';
 import Dropdown from '../app/common/UI/Dropdown';
 import PlayerButton from '../app/common/UI/PlayerButton';
@@ -16,26 +17,26 @@ const Wrapper = styled.div`
 
 const DropdownPlaylist = styled(Dropdown)`
   position: fixed;
-  transform-origin: right bottom;
-  bottom: 90px;
+  transform-origin: center bottom;
+  bottom: ${({ theme }) => theme.spacing(8)};
   right: 0;
   left: 0;
   margin: auto;
   width: ${({ theme }) => theme.spacing(36)};
-  height: 75vh;
+  height: calc(100vh - ${({ theme }) => theme.spacing(16)});
 
   ${({ theme }) => theme.mediaQueries.up('lg')} {
+    position: absolute;
     transform-origin: right bottom;
     bottom: 90px;
     right: 0;
+    left: auto;
     width: 290px;
     height: 190px;
   }
 `;
 
-const PlayerQueue = ({ playlist, className }) => {
-  const [isOpen, setVisibility] = useState(false);
-
+const PlayerQueue = ({ playlist, className, isOpen, setVisibility }) => {
   const visibilityToggle = () => setVisibility(!isOpen);
 
   const handleClick = () => {
@@ -43,19 +44,30 @@ const PlayerQueue = ({ playlist, className }) => {
   };
 
   return (
-    <Wrapper className={className}>
-      <PlayerButton onClick={handleClick} disabled={!playlist}>
-        <PlaylistPlayIcon />
-      </PlayerButton>
-      <DropdownPlaylist isOpen={isOpen} onClickOutside={handleClick}>
-        <Playlist />
-      </DropdownPlaylist>
-    </Wrapper>
+    <OutsideClickHandler
+      onOutsideClick={() => setVisibility(false)}
+      disabled={!isOpen}
+    >
+      <Wrapper className={className}>
+        <PlayerButton
+          onClick={handleClick}
+          disabled={!playlist}
+          activated={isOpen}
+        >
+          <PlaylistPlayIcon />
+        </PlayerButton>
+        <DropdownPlaylist isOpen={isOpen} onClickOutside={handleClick}>
+          <Playlist />
+        </DropdownPlaylist>
+      </Wrapper>
+    </OutsideClickHandler>
   );
 };
 
 PlayerQueue.propTypes = {
   className: PropTypes.string,
+  isOpen: PropTypes.bool,
+  setVisibility: PropTypes.func,
   playlist: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,

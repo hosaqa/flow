@@ -6,12 +6,14 @@ import { useTheme } from 'emotion-theming';
 import { Transition } from 'react-transition-group';
 
 const Content = styled.div`
+  visibility: ${({ state }) =>
+    state === 'entering' || state === 'entered' ? 'visible' : 'hidden'};
   opacity: ${({ state }) =>
     state === 'entering' || state === 'entered' ? 1 : 0};
   transform: ${({ state }) =>
     state === 'entering' || state === 'entered' ? 'scale(1)' : 'scale(0.95)'};
   transition: ${({ theme }) =>
-    `opacity ${theme.transitions.short}ms ease-in, transform ${theme.transitions.short}ms ease-in`};
+    `visibility ${theme.transitions.short}ms ease-in, opacity ${theme.transitions.short}ms ease-in, transform ${theme.transitions.short}ms ease-in`};
   position: absolute;
   padding: 0;
   border-radius: ${({ theme }) => theme.borderRadius(2)};
@@ -53,13 +55,16 @@ const Dropdown = ({ className, children, isOpen }) => {
   const scrollBarEnabled =
     infoScrollArea.clientHeight < infoScrollArea.scrollHeight ? true : false;
 
+  const touchEventStopPropagation = e => e.stopPropagation();
+
   return (
     <Transition in={isOpen} timeout={theme.transitions.short}>
       {state => (
         <Content className={className} state={state}>
           <Scrollbars
-            mobileNative={false}
-            universal={true}
+            onTouchMove={touchEventStopPropagation}
+            onTouchStart={touchEventStopPropagation}
+            onTouchEnd={touchEventStopPropagation}
             ref={refScrollArea}
             renderTrackVertical={({ style, ...props }) => (
               <ScrollTrack

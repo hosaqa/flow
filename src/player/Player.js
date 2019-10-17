@@ -37,8 +37,8 @@ const Wrapper = styled.section`
   transition: background-color ${({ theme }) => theme.transitions.default}ms,
     transform ${({ theme }) => theme.transitions.default}ms;
   transform: translateY(
-    ${({ theme, additionalControlsIsVisibled }) =>
-      additionalControlsIsVisibled ? 0 : theme.spacing(9)}
+    ${({ theme, additionalControlsIsVisible }) =>
+      additionalControlsIsVisible ? 0 : theme.spacing(9)}
   );
 
   ${({ theme }) => theme.mediaQueries.up('lg')} {
@@ -144,9 +144,11 @@ const Player = ({
   }, [track]);
 
   const [
-    additionalControlsIsVisibled,
+    additionalControlsIsVisible,
     setAdditionalControlsVisibility,
   ] = useState(false);
+
+  const [queneIsVisible, setQueneVisibility] = useState(false);
 
   const playerRef = useRef(null);
   let playerRAF = null;
@@ -196,18 +198,18 @@ const Player = ({
   return (
     <OutsideClickHandler
       onOutsideClick={() => setAdditionalControlsVisibility(false)}
-      disabled={isDesktop() || !additionalControlsIsVisibled}
+      disabled={isDesktop() || !additionalControlsIsVisible || queneIsVisible}
     >
       <Swipe
         onSwipeUp={() => {
           handleSwipeUp();
         }}
         onSwipeDown={() => {
-          setAdditionalControlsVisibility(false);
+          if (!queneIsVisible) setAdditionalControlsVisibility(false);
         }}
       >
         <Wrapper
-          additionalControlsIsVisibled={additionalControlsIsVisibled}
+          additionalControlsIsVisible={additionalControlsIsVisible}
           onClick={() => setAdditionalControlsVisibility(true)}
         >
           {!interfaceDisabled && (
@@ -247,7 +249,10 @@ const Player = ({
               </ShuffleButton>
               {/* <VolumeControlStyled disabled={interfaceDisabled} />
                */}
-              <Quene />
+              <Quene
+                isOpen={queneIsVisible}
+                setVisibility={setQueneVisibility}
+              />
             </Row>
           </Container>
         </Wrapper>
