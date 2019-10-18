@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { isMobile } from 'react-device-detect';
@@ -53,7 +53,24 @@ const ScrollView = styled.div`
 
 const Dropdown = ({ className, children, isOpen }) => {
   const refScrollArea = useRef(null);
+  const refScrollAreaView = useRef(null);
   const theme = useTheme();
+
+  useEffect(() => {
+    if (isMobile) {
+      if (isOpen) {
+        disableBodyScroll(refScrollAreaView.current);
+      } else {
+        enableBodyScroll(refScrollAreaView.current);
+      }
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    return () => {
+      clearAllBodyScrollLocks();
+    };
+  }, []);
 
   const instanceScrollArea = (refScrollArea || {}).current || {};
   const infoScrollArea =
@@ -87,6 +104,7 @@ const Dropdown = ({ className, children, isOpen }) => {
             )}
             renderView={({ style, ...props }) => (
               <ScrollView
+                ref={refScrollAreaView}
                 scrollBarEnabled={scrollBarEnabled}
                 style={style}
                 {...props}
