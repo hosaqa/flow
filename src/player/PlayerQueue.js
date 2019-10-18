@@ -28,11 +28,11 @@ const DropdownPlaylist = styled(Dropdown)`
   ${({ theme }) => theme.mediaQueries.up('lg')} {
     position: absolute;
     transform-origin: right bottom;
-    bottom: 90px;
+    bottom: ${({ theme }) => theme.spacing(10)};
     right: 0;
     left: auto;
-    width: 290px;
-    height: 190px;
+    width: ${({ theme }) => theme.spacing(35)};
+    height: ${({ theme }) => theme.spacing(22)};
   }
 `;
 

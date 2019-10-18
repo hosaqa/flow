@@ -1,6 +1,12 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Scrollbars } from 'react-custom-scrollbars';
+import { isMobile } from 'react-device-detect';
+import {
+  disableBodyScroll,
+  enableBodyScroll,
+  clearAllBodyScrollLocks,
+} from 'body-scroll-lock';
 import styled from '@emotion/styled';
 import { useTheme } from 'emotion-theming';
 import { Transition } from 'react-transition-group';
@@ -41,7 +47,7 @@ const ScrollThumb = styled.div`
 
 const ScrollView = styled.div`
   padding-right: ${({ theme, scrollBarEnabled }) =>
-    scrollBarEnabled ? theme.spacing(2) : '0'};
+    scrollBarEnabled && !isMobile ? theme.spacing(2) : '0'};
   -webkit-overflow-scrolling: touch;
 `;
 
@@ -56,16 +62,17 @@ const Dropdown = ({ className, children, isOpen }) => {
   const scrollBarEnabled =
     infoScrollArea.clientHeight < infoScrollArea.scrollHeight ? true : false;
 
-  const touchEventStopPropagation = e => e.stopPropagation();
+  const eventStopPropagation = e => e.stopPropagation();
 
   return (
     <Transition in={isOpen} timeout={theme.transitions.short}>
       {state => (
         <Content className={className} state={state}>
           <Scrollbars
-            onTouchMove={touchEventStopPropagation}
-            onTouchStart={touchEventStopPropagation}
-            onTouchEnd={touchEventStopPropagation}
+            onScroll={eventStopPropagation}
+            onTouchMove={eventStopPropagation}
+            onTouchStart={eventStopPropagation}
+            onTouchEnd={eventStopPropagation}
             ref={refScrollArea}
             renderTrackVertical={({ style, ...props }) => (
               <ScrollTrack

@@ -7,6 +7,7 @@ export const globalStyles = css`
   @import url('https://fonts.googleapis.com/css?family=Montserrat:900i');
   body {
     font-family: 'Source Sans Pro', sans-serif;
+    min-height: 4000px;
   }
 
   img {
