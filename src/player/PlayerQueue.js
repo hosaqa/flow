@@ -24,6 +24,7 @@ const DropdownPlaylist = styled(Dropdown)`
   margin: auto;
   width: ${({ theme }) => theme.spacing(36)};
   height: calc(100vh - ${({ theme }) => theme.spacing(16)});
+  max-height: 75vh;
 
   ${({ theme }) => theme.mediaQueries.up('lg')} {
     position: absolute;

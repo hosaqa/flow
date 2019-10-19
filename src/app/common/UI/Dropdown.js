@@ -53,15 +53,14 @@ const ScrollView = styled.div`
 
 const Dropdown = ({ className, children, isOpen }) => {
   const refScrollArea = useRef(null);
-  const refScrollAreaView = useRef(null);
   const theme = useTheme();
 
   useEffect(() => {
     if (isMobile) {
       if (isOpen) {
-        disableBodyScroll(refScrollAreaView.current);
+        disableBodyScroll(refScrollArea.current.view);
       } else {
-        enableBodyScroll(refScrollAreaView.current);
+        enableBodyScroll(refScrollArea.current.view);
       }
     }
   }, [isOpen]);
@@ -104,7 +103,6 @@ const Dropdown = ({ className, children, isOpen }) => {
             )}
             renderView={({ style, ...props }) => (
               <ScrollView
-                ref={refScrollAreaView}
                 scrollBarEnabled={scrollBarEnabled}
                 style={style}
                 {...props}
