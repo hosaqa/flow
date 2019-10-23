@@ -3,8 +3,6 @@ import {
   SET_CURRENT_TRACK,
   REPEAT_TOGGLE,
   SHUFFLE_PLAYLIST_TOGGLE,
-  SET_VOLUME,
-  MUTE_TOGGLE,
   FETCH_TRACK_EXECUTED,
   FETCH_PLAYLIST_BEGIN,
   FETCH_PLAYLIST_SUCCESS,
@@ -23,8 +21,7 @@ const initialState = {
 
   playingNow: false,
   track: null,
-  volume: 1,
-  muted: false,
+
   repeating: false,
   shuffledPlaylist: null,
 };
@@ -74,12 +71,6 @@ export function playerReducer(state = initialState, action) {
         fetchTrackError: null,
       };
     }
-
-    case SET_VOLUME:
-      return { ...state, volume: action.payload.value };
-
-    case MUTE_TOGGLE:
-      return { ...state, muted: !state.muted };
 
     case SHUFFLE_PLAYLIST_TOGGLE: {
       const { shuffledPlaylist, playlist, track } = state;

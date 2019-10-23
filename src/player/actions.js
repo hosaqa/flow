@@ -3,8 +3,6 @@ import {
   SET_CURRENT_TRACK,
   REPEAT_TOGGLE,
   SHUFFLE_PLAYLIST_TOGGLE,
-  SET_VOLUME,
-  MUTE_TOGGLE,
   FETCH_TRACK_EXECUTED,
   FETCH_PLAYLIST_BEGIN,
   FETCH_PLAYLIST_SUCCESS,
@@ -32,22 +30,11 @@ export const shuffleToggle = () => ({
   type: SHUFFLE_PLAYLIST_TOGGLE,
 });
 
-export const setVolume = value => ({
-  type: SET_VOLUME,
-  payload: {
-    value,
-  },
-});
-
 export const fetchTrackResult = error => ({
   type: FETCH_TRACK_EXECUTED,
   payload: {
     error,
   },
-});
-
-export const muteToggle = () => ({
-  type: MUTE_TOGGLE,
 });
 
 const fetchPlaylistBegin = () => ({

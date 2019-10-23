@@ -124,12 +124,10 @@ const TrackInfoStyled = styled(TrackInfo)`
 `;
 
 const Player = ({
-  muted,
   playingNow,
   repeating,
   shuffledPlaylist,
   track,
-  volume,
   playToggle,
   fetchPlaylist,
   setCurrentTrack,
@@ -138,6 +136,12 @@ const Player = ({
   shuffleToggle,
 }) => {
   const [trackPosition, setTrackPosition] = useState(0);
+  const [volume, setVolume] = useState(1);
+  const [muted, muteToggle] = useState(false);
+
+  const setVolumeEnchanced = nextValue => {
+    setVolume(Math.max(0, Math.min(nextValue, 1)));
+  };
 
   useEffect(() => {
     setTrackPosition(0);
@@ -247,8 +251,14 @@ const Player = ({
               >
                 <ShuffleIcon />
               </ShuffleButton>
-              {/* <VolumeControlStyled disabled={interfaceDisabled} />
-               */}
+              <VolumeControlStyled
+                disabled={interfaceDisabled}
+                volume={volume}
+                setVolume={setVolumeEnchanced}
+                muted={muted}
+                muteToggle={muteToggle}
+              />
+
               <Quene
                 isOpen={queneIsVisible}
                 setVisibility={setQueneVisibility}
@@ -262,12 +272,10 @@ const Player = ({
 };
 
 Player.propTypes = {
-  muted: PropTypes.bool,
   playingNow: PropTypes.bool,
   repeating: PropTypes.bool,
   shuffledPlaylist: PropTypes.array,
   track: PropTypes.object,
-  volume: PropTypes.number,
   playToggle: PropTypes.func,
   fetchPlaylist: PropTypes.func,
   setCurrentTrack: PropTypes.func,

@@ -18,7 +18,7 @@ const Wrapper = styled.div`
 const DropdownPlaylist = styled(Dropdown)`
   position: fixed;
   transform-origin: center bottom;
-  bottom: ${({ theme }) => theme.spacing(8)};
+  bottom: calc(100% + ${({ theme }) => theme.spacing(4)});
   right: 0;
   left: 0;
   margin: auto;
@@ -29,7 +29,7 @@ const DropdownPlaylist = styled(Dropdown)`
   ${({ theme }) => theme.mediaQueries.up('lg')} {
     position: absolute;
     transform-origin: right bottom;
-    bottom: ${({ theme }) => theme.spacing(10)};
+    bottom: calc(100% + ${({ theme }) => theme.spacing(4)});
     right: 0;
     left: auto;
     width: ${({ theme }) => theme.spacing(35)};
@@ -45,11 +45,11 @@ const PlayerQueue = ({ playlist, className, isOpen, setVisibility }) => {
   };
 
   return (
-    <OutsideClickHandler
-      onOutsideClick={() => setVisibility(false)}
-      disabled={!isOpen}
-    >
-      <Wrapper className={className}>
+    <Wrapper className={className}>
+      <OutsideClickHandler
+        onOutsideClick={() => setVisibility(false)}
+        disabled={!isOpen}
+      >
         <PlayerButton
           onClick={handleClick}
           disabled={!playlist}
@@ -60,8 +60,8 @@ const PlayerQueue = ({ playlist, className, isOpen, setVisibility }) => {
         <DropdownPlaylist isOpen={isOpen} onClickOutside={handleClick}>
           <Playlist />
         </DropdownPlaylist>
-      </Wrapper>
-    </OutsideClickHandler>
+      </OutsideClickHandler>
+    </Wrapper>
   );
 };
 
