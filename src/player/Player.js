@@ -251,13 +251,13 @@ const Player = ({
               >
                 <ShuffleIcon />
               </ShuffleButton>
-              <VolumeControlStyled
+              {/* <VolumeControlStyled
                 disabled={interfaceDisabled}
                 volume={volume}
                 setVolume={setVolumeEnchanced}
                 muted={muted}
                 muteToggle={muteToggle}
-              />
+              /> */}
 
               <Quene
                 isOpen={queneIsVisible}

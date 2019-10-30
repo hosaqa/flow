@@ -44,6 +44,9 @@ const getRandomInt = (min, max) =>
 
 const isDesktop = () => useMediaQuery({ minWidth: gridTheme.breakpoints.lg });
 
+const getViewportHeight = () =>
+  Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+
 export {
   humanizeTrackTime,
   isNumeric,
@@ -52,4 +55,5 @@ export {
   searchArrItemByID,
   getRandomInt,
   isDesktop,
+  getViewportHeight,
 };

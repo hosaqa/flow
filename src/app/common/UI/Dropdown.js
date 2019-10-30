@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { isMobile } from 'react-device-detect';
@@ -10,6 +10,7 @@ import {
 import styled from '@emotion/styled';
 import { useTheme } from 'emotion-theming';
 import { Transition } from 'react-transition-group';
+import { getViewportHeight } from '../../../utils';
 
 const Content = styled.div`
   visibility: ${({ state }) =>
@@ -25,6 +26,7 @@ const Content = styled.div`
   border-radius: ${({ theme }) => theme.borderRadius(2)};
   background-color: ${({ theme }) => theme.palette.background.secondary};
   box-shadow: ${({ theme }) => theme.shadows.primary};
+  max-height: ${({ maxHeight }) => (maxHeight ? `${maxHeight}px` : 'none')};
 `;
 
 const ScrollTrack = styled.div`

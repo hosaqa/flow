@@ -57,7 +57,6 @@ const VolumeControl = ({
   //       _setVolume(parseFloat((volume - volumeDelta).toFixed(2)));
   //   }
   // };
-  console.log(volume);
   const handleMouseOver = () => setDropdownIsOpen(true);
 
   const handleMouseLeave = () => setDropdownIsOpen(false);
