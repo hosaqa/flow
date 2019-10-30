@@ -45,11 +45,11 @@ const PlayerQueue = ({ playlist, className, isOpen, setVisibility }) => {
   };
 
   return (
-    <OutsideClickHandler
-      onOutsideClick={() => setVisibility(false)}
-      disabled={!isOpen}
-    >
-      <Wrapper className={className}>
+    <Wrapper className={className}>
+      <OutsideClickHandler
+        onOutsideClick={() => setVisibility(false)}
+        disabled={!isOpen}
+      >
         <PlayerButton
           onClick={handleClick}
           disabled={!playlist}
@@ -60,8 +60,8 @@ const PlayerQueue = ({ playlist, className, isOpen, setVisibility }) => {
         <DropdownPlaylist isOpen={isOpen} onClickOutside={handleClick}>
           <Playlist />
         </DropdownPlaylist>
-      </Wrapper>
-    </OutsideClickHandler>
+      </OutsideClickHandler>
+    </Wrapper>
   );
 };
 
