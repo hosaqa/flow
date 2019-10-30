@@ -45,7 +45,6 @@ const LoaderStyled = styled(Loader)`
 const TimelineControl = ({
   className,
   trackPosition,
-  nowPlaying,
   trackIsLoading,
   track,
   setTrackPosition,
@@ -83,7 +82,6 @@ const TimelineControl = ({
       <ProgressBarStyled
         loading={trackIsLoading}
         disabled={disabled}
-        active={nowPlaying}
         thumbShowOnHover
         thumbRadius={6}
         axis="horizontal"
@@ -101,7 +99,6 @@ const TimelineControl = ({
 
 TimelineControl.propTypes = {
   className: PropTypes.string,
-  nowPlaying: PropTypes.bool,
   trackIsLoading: PropTypes.bool,
   track: PropTypes.object,
   trackPosition: PropTypes.number,

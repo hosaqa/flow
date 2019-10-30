@@ -18,7 +18,7 @@ const Wrapper = styled.div`
 const DropdownPlaylist = styled(Dropdown)`
   position: fixed;
   transform-origin: center bottom;
-  bottom: ${({ theme }) => theme.spacing(8)};
+  bottom: calc(100% + ${({ theme }) => theme.spacing(4)});
   right: 0;
   left: 0;
   margin: auto;
@@ -29,7 +29,7 @@ const DropdownPlaylist = styled(Dropdown)`
   ${({ theme }) => theme.mediaQueries.up('lg')} {
     position: absolute;
     transform-origin: right bottom;
-    bottom: ${({ theme }) => theme.spacing(10)};
+    bottom: calc(100% + ${({ theme }) => theme.spacing(4)});
     right: 0;
     left: auto;
     width: ${({ theme }) => theme.spacing(35)};

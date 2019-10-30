@@ -75,7 +75,6 @@ const ProgressBar = ({
   progress,
   loading,
   disabled,
-  active,
   thumbRadius = 4,
   thumbShowOnHover,
   onSwipeStart = () => {},
@@ -147,7 +146,13 @@ const ProgressBar = ({
       thumbRadius={thumbRadius}
     >
       <Swipe
-        style={{ width: '100%', height: '100%' }}
+        style={{
+          width: '100%',
+          height: '100%',
+          position: 'absolute',
+          left: '0',
+          top: '0',
+        }}
         allowMouseEvents={true}
         onSwipeStart={handleSwipeStart}
         onSwipeMove={handleSwipeMove}
@@ -157,7 +162,6 @@ const ProgressBar = ({
           ref={trackRef}
           isLoading={loading}
           isDisabled={disabled}
-          active={active}
           axis={axis}
         >
           {!disabled && !loading && (
@@ -185,7 +189,6 @@ ProgressBar.propTypes = {
   progress: PropTypes.number,
   loading: PropTypes.bool,
   disabled: PropTypes.bool,
-  active: PropTypes.bool,
   axis: PropTypes.string,
   thumbRadius: PropTypes.number,
   thumbShowOnHover: PropTypes.bool,

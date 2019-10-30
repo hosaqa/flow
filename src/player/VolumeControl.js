@@ -2,47 +2,34 @@ import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled/macro';
 import { css } from '@emotion/core';
-import { connect } from 'react-redux';
-
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import VolumeDownIcon from '@material-ui/icons/VolumeDown';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
-
 import ProgressBar from '../app/common/UI/ProgressBar';
 import PlayerButton from '../app/common/UI/PlayerButton';
-import { setVolume, muteToggle } from './actions';
-import { getMousePosition } from '../utils';
+import Dropdown from '../app/common/UI/Dropdown';
 
-const Volume = styled.div`
+const Wrapper = styled.div`
   padding: 0;
   position: relative;
 `;
 
-const VolumeSlider = styled.div`
-  position: absolute;
-  bottom: calc(100% + 15px);
-  height: 125px;
-  width: 30px;
-  border-radius: ${({ theme }) => theme.borderRadius};
-  background-color: ${({ theme }) => theme.colors.content};
-  box-shadow: ${({ theme }) => theme.shadows.primary};
-  padding: 13px 0;
-  opacity: 0;
-  visibility: hidden;
-  transform: scale(0);
+const VolumeDropdown = styled(Dropdown)`
+  bottom: calc(100% + ${({ theme }) => theme.spacing(4)});
+  height: ${({ theme }) => theme.spacing(16)};
+  width: ${({ theme }) => theme.spacing(4)};
   transform-origin: center bottom;
-  transition: 0.2s opacity, 0.2s visibility, 0.12s transform;
-  transition-delay: 0.28s;
+`;
 
-  ${({ disabled }) =>
-    !disabled &&
-    css`
-      ${Volume}:hover & {
-        opacity: 1;
-        visibility: visible;
-        transform: scale(1);
-      }
-    `}
+const VolumeDropdownInner = styled.div`
+  height: 100%;
+  padding: ${({ theme }) => theme.spacing(1.5)} 0;
+`;
+
+const VolumePropgressBar = styled(ProgressBar)`
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 ${({ theme }) => theme.spacing(2)};
 `;
 
 const VolumeControl = ({
@@ -53,83 +40,58 @@ const VolumeControl = ({
   setVolume,
   muteToggle,
 }) => {
-  const [mouseButtonPressed, setMouseButtonPressed] = useState(false);
-  const volumeControlRef = useRef(null);
+  const [dropdownIsOpen, setDropdownIsOpen] = useState(false);
 
-  const _setVolume = value => {
-    value = value < 0 ? 0 : value > 1 ? 1 : value;
-    setVolume(value);
-  };
+  // const handleOnWheel = e => {
+  //   if (!mouseButtonPressed) {
+  //     const ONE_MOUSE_SCROLL_DELTA = 53;
+  //     const volumeCoeff = Math.abs(e.deltaY / ONE_MOUSE_SCROLL_DELTA);
 
-  const setVolumeFromPosition = (ev, ref) => {
-    const { topPosition } = getMousePosition(ev, ref);
+  //     let volumeDelta = volumeCoeff * 0.025;
+  //     volumeDelta = parseFloat(volumeDelta.toFixed(2));
 
-    setVolume(1 - parseFloat(topPosition.toFixed(2)));
-  };
+  //     if (e.deltaY < 0) {
+  //       if (volume < 1)
+  //         _setVolume(parseFloat((volume + volumeDelta).toFixed(2)));
+  //     } else if (volume > 0)
+  //       _setVolume(parseFloat((volume - volumeDelta).toFixed(2)));
+  //   }
+  // };
+  console.log(volume);
+  const handleMouseOver = () => setDropdownIsOpen(true);
 
-  const handleOnWheel = e => {
-    if (!mouseButtonPressed) {
-      const ONE_MOUSE_SCROLL_DELTA = 53;
-      const volumeCoeff = Math.abs(e.deltaY / ONE_MOUSE_SCROLL_DELTA);
-
-      let volumeDelta = volumeCoeff * 0.025;
-      volumeDelta = parseFloat(volumeDelta.toFixed(2));
-
-      if (e.deltaY < 0) {
-        if (volume < 1)
-          _setVolume(parseFloat((volume + volumeDelta).toFixed(2)));
-      } else if (volume > 0)
-        _setVolume(parseFloat((volume - volumeDelta).toFixed(2)));
-    }
-  };
-
-  const handleOnClick = (ev, ref) => {
-    setVolumeFromPosition(ev, ref);
-  };
-
-  const handleOnMouseMove = (ev, ref) => {
-    if (mouseButtonPressed) setVolumeFromPosition(ev, ref);
-  };
-
-  const handleOnMouseDown = () => {
-    setMouseButtonPressed(true);
-  };
-
-  const handleOnMouseUp = () => {
-    setMouseButtonPressed(false);
-  };
-
-  const handleOnMouseLeave = () => {
-    setMouseButtonPressed(false);
-  };
+  const handleMouseLeave = () => setDropdownIsOpen(false);
 
   return (
-    <Volume className={className} onWheel={ev => handleOnWheel(ev)}>
-      <PlayerButton
-        onClick={() => muteToggle()}
-        hoverDisabled
-        disabled={disabled}
-      >
-        {!muted && volume > 0.4 ? (
-          <VolumeUpIcon />
-        ) : !muted && volume !== 0 ? (
-          <VolumeDownIcon />
+    <Wrapper
+      className={className}
+      onMouseOver={handleMouseOver}
+      onMouseLeave={handleMouseLeave}
+    >
+      <PlayerButton onClick={() => muteToggle()} disabled={disabled}>
+        {!muted ? (
+          <>{volume > 0.4 ? <VolumeUpIcon /> : <VolumeDownIcon />}</>
         ) : (
           <VolumeOffIcon />
         )}
       </PlayerButton>
-      <VolumeSlider
-        disabled={disabled}
-        ref={volumeControlRef}
-        onClick={e => handleOnClick(e, volumeControlRef)}
-        onMouseMove={ev => handleOnMouseMove(ev, volumeControlRef)}
-        onMouseDown={() => handleOnMouseDown()}
-        onMouseUp={() => handleOnMouseUp()}
-        onMouseLeave={() => handleOnMouseLeave()}
-      >
-        <ProgressBar direction="vertical" filled={muted ? 0 : volume * 100} />
-      </VolumeSlider>
-    </Volume>
+      <VolumeDropdown isOpen={dropdownIsOpen} disabled={disabled}>
+        <VolumeDropdownInner>
+          <VolumePropgressBar
+            progress={volume * 100}
+            onSwipeStart={nextPosition => {
+              setDropdownIsOpen(true);
+              setVolume(nextPosition / 100);
+            }}
+            onSwipeMove={nextPosition => setVolume(nextPosition / 100)}
+            onSwipeEnd={() => {
+              setDropdownIsOpen(false);
+            }}
+            axis="vertical"
+          />
+        </VolumeDropdownInner>
+      </VolumeDropdown>
+    </Wrapper>
   );
 };
 
@@ -142,7 +104,4 @@ VolumeControl.propTypes = {
   muteToggle: PropTypes.func,
 };
 
-export default connect(
-  ({ player }) => player,
-  { setVolume, muteToggle }
-)(VolumeControl);
+export default VolumeControl;
