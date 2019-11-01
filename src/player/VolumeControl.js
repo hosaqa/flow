@@ -1,27 +1,37 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled/macro';
-import { css } from '@emotion/core';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import VolumeDownIcon from '@material-ui/icons/VolumeDown';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 import ProgressBar from '../app/common/UI/ProgressBar';
 import PlayerButton from '../app/common/UI/PlayerButton';
-import Dropdown from '../app/common/UI/Dropdown';
+import Popup from '../app/common/UI/Popup';
 
 const Wrapper = styled.div`
   padding: 0;
   position: relative;
 `;
 
-const VolumeDropdown = styled(Dropdown)`
+const PopupStyled = styled(Popup)`
   bottom: calc(100% + ${({ theme }) => theme.spacing(4)});
   height: ${({ theme }) => theme.spacing(16)};
   width: ${({ theme }) => theme.spacing(4)};
   transform-origin: center bottom;
+
+  &:before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: ${({ theme }) => theme.spacing(4)};
+    background-color: transparent;
+  }
 `;
 
-const VolumeDropdownInner = styled.div`
+const Inner = styled.div`
   height: 100%;
   padding: ${({ theme }) => theme.spacing(1.5)} 0;
 `;
@@ -38,30 +48,31 @@ const VolumeControl = ({
   volume,
   muted,
   setVolume,
-  muteToggle,
+  setMute,
 }) => {
-  const [dropdownIsOpen, setDropdownIsOpen] = useState(false);
+  const [popupIsVisible, setPopupVisibility] = useState(false);
   const [isSwiping, setIsSwiping] = useState(false);
 
-  // const handleOnWheel = e => {
-  //   if (!mouseButtonPressed) {
-  //     const ONE_MOUSE_SCROLL_DELTA = 53;
-  //     const volumeCoeff = Math.abs(e.deltaY / ONE_MOUSE_SCROLL_DELTA);
+  const setMuteEnchanded = nextValue => {
+    if (nextValue === false && volume === 0) setVolume(0.7);
 
-  //     let volumeDelta = volumeCoeff * 0.025;
-  //     volumeDelta = parseFloat(volumeDelta.toFixed(2));
+    setMute(nextValue);
+  };
 
-  //     if (e.deltaY < 0) {
-  //       if (volume < 1)
-  //         _setVolume(parseFloat((volume + volumeDelta).toFixed(2)));
-  //     } else if (volume > 0)
-  //       _setVolume(parseFloat((volume - volumeDelta).toFixed(2)));
-  //   }
-  // };
-  const handleMouseOver = () => setDropdownIsOpen(true);
+  const muteToggle = () => setMuteEnchanded(!muted);
+
+  const setVolumeEnchanced = nextValue => {
+    if (nextValue !== 0 && muted) setMute(false);
+
+    if (nextValue === 0) setMute(true);
+
+    setVolume(Math.max(0, Math.min(nextValue, 1)));
+  };
+
+  const handleMouseOver = () => setPopupVisibility(true);
 
   const handleMouseLeave = () => {
-    if (!isSwiping) setDropdownIsOpen(false);
+    if (!isSwiping) setPopupVisibility(false);
   };
 
   return (
@@ -71,30 +82,30 @@ const VolumeControl = ({
       onMouseLeave={handleMouseLeave}
     >
       <PlayerButton onClick={() => muteToggle()} disabled={disabled}>
-        {!muted ? (
+        {!muted && volume !== 0 ? (
           <>{volume > 0.4 ? <VolumeUpIcon /> : <VolumeDownIcon />}</>
         ) : (
           <VolumeOffIcon />
         )}
       </PlayerButton>
-      <VolumeDropdown isOpen={dropdownIsOpen} disabled={disabled}>
-        <VolumeDropdownInner>
+      <PopupStyled isOpen={popupIsVisible} disabled={disabled}>
+        <Inner>
           <VolumePropgressBar
-            progress={volume * 100}
+            progress={muted ? 0 : volume * 100}
             onSwipeStart={nextPosition => {
-              setDropdownIsOpen(true);
+              setPopupVisibility(true);
               setIsSwiping(true);
-              setVolume(nextPosition / 100);
+              setVolumeEnchanced(nextPosition / 100);
             }}
-            onSwipeMove={nextPosition => setVolume(nextPosition / 100)}
+            onSwipeMove={nextPosition => setVolumeEnchanced(nextPosition / 100)}
             onSwipeEnd={() => {
-              setDropdownIsOpen(false);
+              setPopupVisibility(false);
               setIsSwiping(false);
             }}
             axis="vertical"
           />
-        </VolumeDropdownInner>
-      </VolumeDropdown>
+        </Inner>
+      </PopupStyled>
     </Wrapper>
   );
 };
@@ -105,7 +116,7 @@ VolumeControl.propTypes = {
   volume: PropTypes.number,
   setVolume: PropTypes.func,
   muted: PropTypes.bool,
-  muteToggle: PropTypes.func,
+  setMute: PropTypes.func,
 };
 
 export default VolumeControl;

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import styled from '@emotion/styled';
 import OutsideClickHandler from 'react-outside-click-handler';
 import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay';
-import Dropdown from '../app/common/UI/Dropdown';
+import PopupOverflow from '../app/common/UI/PopupOverflow';
 import PlayerButton from '../app/common/UI/PlayerButton';
 import Playlist from '../app/common/Playlist';
 
@@ -15,7 +15,7 @@ const Wrapper = styled.div`
   justify-content: space-between;
 `;
 
-const DropdownPlaylist = styled(Dropdown)`
+const PlaylistPopup = styled(PopupOverflow)`
   position: fixed;
   transform-origin: center bottom;
   bottom: calc(100% + ${({ theme }) => theme.spacing(4)});
@@ -57,9 +57,9 @@ const PlayerQueue = ({ playlist, className, isOpen, setVisibility }) => {
         >
           <PlaylistPlayIcon />
         </PlayerButton>
-        <DropdownPlaylist isOpen={isOpen} onClickOutside={handleClick}>
+        <PlaylistPopup isOpen={isOpen} onClickOutside={handleClick}>
           <Playlist />
-        </DropdownPlaylist>
+        </PlaylistPopup>
       </OutsideClickHandler>
     </Wrapper>
   );

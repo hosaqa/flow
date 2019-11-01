@@ -137,13 +137,7 @@ const Player = ({
 }) => {
   const [trackPosition, setTrackPosition] = useState(0);
   const [volume, setVolume] = useState(1);
-  const [muted, setMuteToggle] = useState(false);
-
-  const muteToggle = () => setMuteToggle(!muted);
-
-  const setVolumeEnchanced = nextValue => {
-    setVolume(Math.max(0, Math.min(nextValue, 1)));
-  };
+  const [muted, setMute] = useState(false);
 
   useEffect(() => {
     setTrackPosition(0);
@@ -256,9 +250,9 @@ const Player = ({
               <VolumeControlStyled
                 disabled={interfaceDisabled}
                 volume={volume}
-                setVolume={setVolumeEnchanced}
+                setVolume={setVolume}
                 muted={muted}
-                muteToggle={muteToggle}
+                setMute={setMute}
               />
 
               <Quene
