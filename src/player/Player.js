@@ -137,7 +137,9 @@ const Player = ({
 }) => {
   const [trackPosition, setTrackPosition] = useState(0);
   const [volume, setVolume] = useState(1);
-  const [muted, muteToggle] = useState(false);
+  const [muted, setMuteToggle] = useState(false);
+
+  const muteToggle = () => setMuteToggle(!muted);
 
   const setVolumeEnchanced = nextValue => {
     setVolume(Math.max(0, Math.min(nextValue, 1)));
@@ -251,13 +253,13 @@ const Player = ({
               >
                 <ShuffleIcon />
               </ShuffleButton>
-              {/* <VolumeControlStyled
+              <VolumeControlStyled
                 disabled={interfaceDisabled}
                 volume={volume}
                 setVolume={setVolumeEnchanced}
                 muted={muted}
                 muteToggle={muteToggle}
-              /> */}
+              />
 
               <Quene
                 isOpen={queneIsVisible}

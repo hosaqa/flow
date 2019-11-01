@@ -41,6 +41,7 @@ const VolumeControl = ({
   muteToggle,
 }) => {
   const [dropdownIsOpen, setDropdownIsOpen] = useState(false);
+  const [isSwiping, setIsSwiping] = useState(false);
 
   // const handleOnWheel = e => {
   //   if (!mouseButtonPressed) {
@@ -59,7 +60,9 @@ const VolumeControl = ({
   // };
   const handleMouseOver = () => setDropdownIsOpen(true);
 
-  const handleMouseLeave = () => setDropdownIsOpen(false);
+  const handleMouseLeave = () => {
+    if (!isSwiping) setDropdownIsOpen(false);
+  };
 
   return (
     <Wrapper
@@ -80,11 +83,13 @@ const VolumeControl = ({
             progress={volume * 100}
             onSwipeStart={nextPosition => {
               setDropdownIsOpen(true);
+              setIsSwiping(true);
               setVolume(nextPosition / 100);
             }}
             onSwipeMove={nextPosition => setVolume(nextPosition / 100)}
             onSwipeEnd={() => {
               setDropdownIsOpen(false);
+              setIsSwiping(false);
             }}
             axis="vertical"
           />

@@ -10,9 +10,9 @@ import {
 import styled from '@emotion/styled';
 import { useTheme } from 'emotion-theming';
 import { Transition } from 'react-transition-group';
-import { getViewportHeight } from '../../../utils';
+import Popup from './Popup';
 
-const Content = styled.div`
+const Content = styled(Popup)`
   visibility: ${({ state }) =>
     state === 'entering' || state === 'entered' ? 'visible' : 'hidden'};
   opacity: ${({ state }) =>
@@ -22,10 +22,6 @@ const Content = styled.div`
   transition: ${({ theme }) =>
     `visibility ${theme.transitions.short}ms ease-in, opacity ${theme.transitions.short}ms ease-in, transform ${theme.transitions.short}ms ease-in`};
   position: absolute;
-  padding: 0;
-  border-radius: ${({ theme }) => theme.borderRadius(2)};
-  background-color: ${({ theme }) => theme.palette.background.secondary};
-  box-shadow: ${({ theme }) => theme.shadows.primary};
   max-height: ${({ maxHeight }) => (maxHeight ? `${maxHeight}px` : 'none')};
 `;
 
