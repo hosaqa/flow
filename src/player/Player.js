@@ -227,7 +227,7 @@ const Player = ({
           )}
           <Container>
             <Row>
-              {/* <TrackInfoStyled {...track} /> */}
+              <TrackInfoStyled {...track} />
               <PlayControlsStyled disabled={interfaceDisabled} />
               <TimelineControlStyled
                 trackPosition={trackPosition}

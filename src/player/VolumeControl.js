@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { isMobile } from 'react-device-detect';
+import OutsideClickHandler from 'react-outside-click-handler';
 import styled from '@emotion/styled/macro';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import VolumeDownIcon from '@material-ui/icons/VolumeDown';
@@ -50,8 +52,11 @@ const VolumeControl = ({
   setVolume,
   setMute,
 }) => {
+  const buttonRef = useRef();
   const [popupIsVisible, setPopupVisibility] = useState(false);
   const [isSwiping, setIsSwiping] = useState(false);
+
+  const popupVisibleToggle = () => setPopupVisibility(!popupIsVisible);
 
   const setMuteEnchanded = nextValue => {
     if (nextValue === false && volume === 0) setVolume(0.7);
@@ -69,10 +74,36 @@ const VolumeControl = ({
     setVolume(Math.max(0, Math.min(nextValue, 1)));
   };
 
-  const handleMouseOver = () => setPopupVisibility(true);
+  const handleMouseOver = () => {
+    if (isMobile) return;
+
+    setPopupVisibility(true);
+  };
 
   const handleMouseLeave = () => {
+    if (isMobile) return;
+
     if (!isSwiping) setPopupVisibility(false);
+  };
+
+  const handleSwipeEnd = () => {
+    if (isMobile) return;
+
+    setPopupVisibility(false);
+    setIsSwiping(false);
+  };
+
+  const handleButtonClick = event => {
+    event.stopPropagation();
+    isMobile ? popupVisibleToggle() : muteToggle();
+  };
+
+  const handleOutsideClick = event => {
+    if (!isMobile) return;
+
+    if (event.target === buttonRef.current) return;
+
+    setPopupVisibility(false);
   };
 
   return (
@@ -81,31 +112,39 @@ const VolumeControl = ({
       onMouseOver={handleMouseOver}
       onMouseLeave={handleMouseLeave}
     >
-      <PlayerButton onClick={() => muteToggle()} disabled={disabled}>
+      <PlayerButton
+        ref={buttonRef}
+        onClick={handleButtonClick}
+        disabled={disabled}
+      >
         {!muted && volume !== 0 ? (
           <>{volume > 0.4 ? <VolumeUpIcon /> : <VolumeDownIcon />}</>
         ) : (
           <VolumeOffIcon />
         )}
       </PlayerButton>
-      <PopupStyled isOpen={popupIsVisible} disabled={disabled}>
-        <Inner>
-          <VolumePropgressBar
-            progress={muted ? 0 : volume * 100}
-            onSwipeStart={nextPosition => {
-              setPopupVisibility(true);
-              setIsSwiping(true);
-              setVolumeEnchanced(nextPosition / 100);
-            }}
-            onSwipeMove={nextPosition => setVolumeEnchanced(nextPosition / 100)}
-            onSwipeEnd={() => {
-              setPopupVisibility(false);
-              setIsSwiping(false);
-            }}
-            axis="vertical"
-          />
-        </Inner>
-      </PopupStyled>
+      <OutsideClickHandler
+        onOutsideClick={handleOutsideClick}
+        disabled={!popupIsVisible}
+      >
+        <PopupStyled isOpen={popupIsVisible} disabled={disabled}>
+          <Inner>
+            <VolumePropgressBar
+              progress={muted ? 0 : volume * 100}
+              onSwipeStart={nextPosition => {
+                setPopupVisibility(true);
+                setIsSwiping(true);
+                setVolumeEnchanced(nextPosition / 100);
+              }}
+              onSwipeMove={nextPosition =>
+                setVolumeEnchanced(nextPosition / 100)
+              }
+              onSwipeEnd={handleSwipeEnd}
+              axis="vertical"
+            />
+          </Inner>
+        </PopupStyled>
+      </OutsideClickHandler>
     </Wrapper>
   );
 };
