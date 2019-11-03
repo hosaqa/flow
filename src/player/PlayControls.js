@@ -1,13 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import styled from '@emotion/styled';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
 import PlayerButton from '../app/common/UI/PlayerButton';
-import { playToggle, setCurrentTrack } from './actions';
 
 const ButtonsRow = styled.div`
   display: inline-flex;
@@ -17,21 +15,22 @@ const ButtonsRow = styled.div`
 
 const PlayControls = ({
   className,
-  track,
-  playingNow,
   disabled,
+  playingNow,
+  prevTrack,
+  nextTrack,
   playToggle,
   setCurrentTrack,
 }) => (
   <div className={className}>
     <ButtonsRow
-      onClick={e => {
-        e.stopPropagation();
+      onClick={event => {
+        event.stopPropagation();
       }}
     >
       <PlayerButton
-        onClick={() => setCurrentTrack(track.prevTrack.id)}
-        disabled={disabled || !track.prevTrack}
+        onClick={() => setCurrentTrack(prevTrack.id)}
+        disabled={disabled || !prevTrack}
       >
         <SkipPreviousIcon />
       </PlayerButton>
@@ -43,8 +42,8 @@ const PlayControls = ({
         {!playingNow ? <PlayCircleOutlineIcon /> : <PauseCircleOutlineIcon />}
       </PlayerButton>
       <PlayerButton
-        onClick={() => setCurrentTrack(track.nextTrack.id)}
-        disabled={disabled || !track.nextTrack}
+        onClick={() => setCurrentTrack(nextTrack.id)}
+        disabled={disabled || !nextTrack}
       >
         <SkipNextIcon />
       </PlayerButton>
@@ -52,16 +51,24 @@ const PlayControls = ({
   </div>
 );
 
+const trackProp = PropTypes.shape({
+  id: PropTypes.number,
+  artist: PropTypes.string,
+  trackname: PropTypes.string,
+  album: PropTypes.string,
+  src: PropTypes.string,
+  img: PropTypes.string,
+  duration: PropTypes.number,
+});
+
 PlayControls.propTypes = {
   className: PropTypes.string,
-  track: PropTypes.object,
-  playingNow: PropTypes.bool,
   disabled: PropTypes.bool,
+  playingNow: PropTypes.bool,
+  prevTrack: trackProp,
+  nextTrack: trackProp,
   playToggle: PropTypes.func,
   setCurrentTrack: PropTypes.func,
 };
 
-export default connect(
-  ({ player }) => player,
-  { playToggle, setCurrentTrack }
-)(PlayControls);
+export default PlayControls;

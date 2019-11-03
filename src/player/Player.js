@@ -121,10 +121,12 @@ const CurrentTrackInfo = styled(TrackInfo)`
 `;
 
 const Player = ({
+  trackIsLoading,
   playingNow,
   repeating,
+  playlist,
   shuffledPlaylist,
-  track,
+  currentTrackID,
   playToggle,
   fetchPlaylist,
   setCurrentTrack,
@@ -136,9 +138,20 @@ const Player = ({
   const [volume, setVolume] = useState(1);
   const [muted, setMute] = useState(false);
 
+  const currentTrack = playlist
+    ? playlist.find(track => track.id === currentTrackID)
+    : null;
+  const currentTrackIndex = currentTrack
+    ? playlist.indexOf(currentTrack)
+    : null;
+
+  const prevTrack = currentTrack ? playlist[currentTrackIndex - 1] : null;
+  const nextTrack = currentTrack ? playlist[currentTrackIndex + 1] : null;
+
   useEffect(() => {
+    // wtf?
     setTrackPosition(0);
-  }, [track]);
+  }, [playlist]);
 
   const [
     additionalControlsIsVisible,
@@ -174,8 +187,6 @@ const Player = ({
 
   const handleOnEnd = () => {
     if (!repeating) {
-      const nextTrack = track.nextTrack;
-
       if (!nextTrack) {
         playToggle();
 
@@ -190,7 +201,7 @@ const Player = ({
     setAdditionalControlsVisibility(true);
   };
 
-  const interfaceDisabled = !track;
+  const interfaceDisabled = !playlist;
 
   return (
     <OutsideClickHandler
@@ -212,7 +223,7 @@ const Player = ({
           {!interfaceDisabled && (
             <ReactHowler
               ref={playerRef}
-              src={track.src}
+              src={currentTrack.src}
               playing={playingNow}
               onPlay={setSeekPos}
               onEnd={handleOnEnd}
@@ -224,9 +235,19 @@ const Player = ({
           )}
           <Container>
             <Row>
-              <CurrentTrackInfo {...track} />
-              <PlayControlsStyled disabled={interfaceDisabled} />
+              <CurrentTrackInfo {...currentTrack} />
+              <PlayControlsStyled
+                disabled={interfaceDisabled}
+                playingNow={playingNow}
+                prevTrack={prevTrack}
+                nextTrack={nextTrack}
+                setCurrentTrack={setCurrentTrack}
+                playToggle={playToggle}
+              />
               <TimelineControlStyled
+                disabled={interfaceDisabled}
+                trackIsLoading={trackIsLoading}
+                currentTrack={currentTrack}
                 trackPosition={trackPosition}
                 setTrackPosition={setSeek}
               />
@@ -265,10 +286,12 @@ const Player = ({
 };
 
 Player.propTypes = {
+  trackIsLoading: PropTypes.bool,
   playingNow: PropTypes.bool,
   repeating: PropTypes.bool,
+  playlist: PropTypes.array, // TODO: описание типов!
   shuffledPlaylist: PropTypes.array,
-  track: PropTypes.object,
+  currentTrackID: PropTypes.string,
   playToggle: PropTypes.func,
   fetchPlaylist: PropTypes.func,
   setCurrentTrack: PropTypes.func,

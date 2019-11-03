@@ -12,7 +12,7 @@ const PlaylistItemStyled = styled(PlaylistItem)`
 `;
 
 const Playlist = ({
-  track,
+  currentTrackID,
   playlist,
   playToggle,
   playingNow,
@@ -30,8 +30,6 @@ const Playlist = ({
       </>
     );
 
-  const currentTrack = track.id;
-
   return (
     <>
       {playlist.map(track => (
@@ -39,7 +37,7 @@ const Playlist = ({
           playToggle={playToggle}
           setTrack={setCurrentTrack}
           track={track}
-          currentTrackID={currentTrack}
+          currentTrackID={currentTrackID}
           playingNow={playingNow}
           key={track.id}
         />
@@ -62,7 +60,7 @@ const playlistProp = PropTypes.arrayOf(
 
 Playlist.propTypes = {
   playlist: playlistProp,
-  track: PropTypes.object,
+  currentTrackID: PropTypes.string,
   playToggle: PropTypes.func,
   setCurrentTrack: PropTypes.func,
   playingNow: PropTypes.bool,

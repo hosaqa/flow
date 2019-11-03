@@ -9,7 +9,7 @@ import {
   FETCH_PLAYLIST_FAILURE,
 } from './constants';
 
-import { searchArrItemByID, getRandomInt } from '../utils';
+import { getRandomInt } from '../utils';
 
 const initialState = {
   playlistIsLoading: false,
@@ -20,27 +20,10 @@ const initialState = {
   fetchTrackError: null,
 
   playingNow: false,
-  track: null,
+  currentTrackID: null,
 
   repeating: false,
   shuffledPlaylist: null,
-};
-
-const getClosestTracks = (currentTrackID, playlist) => {
-  const currentTrack = searchArrItemByID(playlist, currentTrackID);
-  const currentTrackIndex = playlist.indexOf(currentTrack);
-
-  let prevTrack = playlist[currentTrackIndex - 1];
-  prevTrack = prevTrack ? prevTrack : null;
-
-  let nextTrack = playlist[currentTrackIndex + 1];
-  nextTrack = nextTrack ? nextTrack : null;
-
-  return {
-    currentTrack,
-    prevTrack,
-    nextTrack,
-  };
 };
 
 export function playerReducer(state = initialState, action) {
@@ -52,20 +35,11 @@ export function playerReducer(state = initialState, action) {
       return { ...state, playingNow: !state.playingNow };
 
     case SET_CURRENT_TRACK: {
-      const { playlist, shuffledPlaylist } = state;
       const { id, playingNow } = action.payload;
-
-      const currentPlaylist = shuffledPlaylist || playlist;
-
-      const closestTracks = getClosestTracks(id, currentPlaylist);
 
       return {
         ...state,
-        track: {
-          ...closestTracks.currentTrack,
-          prevTrack: closestTracks.prevTrack,
-          nextTrack: closestTracks.nextTrack,
-        },
+        currentTrackID: id,
         playingNow: playingNow || state.playingNow, ///что это за ????
         trackIsLoading: true,
         fetchTrackError: null,
@@ -73,46 +47,39 @@ export function playerReducer(state = initialState, action) {
     }
 
     case SHUFFLE_PLAYLIST_TOGGLE: {
-      const { shuffledPlaylist, playlist, track } = state;
-
-      if (shuffledPlaylist) {
-        const closestTracks = getClosestTracks(track.id, playlist);
-
-        return {
-          ...state,
-          shuffledPlaylist: null,
-          track: {
-            ...track,
-            prevTrack: closestTracks.prevTrack,
-            nextTrack: closestTracks.nextTrack,
-          },
-        };
-      }
-
-      const currentPlaylist = playlist;
-      const playlistLength = currentPlaylist.length;
-
-      const prevIndexesSequence = [...Array(playlistLength).keys()];
-      const nextPlaylist = [];
-
-      while (prevIndexesSequence.length > 0) {
-        const getRandomIndex = getRandomInt(1, prevIndexesSequence.length) - 1;
-
-        nextPlaylist.push(currentPlaylist[prevIndexesSequence[getRandomIndex]]);
-        prevIndexesSequence.splice(getRandomIndex, 1);
-      }
-
-      const closestTracks = getClosestTracks(track.id, nextPlaylist);
-
-      return {
-        ...state,
-        shuffledPlaylist: nextPlaylist,
-        track: {
-          ...track,
-          prevTrack: closestTracks.prevTrack,
-          nextTrack: closestTracks.nextTrack,
-        },
-      };
+      //надо разобраться
+      // const { shuffledPlaylist, playlist, track } = state;
+      // if (shuffledPlaylist) {
+      //   const closestTracks = getClosestTracks(track.id, playlist);
+      //   return {
+      //     ...state,
+      //     shuffledPlaylist: null,
+      //     track: {
+      //       ...track,
+      //       prevTrack: closestTracks.prevTrack,
+      //       nextTrack: closestTracks.nextTrack,
+      //     },
+      //   };
+      // }
+      // const currentPlaylist = playlist;
+      // const playlistLength = currentPlaylist.length;
+      // const prevIndexesSequence = [...Array(playlistLength).keys()];
+      // const nextPlaylist = [];
+      // while (prevIndexesSequence.length > 0) {
+      //   const getRandomIndex = getRandomInt(1, prevIndexesSequence.length) - 1;
+      //   nextPlaylist.push(currentPlaylist[prevIndexesSequence[getRandomIndex]]);
+      //   prevIndexesSequence.splice(getRandomIndex, 1);
+      // }
+      // const closestTracks = getClosestTracks(track.id, nextPlaylist);
+      // return {
+      //   ...state,
+      //   shuffledPlaylist: nextPlaylist,
+      //   currentTrackID: {
+      //     ...track,
+      //     prevTrack: closestTracks.prevTrack,
+      //     nextTrack: closestTracks.nextTrack,
+      //   },
+      // };
     }
 
     case FETCH_TRACK_EXECUTED:
@@ -135,7 +102,7 @@ export function playerReducer(state = initialState, action) {
       return {
         ...state,
         playlist: playlist,
-        track: { ...playlist[0], prevTrack: null, nextTrack: playlist[1] },
+        currentTrackID: playlist[0].id,
         playlistIsLoading: false,
       };
     }

@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import styled from '@emotion/styled';
-
 import ProgressBar from '../app/common/UI/ProgressBar';
 import Loader from '../app/common/UI/Loader';
 import { humanizeTrackTime } from '../utils';
@@ -44,14 +42,15 @@ const LoaderStyled = styled(Loader)`
 
 const TimelineControl = ({
   className,
+  disabled,
   trackPosition,
   trackIsLoading,
-  track,
+  currentTrack,
   setTrackPosition,
 }) => {
   const [nextTrackPosition, setNextTrackPosition] = useState(null);
 
-  const trackDuration = track ? track.duration : null;
+  const trackDuration = currentTrack ? currentTrack.duration : null;
 
   const progress = parseFloat(
     ((trackPosition / trackDuration) * 100).toFixed(1)
@@ -69,8 +68,6 @@ const TimelineControl = ({
     setNextTrackPosition(null);
     _setTrackPosition(nextPosition);
   };
-
-  const disabled = !track;
 
   return (
     <Wrapper className={className}>
@@ -99,10 +96,19 @@ const TimelineControl = ({
 
 TimelineControl.propTypes = {
   className: PropTypes.string,
+  disabled: PropTypes.bool,
   trackIsLoading: PropTypes.bool,
-  track: PropTypes.object,
+  currentTrack: PropTypes.shape({
+    id: PropTypes.number,
+    artist: PropTypes.string,
+    trackname: PropTypes.string,
+    album: PropTypes.string,
+    src: PropTypes.string,
+    img: PropTypes.string,
+    duration: PropTypes.number,
+  }),
   trackPosition: PropTypes.number,
   setTrackPosition: PropTypes.func,
 };
 
-export default connect(({ player }) => player)(TimelineControl);
+export default TimelineControl;
