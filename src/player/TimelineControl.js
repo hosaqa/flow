@@ -17,16 +17,16 @@ const TimeDisplay = styled.div`
   text-align: center;
   display: inline-block;
   vertical-align: middle;
-  width: ${({ theme }) => theme.spacing(4)};
+  width: ${({ theme }) => theme.spacing(4)}px;
   user-select: none;
   font-size: 14px;
-  transition: color ${({ theme }) => theme.transitions.short};
+  transition: color ${({ theme }) => theme.transitions.short}ms;
   color: ${({ theme, disabled }) =>
     disabled ? theme.palette.action.disabled : theme.palette.text.primary};
 `;
 
 const ProgressBarStyled = styled(ProgressBar)`
-  margin: 0 ${({ theme }) => theme.spacing(1)};
+  margin: 0 ${({ theme }) => theme.spacing(1)}px;
   width: 100%;
   display: flex;
   align-items: center;

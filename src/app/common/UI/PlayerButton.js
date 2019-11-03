@@ -10,8 +10,8 @@ const PlayerButton = styled.button`
   position: relative;
   border: 0;
   padding: 0;
-  margin-left: ${({ theme }) => theme.spacing(0.5)};
-  margin-right: ${({ theme }) => theme.spacing(0.5)};
+  margin-left: ${({ theme }) => theme.spacing(0.5)}px;
+  margin-right: ${({ theme }) => theme.spacing(0.5)}px;
   outline: none;
   background-color: transparent;
   color: ${({ activated, disabled, theme }) =>
@@ -37,7 +37,7 @@ const PlayerButton = styled.button`
     vertical-align: middle;
     pointer-events: none;
     font-size: ${({ theme, iconSize }) =>
-      iconSize ? `${iconSize}px` : theme.spacing(3)};
+      iconSize === 'large' ? theme.spacing(4) : theme.spacing(3)}px;
   }
 `;
 

@@ -6,15 +6,13 @@ import { GridThemeProvider, BaseCSS } from 'styled-bootstrap-grid';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from './store';
-
+import { SkeletonTheme } from 'react-loading-skeleton';
 import Header from './common/Header';
 import Player from '../player/Player';
 import PageContent from './common/PageContent';
 import ContentPlaylist from './common/ContentPlaylist';
 import { lightTheme, gridTheme } from './theme';
 import { globalStyles } from './theme/globalStyles';
-import Drag from './common/UI/Drag';
-import Loader from './common/UI/Loader';
 
 const App = () => {
   //ReactGA.initialize('UA-92698247-2');
@@ -24,20 +22,23 @@ const App = () => {
     <Provider store={store}>
       <BrowserRouter>
         <ThemeProvider theme={lightTheme}>
-          <BaseCSS />
-          <Global styles={globalStyles} />
-          <GridThemeProvider gridTheme={gridTheme}>
-            <>
-              {/* <Header />
+          <SkeletonTheme
+            color={lightTheme.palette.skeleton.primary}
+            highlightColor={lightTheme.palette.skeleton.secondary}
+          >
+            <BaseCSS />
+            <Global styles={globalStyles} />
+            <GridThemeProvider gridTheme={gridTheme}>
+              <>
+                {/* <Header />
               <PageContent>
                 <ContentPlaylist />
               </PageContent> */}
-              <div style={{ padding: '20px' }}>
-                <Loader />
-              </div>
-              <Player />
-            </>
-          </GridThemeProvider>
+
+                <Player />
+              </>
+            </GridThemeProvider>
+          </SkeletonTheme>
         </ThemeProvider>
       </BrowserRouter>
     </Provider>

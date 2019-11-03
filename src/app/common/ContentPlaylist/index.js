@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from '@emotion/styled';
 
-import Playlist from '../Playlist';
+import Playlist from '../../../player/Playlist';
 import coverImg from './cover.svg';
 
 const Wrapper = styled.div`

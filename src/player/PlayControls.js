@@ -12,7 +12,7 @@ import { playToggle, setCurrentTrack } from './actions';
 const ButtonsRow = styled.div`
   display: inline-flex;
   align-items: center;
-  margin: 0 ${({ theme }) => theme.spacing(-0.5)};
+  margin: 0 ${({ theme }) => theme.spacing(-0.5)}px;
 `;
 
 const PlayControls = ({
@@ -37,7 +37,7 @@ const PlayControls = ({
       </PlayerButton>
       <PlayerButton
         onClick={() => playToggle()}
-        iconSize={32}
+        iconSize={'large'}
         disabled={disabled}
       >
         {!playingNow ? <PlayCircleOutlineIcon /> : <PauseCircleOutlineIcon />}

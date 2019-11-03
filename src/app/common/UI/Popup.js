@@ -14,7 +14,7 @@ const Content = styled.div`
   transition: ${({ theme }) =>
     `visibility ${theme.transitions.short}ms ease-in, opacity ${theme.transitions.short}ms ease-in, transform ${theme.transitions.short}ms ease-in`};
   position: absolute;
-  border-radius: ${({ theme }) => theme.borderRadius(2)};
+  border-radius: ${({ theme }) => theme.borderRadius(2)}px;
   background-color: ${({ theme }) => theme.palette.background.secondary};
   box-shadow: ${({ theme }) => theme.shadows.primary};
 `;

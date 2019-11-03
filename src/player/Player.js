@@ -30,20 +30,19 @@ const Wrapper = styled.section`
   bottom: 0;
   left: 0;
   width: 100%;
-  padding: ${({ theme }) => theme.spacing(1)} 0
-    ${({ theme }) => theme.spacing(2)};
+  padding: ${({ theme }) => `${theme.spacing(1)}px 0 ${theme.spacing(2)}px`};
   background-color: ${({ theme }) => theme.palette.background.primary};
   border-top: 1px solid ${({ theme }) => theme.palette.border.primary};
   transition: background-color ${({ theme }) => theme.transitions.default}ms,
     transform ${({ theme }) => theme.transitions.default}ms;
   transform: translateY(
     ${({ theme, additionalControlsIsVisible }) =>
-      additionalControlsIsVisible ? 0 : theme.spacing(9)}
+      additionalControlsIsVisible ? 0 : `${theme.spacing(9)}px`}
   );
 
   ${({ theme }) => theme.mediaQueries.up('lg')} {
     transform: none;
-    padding: ${({ theme }) => theme.spacing(1)} 0;
+    padding: ${({ theme }) => `${theme.spacing(2)}px 0`};
   }
 `;
 
@@ -65,29 +64,27 @@ const Row = styled.div`
   }
 
   ${({ theme }) => theme.mediaQueries.up('xl')} {
-    padding: 0 ${({ theme }) => theme.spacing(2)};
+    padding: 0 ${({ theme }) => theme.spacing(2)}px;
   }
 `;
 
 const PlayControlsStyled = styled(PlayControls)`
   margin: 0 0 0 auto;
-  padding: 0 ${({ theme }) => theme.spacing(2)} 0
-    ${({ theme }) => theme.spacing(1)};
-
-  ${({ theme }) => theme.mediaQueries.up('lg')} {
+  padding: ${({ theme }) => `0 ${theme.spacing(2)}px 0 ${theme.spacing(1)}px`}
+    ${({ theme }) => theme.mediaQueries.up('lg')} {
     order: -1;
     padding: 0;
-    margin: 0 ${({ theme }) => theme.spacing(4)} 0 0;
+    margin: 0 ${({ theme }) => theme.spacing(4)}px 0 0;
   }
 
   ${({ theme }) => theme.mediaQueries.up('xl')} {
-    margin: 0 ${({ theme }) => theme.spacing(5)} 0 0;
+    margin: 0 ${({ theme }) => theme.spacing(5)}px 0 0;
   }
 `;
 
 const TimelineControlStyled = styled(TimelineControl)`
   width: 100%;
-  margin: ${({ theme }) => theme.spacing(1.5)} 0;
+  margin: ${({ theme }) => theme.spacing(1.5)}px 0;
 
   ${({ theme }) => theme.mediaQueries.up('lg')} {
     order: 4;
@@ -98,7 +95,7 @@ const TimelineControlStyled = styled(TimelineControl)`
 const ShuffleButton = styled(PlayerButton)`
   ${({ theme }) => theme.mediaQueries.up('lg')} {
     order: 3;
-    margin: 0 ${({ theme }) => theme.spacing(8)} 0 0;
+    margin: 0 ${({ theme }) => theme.spacing(8)}px 0 0;
   }
 `;
 
@@ -111,15 +108,15 @@ const RepeatButton = styled(PlayerButton)`
 const VolumeControlStyled = styled(VolumeControl)`
   ${({ theme }) => theme.mediaQueries.up('lg')} {
     order: 5;
-    margin: 0 0 0 ${({ theme }) => theme.spacing(2)};
+    margin: 0 0 0 ${({ theme }) => theme.spacing(2)}px;
   }
 `;
 
-const TrackInfoStyled = styled(TrackInfo)`
+const CurrentTrackInfo = styled(TrackInfo)`
   ${({ theme }) => theme.mediaQueries.up('lg')} {
     order: 6;
-    margin: 0 ${({ theme }) => theme.spacing(2)} 0
-      ${({ theme }) => theme.spacing(3)};
+    margin: 0 ${({ theme }) => theme.spacing(2)}px 0
+      ${({ theme }) => theme.spacing(3)}px;
   }
 `;
 
@@ -227,7 +224,7 @@ const Player = ({
           )}
           <Container>
             <Row>
-              <TrackInfoStyled {...track} />
+              <CurrentTrackInfo {...track} />
               <PlayControlsStyled disabled={interfaceDisabled} />
               <TimelineControlStyled
                 trackPosition={trackPosition}

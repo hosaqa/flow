@@ -56,12 +56,19 @@ export const lightTheme = {
       primary: '#f8f8f8',
       secondary: common.light,
       alt: 'rgb(237, 237, 237)',
+      overlay: tinycolor(common.light)
+        .setAlpha(0.8)
+        .toString(),
     },
     action: {
       disabled: '#dedede',
       focus: tinycolor(common.main)
         .setAlpha(0.35)
         .toString(),
+    },
+    skeleton: {
+      primary: '#dedede',
+      secondary: '#efefef',
     },
   },
   shadows: {
@@ -80,9 +87,9 @@ export const lightTheme = {
     default: 250,
   },
   spacing: increment => {
-    return `${GRID_UNIT * increment}px`;
+    return `${GRID_UNIT * increment}`;
   },
-  borderRadius: increment => `${BORDER_RADIUS_COEFFICIENT * increment}px`,
+  borderRadius: increment => `${BORDER_RADIUS_COEFFICIENT * increment}`,
   breakpoints: gridTheme.breakpoints,
   mediaQueries: {
     up: breakpoint =>

@@ -14,16 +14,16 @@ const Wrapper = styled.div`
 
 const Track = styled.div`
   height: ${({ axis, theme }) =>
-    axis === 'horizontal' ? theme.spacing(0.5) : '100%'};
+    axis === 'horizontal' ? `${theme.spacing(0.5)}px` : '100%'};
   width: ${({ axis, theme }) =>
-    axis === 'vertical' ? theme.spacing(0.5) : '100%'};
+    axis === 'vertical' ? `${theme.spacing(0.5)}px` : '100%'};
   position: absolute;
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
   margin: auto;
-  border-radius: ${({ theme }) => theme.borderRadius(1)};
+  border-radius: ${({ theme }) => theme.borderRadius(1)}px;
   background-color: ${({ isDisabled, theme }) =>
     isDisabled
       ? theme.palette.action.disabled
@@ -36,12 +36,12 @@ const FilledSpace = styled.div`
   bottom: 0;
   left: 0;
   height: ${({ axis, progress, theme }) =>
-    axis === 'horizontal' ? theme.spacing(0.5) : progress};
+    axis === 'horizontal' ? `${theme.spacing(0.5)}px` : progress};
   width: ${({ axis, progress, theme }) =>
-    axis === 'vertical' ? theme.spacing(0.5) : progress};
+    axis === 'vertical' ? `${theme.spacing(0.5)}px` : progress};
   background: ${({ theme }) =>
     `linear-gradient(154deg, ${theme.palette.primary.normal}, ${theme.palette.secondary})`};
-  border-radius: ${({ theme }) => theme.borderRadius(1)};
+  border-radius: ${({ theme }) => theme.borderRadius(1)}px;
 `;
 
 const Thumb = styled.div`

@@ -16,9 +16,9 @@ const Wrapper = styled.div`
 `;
 
 const PopupStyled = styled(Popup)`
-  bottom: calc(100% + ${({ theme }) => theme.spacing(4)});
-  height: ${({ theme }) => theme.spacing(16)};
-  width: ${({ theme }) => theme.spacing(4)};
+  bottom: calc(100% + ${({ theme }) => theme.spacing(4)}px);
+  height: ${({ theme }) => theme.spacing(16)}px;
+  width: ${({ theme }) => theme.spacing(4)}px;
   transform-origin: center bottom;
 
   &:before {
@@ -28,20 +28,20 @@ const PopupStyled = styled(Popup)`
     top: 100%;
     left: 0;
     width: 100%;
-    height: ${({ theme }) => theme.spacing(4)};
+    height: ${({ theme }) => theme.spacing(4)}px;
     background-color: transparent;
   }
 `;
 
 const Inner = styled.div`
   height: 100%;
-  padding: ${({ theme }) => theme.spacing(1.5)} 0;
+  padding: ${({ theme }) => theme.spacing(1.5)}px 0;
 `;
 
 const VolumePropgressBar = styled(ProgressBar)`
   margin-left: auto;
   margin-right: auto;
-  padding: 0 ${({ theme }) => theme.spacing(2)};
+  padding: 0 ${({ theme }) => theme.spacing(2)}px;
 `;
 
 const VolumeControl = ({
@@ -54,6 +54,7 @@ const VolumeControl = ({
 }) => {
   const buttonRef = useRef();
   const [popupIsVisible, setPopupVisibility] = useState(false);
+  const [isMouseOver, setMouseOver] = useState(false);
   const [isSwiping, setIsSwiping] = useState(false);
 
   const popupVisibleToggle = () => setPopupVisibility(!popupIsVisible);
@@ -77,11 +78,14 @@ const VolumeControl = ({
   const handleMouseOver = () => {
     if (isMobile) return;
 
+    setMouseOver(true);
     setPopupVisibility(true);
   };
 
   const handleMouseLeave = () => {
     if (isMobile) return;
+
+    setMouseOver(false);
 
     if (!isSwiping) setPopupVisibility(false);
   };
@@ -89,8 +93,11 @@ const VolumeControl = ({
   const handleSwipeEnd = () => {
     if (isMobile) return;
 
-    setPopupVisibility(false);
     setIsSwiping(false);
+
+    if (!isMouseOver) {
+      setPopupVisibility(false);
+    }
   };
 
   const handleButtonClick = event => {

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import Swipe from 'react-easy-swipe';
@@ -12,7 +12,7 @@ const Wrapper = styled.div`
   );
 `;
 
-const Drag = ({ draggableArea, children }) => {
+const Draggable = ({ children }) => {
   const elRef = useRef(null);
 
   const [startPosition, setStartPosition] = useState({
@@ -56,8 +56,8 @@ const Drag = ({ draggableArea, children }) => {
   );
 };
 
-Drag.propTypes = {
+Draggable.propTypes = {
   children: PropTypes.element,
 };
 
-export default Drag;
+export default Draggable;

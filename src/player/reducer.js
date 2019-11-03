@@ -134,7 +134,7 @@ export function playerReducer(state = initialState, action) {
 
       return {
         ...state,
-        playlist: action.payload.playlist,
+        playlist: playlist,
         track: { ...playlist[0], prevTrack: null, nextTrack: playlist[1] },
         playlistIsLoading: false,
       };

@@ -1,105 +1,87 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ContentLoader from 'react-content-loader';
+//import Skeleton from 'react-loading-skeleton';
 import styled from '@emotion/styled';
 import MusicNote from '@material-ui/icons/MusicNote';
+import Skeleton from './Skeleton';
 
-const StyledTrackInfo = styled.div`
+const Wrapper = styled.div`
   display: flex;
   align-items: center;
-  max-width: ${({ theme }) => theme.spacing(20)};
+  max-width: ${({ theme }) => theme.spacing(20)}px;
 
   ${({ theme }) => theme.mediaQueries.up('sm')} {
-    min-width: ${({ theme }) => theme.spacing(22)};
-    width: ${({ theme }) => theme.spacing(22)};
-    max-width: ${({ theme }) => theme.spacing(22)};
+    min-width: ${({ theme }) => theme.spacing(22)}px;
+    width: ${({ theme }) => theme.spacing(22)}px;
+    max-width: ${({ theme }) => theme.spacing(22)}px;
   }
 `;
-const ImgWrapper = styled.div`
+const ArtCover = styled.div`
   flex-shrink: 0;
-  width: ${({ theme }) => theme.spacing(4.5)};
-  height: ${({ theme }) => theme.spacing(4.5)};
+  width: ${({ theme }) => theme.spacing(5)}px;
+  height: ${({ theme }) => theme.spacing(5)}px;
+  position: relative;
 `;
 
-const ImgDefault = styled.div`
+const ArtCoverDefault = styled.div`
   width: 100%;
   height: 100%;
-  line-height: ${({ theme }) => theme.spacing(4)};
+  line-height: ${({ theme }) => theme.spacing(5)}px;
   text-align: center;
-  font-size: ${({ theme }) => theme.spacing(4)};
+  font-size: ${({ theme }) => theme.spacing(4)}px;
   font-weight: 700;
   background-color: ${({ theme }) => theme.palette.primary.normal};
   color: ${({ theme }) => theme.palette.white};
 `;
 
 const Text = styled.div`
-  padding: 0 0 0 ${({ theme }) => theme.spacing(1)};
+  padding: 0 0 0 ${({ theme }) => theme.spacing(1)}px;
 `;
 
-const Track = styled.div`
+const TextLine = styled.div`
+  max-width: ${({ theme }) => theme.spacing(16)}px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+`;
+
+const Track = styled(TextLine)`
   color: ${({ theme }) => theme.palette.text.primary};
   font-size: 14px;
   line-height: 20px;
   font-weight: 700;
-  max-width: 130px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+  min-width: ${({ theme }) => theme.spacing(10)}px;
 `;
 
-const Artist = styled.div`
+const Artist = styled(TextLine)`
   font-size: 12px;
   line-height: 17px;
   color: ${({ theme }) => theme.palette.text.secondary};
-  max-width: 130px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
 `;
 
-const TrackInfo = ({ className, trackname, artist, img }) => {
-  if (!trackname) {
-    return (
-      <StyledTrackInfo className={className}>
-        <ContentLoader
-          height={40}
-          width={130}
-          speed={2}
-          primaryColor="#eee"
-          secondaryColor="#dadada"
-          style={{
-            width: '140px',
-            height: '40px',
-          }}
-        >
-          <rect x="47" y="6" width="68" height="8" />
-          <rect x="47" y="20" width="108" height="9" />
-          <rect x="0" y="0" width="37" height="37" />
-        </ContentLoader>
-      </StyledTrackInfo>
-    );
-  }
-
-  return (
-    <StyledTrackInfo className={className}>
-      <ImgWrapper>
-        {img ? (
-          <img src={img} alt={`${artist} - ${trackname}`} />
-        ) : (
-          <ImgDefault>
-            <MusicNote />
-          </ImgDefault>
-        )}
-      </ImgWrapper>
-      <Text>
-        <Track>{trackname}</Track>
-        <Artist>{artist}</Artist>
-      </Text>
-    </StyledTrackInfo>
-  );
-};
+const TrackInfo = ({ children, className, trackname, artist, img }) => (
+  <Wrapper className={className}>
+    <ArtCover>
+      {!trackname ? (
+        <Skeleton />
+      ) : img ? (
+        <img src={img} alt={`${artist} - ${trackname}`} />
+      ) : (
+        <ArtCoverDefault>
+          <MusicNote />
+        </ArtCoverDefault>
+      )}
+      {children}
+    </ArtCover>
+    <Text>
+      <Track>{!trackname ? <Skeleton /> : trackname}</Track>
+      <Artist>{!artist ? <Skeleton /> : artist}</Artist>
+    </Text>
+  </Wrapper>
+);
 
 TrackInfo.propTypes = {
+  children: PropTypes.node,
   className: PropTypes.string,
   trackname: PropTypes.string,
   artist: PropTypes.string,

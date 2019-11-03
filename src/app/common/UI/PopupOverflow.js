@@ -17,20 +17,20 @@ const ScrollTrack = styled.div`
   right: 0;
   bottom: 0;
   top: 0;
-  width: ${({ theme }) => theme.spacing(1)};
+  width: ${({ theme }) => theme.spacing(1)}px;
   border-radius: ${({ theme }) =>
-    `0 ${theme.borderRadius(2)} ${theme.borderRadius(2)} 0`};
+    `0 ${theme.borderRadius(2)}px ${theme.borderRadius(2)}px 0`};
   background-color: ${({ theme }) => theme.palette.background.alt};
 `;
 
 const ScrollThumb = styled.div`
   background-color: ${({ theme }) => theme.palette.primary.normal};
-  border-radius: ${({ theme }) => theme.borderRadius(2)};
+  border-radius: ${({ theme }) => theme.borderRadius(2)}px;
 `;
 
 const ScrollView = styled.div`
   padding-right: ${({ theme, scrollBarEnabled }) =>
-    scrollBarEnabled && !isMobile ? theme.spacing(2) : '0'};
+    scrollBarEnabled && !isMobile ? `${theme.spacing(1)}px` : '0'};
   -webkit-overflow-scrolling: touch;
 `;
 

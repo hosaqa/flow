@@ -31,9 +31,9 @@ const Wrapper = styled.div`
 
 const Circle = styled.span`
   display: block;
-  height: ${({ theme, size }) => theme.spacing(size)};
-  width: ${({ theme, size }) => theme.spacing(size)};
-  margin: 0 ${({ theme, size }) => theme.spacing(size / 2)};
+  height: ${({ theme, size }) => theme.spacing(size)}px;
+  width: ${({ theme, size }) => theme.spacing(size)}px;
+  margin: 0 ${({ theme, size }) => theme.spacing(size / 2)}px;
   border-radius: 50%;
   background-color: ${({ theme }) => theme.palette.primary.light};
   animation-name: ${({ theme }) =>

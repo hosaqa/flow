@@ -6,7 +6,7 @@ import OutsideClickHandler from 'react-outside-click-handler';
 import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay';
 import PopupOverflow from '../app/common/UI/PopupOverflow';
 import PlayerButton from '../app/common/UI/PlayerButton';
-import Playlist from '../app/common/Playlist';
+import Playlist from './Playlist';
 
 const Wrapper = styled.div`
   position: relative;
@@ -18,23 +18,28 @@ const Wrapper = styled.div`
 const PlaylistPopup = styled(PopupOverflow)`
   position: fixed;
   transform-origin: center bottom;
-  bottom: calc(100% + ${({ theme }) => theme.spacing(4)});
+  bottom: calc(100% + ${({ theme }) => theme.spacing(4)}px);
   right: 0;
   left: 0;
   margin: auto;
-  width: ${({ theme }) => theme.spacing(36)};
-  height: calc(100vh - ${({ theme }) => theme.spacing(16)});
+  width: ${({ theme }) => theme.spacing(36)}px;
+  height: calc(100vh - ${({ theme }) => theme.spacing(16)}px);
   max-height: 55vh;
 
   ${({ theme }) => theme.mediaQueries.up('lg')} {
     position: absolute;
     transform-origin: right bottom;
-    bottom: calc(100% + ${({ theme }) => theme.spacing(4)});
+    bottom: calc(100% + ${({ theme }) => theme.spacing(4)}px);
     right: 0;
     left: auto;
-    width: ${({ theme }) => theme.spacing(35)};
-    height: ${({ theme }) => theme.spacing(22)};
+    width: ${({ theme }) => theme.spacing(42)}px;
+    height: ${({ theme }) => theme.spacing(28)}px;
+    max-height: none;
   }
+`;
+
+const PlaylistWrapper = styled.div`
+  padding: ${({ theme }) => theme.spacing(1)}px;
 `;
 
 const PlayerQueue = ({ playlist, className, isOpen, setVisibility }) => {
@@ -58,7 +63,9 @@ const PlayerQueue = ({ playlist, className, isOpen, setVisibility }) => {
           <PlaylistPlayIcon />
         </PlayerButton>
         <PlaylistPopup isOpen={isOpen} onClickOutside={handleClick}>
-          <Playlist />
+          <PlaylistWrapper>
+            <Playlist />
+          </PlaylistWrapper>
         </PlaylistPopup>
       </OutsideClickHandler>
     </Wrapper>
