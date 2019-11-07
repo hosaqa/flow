@@ -138,15 +138,28 @@ const Player = ({
   const [volume, setVolume] = useState(1);
   const [muted, setMute] = useState(false);
 
-  const currentTrack = playlist
-    ? playlist.find(track => track.id === currentTrackID)
-    : null;
-  const currentTrackIndex = currentTrack
-    ? playlist.indexOf(currentTrack)
+  const currentPlaylist = playlist
+    ? shuffledPlaylist
+      ? shuffledPlaylist
+      : playlist
     : null;
 
-  const prevTrack = currentTrack ? playlist[currentTrackIndex - 1] : null;
-  const nextTrack = currentTrack ? playlist[currentTrackIndex + 1] : null;
+  const currentTrack = currentPlaylist
+    ? currentPlaylist.find(track => track.id === currentTrackID)
+    : null;
+  const currentTrackIndex = currentTrack
+    ? currentPlaylist.indexOf(currentTrack)
+    : null;
+
+  const prevTrack = currentTrack
+    ? currentPlaylist[currentTrackIndex - 1]
+    : null;
+  const nextTrack = currentTrack
+    ? currentPlaylist[currentTrackIndex + 1]
+    : null;
+
+  const prevTrackID = prevTrack ? prevTrack.id : null;
+  const nextTrackID = nextTrack ? nextTrack.id : null;
 
   useEffect(() => {
     // wtf?
@@ -187,12 +200,12 @@ const Player = ({
 
   const handleOnEnd = () => {
     if (!repeating) {
-      if (!nextTrack) {
+      if (!nextTrackID) {
         playToggle();
 
         clearRAF();
       } else {
-        setCurrentTrack(nextTrack.id);
+        setCurrentTrack(nextTrackID);
       }
     }
   };
@@ -201,7 +214,7 @@ const Player = ({
     setAdditionalControlsVisibility(true);
   };
 
-  const interfaceDisabled = !playlist;
+  const interfaceDisabled = !currentPlaylist;
 
   return (
     <OutsideClickHandler
@@ -239,8 +252,8 @@ const Player = ({
               <PlayControlsStyled
                 disabled={interfaceDisabled}
                 playingNow={playingNow}
-                prevTrack={prevTrack}
-                nextTrack={nextTrack}
+                prevTrackID={prevTrackID}
+                nextTrackID={nextTrackID}
                 setCurrentTrack={setCurrentTrack}
                 playToggle={playToggle}
               />
@@ -274,6 +287,8 @@ const Player = ({
               />
 
               <Quene
+                disabled={interfaceDisabled}
+                playlist={currentPlaylist}
                 isOpen={queneIsVisible}
                 setVisibility={setQueneVisibility}
               />
@@ -292,6 +307,7 @@ Player.propTypes = {
   playlist: PropTypes.array, // TODO: описание типов!
   shuffledPlaylist: PropTypes.array,
   currentTrackID: PropTypes.string,
+
   playToggle: PropTypes.func,
   fetchPlaylist: PropTypes.func,
   setCurrentTrack: PropTypes.func,

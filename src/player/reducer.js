@@ -47,39 +47,30 @@ export function playerReducer(state = initialState, action) {
     }
 
     case SHUFFLE_PLAYLIST_TOGGLE: {
-      //надо разобраться
-      // const { shuffledPlaylist, playlist, track } = state;
-      // if (shuffledPlaylist) {
-      //   const closestTracks = getClosestTracks(track.id, playlist);
-      //   return {
-      //     ...state,
-      //     shuffledPlaylist: null,
-      //     track: {
-      //       ...track,
-      //       prevTrack: closestTracks.prevTrack,
-      //       nextTrack: closestTracks.nextTrack,
-      //     },
-      //   };
-      // }
-      // const currentPlaylist = playlist;
-      // const playlistLength = currentPlaylist.length;
-      // const prevIndexesSequence = [...Array(playlistLength).keys()];
-      // const nextPlaylist = [];
-      // while (prevIndexesSequence.length > 0) {
-      //   const getRandomIndex = getRandomInt(1, prevIndexesSequence.length) - 1;
-      //   nextPlaylist.push(currentPlaylist[prevIndexesSequence[getRandomIndex]]);
-      //   prevIndexesSequence.splice(getRandomIndex, 1);
-      // }
-      // const closestTracks = getClosestTracks(track.id, nextPlaylist);
-      // return {
-      //   ...state,
-      //   shuffledPlaylist: nextPlaylist,
-      //   currentTrackID: {
-      //     ...track,
-      //     prevTrack: closestTracks.prevTrack,
-      //     nextTrack: closestTracks.nextTrack,
-      //   },
-      // };
+      const { shuffledPlaylist, playlist } = state;
+
+      if (shuffledPlaylist) {
+        return {
+          ...state,
+          shuffledPlaylist: null,
+        };
+      }
+
+      const currentPlaylist = playlist;
+      const playlistLength = currentPlaylist.length;
+      const prevIndexesSequence = [...Array(playlistLength).keys()];
+      const nextPlaylist = [];
+
+      while (prevIndexesSequence.length > 0) {
+        const getRandomIndex = getRandomInt(1, prevIndexesSequence.length) - 1;
+        nextPlaylist.push(currentPlaylist[prevIndexesSequence[getRandomIndex]]);
+        prevIndexesSequence.splice(getRandomIndex, 1);
+      }
+
+      return {
+        ...state,
+        shuffledPlaylist: nextPlaylist,
+      };
     }
 
     case FETCH_TRACK_EXECUTED:

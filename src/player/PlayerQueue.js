@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import styled from '@emotion/styled';
 import OutsideClickHandler from 'react-outside-click-handler';
 import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay';
@@ -42,7 +41,7 @@ const PlaylistWrapper = styled.div`
   padding: ${({ theme }) => theme.spacing(1)}px;
 `;
 
-const PlayerQueue = ({ playlist, className, isOpen, setVisibility }) => {
+const PlayerQueue = ({ className, disabled, isOpen, setVisibility }) => {
   const visibilityToggle = () => setVisibility(!isOpen);
 
   const handleClick = () => {
@@ -57,7 +56,7 @@ const PlayerQueue = ({ playlist, className, isOpen, setVisibility }) => {
       >
         <PlayerButton
           onClick={handleClick}
-          disabled={!playlist}
+          disabled={disabled}
           activated={isOpen}
         >
           <PlaylistPlayIcon />
@@ -73,24 +72,10 @@ const PlayerQueue = ({ playlist, className, isOpen, setVisibility }) => {
 };
 
 PlayerQueue.propTypes = {
+  disabled: PropTypes.bool,
   className: PropTypes.string,
   isOpen: PropTypes.bool,
   setVisibility: PropTypes.func,
-  playlist: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      artist: PropTypes.string,
-      trackname: PropTypes.string,
-      album: PropTypes.string,
-      src: PropTypes.string,
-      img: PropTypes.string,
-      duration: PropTypes.number,
-    })
-  ),
-  playingNow: PropTypes.bool,
 };
 
-export default connect(
-  ({ player }) => player,
-  null
-)(PlayerQueue);
+export default PlayerQueue;

@@ -29,7 +29,6 @@ const Playlist = ({
         <PlaylistItemStyled />
       </>
     );
-
   return (
     <>
       {playlist.map(track => (
@@ -48,7 +47,7 @@ const Playlist = ({
 
 const playlistProp = PropTypes.arrayOf(
   PropTypes.shape({
-    id: PropTypes.number,
+    id: PropTypes.string,
     artist: PropTypes.string,
     trackname: PropTypes.string,
     album: PropTypes.string,
@@ -67,6 +66,6 @@ Playlist.propTypes = {
 };
 
 export default connect(
-  ({ player }) => player,
+  ({ player }) => ({ ...player }),
   { playToggle, setCurrentTrack }
 )(Playlist);

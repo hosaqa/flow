@@ -1,6 +1,6 @@
 [
   {
-    "id": 0,
+    "id": "0",
     "artist": "Aphex Twin",
     "trackname": "Avril 14th",
     "album": "",
@@ -9,7 +9,7 @@
     "duration": 126
   },
   {
-    "id": 1,
+    "id": "1",
     "artist": "New Beat Fund",
     "trackname": "When Shes's Sober",
     "album": "",
@@ -17,7 +17,7 @@
     "duration": 243
   },
   {
-    "id": 3,
+    "id": "3",
     "artist": "Lil PEEP",
     "trackname": "Awful Things",
     "album": "",
@@ -26,7 +26,7 @@
     "duration": 214
   },
   {
-    "id": 4,
+    "id": "4",
     "artist": "Lil PEEP",
     "trackname": "Better Off (Dying)",
     "album": "",
@@ -35,7 +35,7 @@
     "duration": 155
   },
   {
-    "id": 5,
+    "id": "5",
     "artist": "Lil PEEP x Marshmello",
     "trackname": "Spotlight",
     "album": "",
@@ -44,7 +44,7 @@
     "duration": 178
   },
   {
-    "id": 6,
+    "id": "6",
     "artist": "Lil PEEP",
     "trackname": "Yesterday",
     "album": "",
@@ -53,7 +53,7 @@
     "duration": 111
   },
   {
-    "id": 7,
+    "id": "7",
     "artist": "Lil Uzi Vert",
     "trackname": "XO Tour Llif3",
     "src": "/tracks/lil-uzi_xo-tour.mp3",
@@ -61,7 +61,7 @@
     "duration": 180
   },
   {
-    "id": 8,
+    "id": "8",
     "artist": "XXXTentacion",
     "trackname": "Save me",
     "src": "/tracks/xxxtentacion_save-me.mp3",
@@ -69,7 +69,7 @@
     "duration": 163
   },
   {
-    "id": 9,
+    "id": "9",
     "artist": "XXXTentacion",
     "trackname": "KING",
     "src": "/tracks/xxxtentacion_king.mp3",
@@ -77,7 +77,7 @@
     "duration": 113
   },
   {
-    "id": 10,
+    "id": "10",
     "artist": "Lil Pump",
     "trackname": "Molly",
     "img": "/img/artists/lil-pump.jpg",
@@ -85,14 +85,14 @@
     "duration": 99
   },
   {
-    "id": 11,
+    "id": "11",
     "artist": "Гнойный & Смешарик",
     "trackname": "Клетчатая сумка",
     "src": "/tracks/gnoynii_kletchataya-sumka.mp3",
     "duration": 66
   },
   {
-    "id": 12,
+    "id": "12",
     "artist": "MGMT",
     "trackname": "When you die",
     "src": "/tracks/mgmt_when-you-die.mp3",

@@ -86,7 +86,7 @@ const PlaylistItem = ({
 PlaylistItem.propTypes = {
   className: PropTypes.string,
   track: PropTypes.shape({
-    id: PropTypes.number,
+    id: PropTypes.string,
     artist: PropTypes.string,
     trackname: PropTypes.string,
     album: PropTypes.string,
@@ -94,7 +94,7 @@ PlaylistItem.propTypes = {
     img: PropTypes.string,
     duration: PropTypes.number,
   }),
-  currentTrackID: PropTypes.number,
+  currentTrackID: PropTypes.string,
   playToggle: PropTypes.func,
   setTrack: PropTypes.func,
   playingNow: PropTypes.bool,

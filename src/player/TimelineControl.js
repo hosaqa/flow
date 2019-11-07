@@ -99,7 +99,7 @@ TimelineControl.propTypes = {
   disabled: PropTypes.bool,
   trackIsLoading: PropTypes.bool,
   currentTrack: PropTypes.shape({
-    id: PropTypes.number,
+    id: PropTypes.string,
     artist: PropTypes.string,
     trackname: PropTypes.string,
     album: PropTypes.string,

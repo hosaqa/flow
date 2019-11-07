@@ -17,8 +17,8 @@ const PlayControls = ({
   className,
   disabled,
   playingNow,
-  prevTrack,
-  nextTrack,
+  prevTrackID,
+  nextTrackID,
   playToggle,
   setCurrentTrack,
 }) => (
@@ -29,8 +29,8 @@ const PlayControls = ({
       }}
     >
       <PlayerButton
-        onClick={() => setCurrentTrack(prevTrack.id)}
-        disabled={disabled || !prevTrack}
+        onClick={() => setCurrentTrack(prevTrackID)}
+        disabled={disabled || !prevTrackID}
       >
         <SkipPreviousIcon />
       </PlayerButton>
@@ -42,8 +42,8 @@ const PlayControls = ({
         {!playingNow ? <PlayCircleOutlineIcon /> : <PauseCircleOutlineIcon />}
       </PlayerButton>
       <PlayerButton
-        onClick={() => setCurrentTrack(nextTrack.id)}
-        disabled={disabled || !nextTrack}
+        onClick={() => setCurrentTrack(nextTrackID)}
+        disabled={disabled || !nextTrackID}
       >
         <SkipNextIcon />
       </PlayerButton>
@@ -51,22 +51,12 @@ const PlayControls = ({
   </div>
 );
 
-const trackProp = PropTypes.shape({
-  id: PropTypes.number,
-  artist: PropTypes.string,
-  trackname: PropTypes.string,
-  album: PropTypes.string,
-  src: PropTypes.string,
-  img: PropTypes.string,
-  duration: PropTypes.number,
-});
-
 PlayControls.propTypes = {
   className: PropTypes.string,
   disabled: PropTypes.bool,
   playingNow: PropTypes.bool,
-  prevTrack: trackProp,
-  nextTrack: trackProp,
+  prevTrackID: PropTypes.string,
+  nextTrackID: PropTypes.string,
   playToggle: PropTypes.func,
   setCurrentTrack: PropTypes.func,
 };
