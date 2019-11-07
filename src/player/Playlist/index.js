@@ -14,11 +14,14 @@ const PlaylistItemStyled = styled(PlaylistItem)`
 const Playlist = ({
   currentTrackID,
   playlist,
+  playlistNowPlaying,
   playToggle,
   playingNow,
   setCurrentTrack,
 }) => {
-  if (!playlist)
+  const currentPlaylist = playlist || playlistNowPlaying;
+
+  if (!currentPlaylist)
     return (
       <>
         <PlaylistItemStyled />
@@ -31,7 +34,7 @@ const Playlist = ({
     );
   return (
     <>
-      {playlist.map(track => (
+      {currentPlaylist.map(track => (
         <PlaylistItemStyled
           playToggle={playToggle}
           setTrack={setCurrentTrack}
@@ -59,6 +62,7 @@ const playlistProp = PropTypes.arrayOf(
 
 Playlist.propTypes = {
   playlist: playlistProp,
+  playlistNowPlaying: playlistProp,
   currentTrackID: PropTypes.string,
   playToggle: PropTypes.func,
   setCurrentTrack: PropTypes.func,
@@ -66,6 +70,10 @@ Playlist.propTypes = {
 };
 
 export default connect(
-  ({ player }) => ({ ...player }),
+  ({ player }) => ({
+    playlistNowPlaying: player.playlist,
+    currentTrackID: player.currentTrackID,
+    playingNow: player.playingNow,
+  }),
   { playToggle, setCurrentTrack }
 )(Playlist);

@@ -41,7 +41,13 @@ const PlaylistWrapper = styled.div`
   padding: ${({ theme }) => theme.spacing(1)}px;
 `;
 
-const PlayerQueue = ({ className, disabled, isOpen, setVisibility }) => {
+const PlayerQueue = ({
+  className,
+  disabled,
+  isOpen,
+  playlist,
+  setVisibility,
+}) => {
   const visibilityToggle = () => setVisibility(!isOpen);
 
   const handleClick = () => {
@@ -63,7 +69,7 @@ const PlayerQueue = ({ className, disabled, isOpen, setVisibility }) => {
         </PlayerButton>
         <PlaylistPopup isOpen={isOpen} onClickOutside={handleClick}>
           <PlaylistWrapper>
-            <Playlist />
+            <Playlist playlist={playlist} />
           </PlaylistWrapper>
         </PlaylistPopup>
       </OutsideClickHandler>
@@ -74,6 +80,17 @@ const PlayerQueue = ({ className, disabled, isOpen, setVisibility }) => {
 PlayerQueue.propTypes = {
   disabled: PropTypes.bool,
   className: PropTypes.string,
+  playlist: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      artist: PropTypes.string,
+      trackname: PropTypes.string,
+      album: PropTypes.string,
+      src: PropTypes.string,
+      img: PropTypes.string,
+      duration: PropTypes.number,
+    })
+  ),
   isOpen: PropTypes.bool,
   setVisibility: PropTypes.func,
 };

@@ -1,8 +1,7 @@
 {
   "extends": ["eslint:recommended", "plugin:react/recommended"],
   "rules": {
-    "jsx-quotes": [1, "prefer-double"],
-    "react-hooks/exhaustive-deps": "off"
+    "jsx-quotes": [1, "prefer-double"]
   },
   "env": {
     "browser": true,

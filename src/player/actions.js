@@ -1,8 +1,6 @@
 import {
   PLAY_TOGGLE,
   SET_CURRENT_TRACK,
-  REPEAT_TOGGLE,
-  SHUFFLE_PLAYLIST_TOGGLE,
   FETCH_TRACK_EXECUTED,
   FETCH_PLAYLIST_BEGIN,
   FETCH_PLAYLIST_SUCCESS,
@@ -20,14 +18,6 @@ export const setCurrentTrack = (id, playingNow) => ({
     playingNow,
     trackPosition: null,
   },
-});
-
-export const repeatToggle = () => ({
-  type: REPEAT_TOGGLE,
-});
-
-export const shuffleToggle = () => ({
-  type: SHUFFLE_PLAYLIST_TOGGLE,
 });
 
 export const fetchTrackResult = error => ({

@@ -20,10 +20,8 @@ import {
   setCurrentTrack,
   fetchTrackResult,
   fetchPlaylist,
-  repeatToggle,
-  shuffleToggle,
 } from './actions';
-import { isDesktop, isNumeric } from '../utils';
+import { isDesktop, isNumeric, randomiseArray } from '../utils';
 
 const Wrapper = styled.section`
   position: fixed;
@@ -123,24 +121,41 @@ const CurrentTrackInfo = styled(TrackInfo)`
 const Player = ({
   trackIsLoading,
   playingNow,
-  repeating,
   playlist,
-  shuffledPlaylist,
   currentTrackID,
   playToggle,
   fetchPlaylist,
   setCurrentTrack,
   fetchTrackResult,
-  repeatToggle,
-  shuffleToggle,
 }) => {
   const [trackPosition, setTrackPosition] = useState(0);
   const [volume, setVolume] = useState(1);
   const [muted, setMute] = useState(false);
+  const [repeat, setRepeat] = useState(false);
+  const [playlistShuffled, setPlaylistShuffled] = useState(null);
+
+  const toggleShuffle = () => {
+    playlistShuffled
+      ? setPlaylistShuffled(null)
+      : setPlaylistShuffled(randomiseArray(playlist));
+  };
+
+  const [
+    additionalControlsIsVisible,
+    setAdditionalControlsVisibility,
+  ] = useState(false);
+
+  const [queneIsVisible, setQueneVisibility] = useState(false);
+
+  const playerRef = useRef(null);
+
+  useEffect(() => {
+    setTrackPosition(0);
+  }, [playlist]);
 
   const currentPlaylist = playlist
-    ? shuffledPlaylist
-      ? shuffledPlaylist
+    ? playlistShuffled
+      ? playlistShuffled
       : playlist
     : null;
 
@@ -161,19 +176,6 @@ const Player = ({
   const prevTrackID = prevTrack ? prevTrack.id : null;
   const nextTrackID = nextTrack ? nextTrack.id : null;
 
-  useEffect(() => {
-    // wtf?
-    setTrackPosition(0);
-  }, [playlist]);
-
-  const [
-    additionalControlsIsVisible,
-    setAdditionalControlsVisibility,
-  ] = useState(false);
-
-  const [queneIsVisible, setQueneVisibility] = useState(false);
-
-  const playerRef = useRef(null);
   let playerRAF = null;
 
   useEffect(() => {
@@ -198,8 +200,12 @@ const Player = ({
     raf.cancel(playerRAF);
   };
 
+  const repeatToggle = () => {
+    setRepeat(!repeat);
+  };
+
   const handleOnEnd = () => {
-    if (!repeating) {
+    if (!playerRef.current.props.repeat) {
       if (!nextTrackID) {
         playToggle();
 
@@ -236,6 +242,8 @@ const Player = ({
           {!interfaceDisabled && (
             <ReactHowler
               ref={playerRef}
+              loop={repeat}
+              repeat={repeat}
               src={currentTrack.src}
               playing={playingNow}
               onPlay={setSeekPos}
@@ -266,14 +274,14 @@ const Player = ({
               />
               <RepeatButton
                 onClick={repeatToggle}
-                activated={repeating}
+                activated={repeat}
                 disabled={interfaceDisabled}
               >
                 <RepeatIcon />
               </RepeatButton>
               <ShuffleButton
-                onClick={shuffleToggle}
-                activated={!!shuffledPlaylist}
+                onClick={toggleShuffle}
+                activated={!!playlistShuffled}
                 disabled={interfaceDisabled}
               >
                 <ShuffleIcon />
@@ -305,15 +313,12 @@ Player.propTypes = {
   playingNow: PropTypes.bool,
   repeating: PropTypes.bool,
   playlist: PropTypes.array, // TODO: описание типов!
-  shuffledPlaylist: PropTypes.array,
   currentTrackID: PropTypes.string,
 
   playToggle: PropTypes.func,
   fetchPlaylist: PropTypes.func,
   setCurrentTrack: PropTypes.func,
   fetchTrackResult: PropTypes.func,
-  repeatToggle: PropTypes.func,
-  shuffleToggle: PropTypes.func,
 };
 
 export default connect(
@@ -323,7 +328,5 @@ export default connect(
     fetchPlaylist,
     setCurrentTrack,
     fetchTrackResult,
-    repeatToggle,
-    shuffleToggle,
   }
 )(Player);

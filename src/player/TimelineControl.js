@@ -3,24 +3,13 @@ import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import ProgressBar from '../app/common/UI/ProgressBar';
 import Loader from '../app/common/UI/Loader';
+import TimeLabel from '../app/common/UI/TimeLabel';
 import { humanizeTrackTime } from '../utils';
 
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
   position: relative;
-`;
-
-const TimeDisplay = styled.div`
-  text-align: center;
-  display: inline-block;
-  vertical-align: middle;
-  width: ${({ theme }) => theme.spacing(4)}px;
-  user-select: none;
-  font-size: 14px;
-  transition: color ${({ theme }) => theme.transitions.short}ms;
-  color: ${({ theme, disabled }) =>
-    disabled ? theme.palette.action.disabled : theme.palette.text.primary};
 `;
 
 const ProgressBarStyled = styled(ProgressBar)`
@@ -71,11 +60,11 @@ const TimelineControl = ({
 
   return (
     <Wrapper className={className}>
-      <TimeDisplay disabled={disabled}>
+      <TimeLabel disabled={disabled}>
         {nextTrackPosition !== null
           ? humanizeTrackTime(nextTrackPosition)
           : humanizeTrackTime(trackPosition)}
-      </TimeDisplay>
+      </TimeLabel>
       <ProgressBarStyled
         loading={trackIsLoading}
         disabled={disabled}
@@ -87,9 +76,9 @@ const TimelineControl = ({
         onSwipeEnd={handleSwipeEnd}
       />
       {trackIsLoading && <LoaderStyled size={0.5} />}
-      <TimeDisplay disabled={disabled}>
+      <TimeLabel disabled={disabled}>
         {humanizeTrackTime(trackDuration)}
-      </TimeDisplay>
+      </TimeLabel>
     </Wrapper>
   );
 };

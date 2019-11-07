@@ -42,6 +42,19 @@ const searchArrItemByID = (arr, id) => {
 const getRandomInt = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min);
 
+const randomiseArray = arr => {
+  const prevIndexesSequence = [...Array(arr.length).keys()];
+  const randomisedArray = [];
+
+  while (prevIndexesSequence.length > 0) {
+    const getRandomIndex = getRandomInt(1, prevIndexesSequence.length) - 1;
+    randomisedArray.push(arr[prevIndexesSequence[getRandomIndex]]);
+    prevIndexesSequence.splice(getRandomIndex, 1);
+  }
+
+  return randomisedArray;
+};
+
 const isDesktop = () => useMediaQuery({ minWidth: gridTheme.breakpoints.lg });
 
 const getViewportHeight = () =>
@@ -56,4 +69,5 @@ export {
   getRandomInt,
   isDesktop,
   getViewportHeight,
+  randomiseArray,
 };

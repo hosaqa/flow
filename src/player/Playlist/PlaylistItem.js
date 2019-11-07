@@ -6,6 +6,7 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
 
 import PlayerButton from '../../app/common/UI/PlayerButton';
+import TimeLabel from '../../app/common/UI/TimeLabel';
 import TrackInfo from '../../app/common/UI/TrackInfo';
 
 import { humanizeTrackTime } from '../../utils';
@@ -29,7 +30,7 @@ const ButtonWrapper = styled.div`
   transition: opacity ${({ theme }) => theme.transitions.short}ms,
     visibility ${({ theme }) => theme.transitions.short}ms;
   opacity: ${({ visible }) => (visible ? '1' : '0')};
-  visibility: hidden;
+  visibility: ${({ visible }) => (visible ? 'visible' : 'hidden')};
 
   ${Wrapper}:hover & {
     opacity: 1;
@@ -37,11 +38,7 @@ const ButtonWrapper = styled.div`
   }
 `;
 
-const TimeLabel = styled.div`
-  width: ${({ theme }) => theme.spacing(6)}px;
-  display: block;
-  text-align: right;
-  font-size: 14px;
+const TimeLabelStyled = styled(TimeLabel)`
   margin-left: auto;
 `;
 
@@ -60,6 +57,7 @@ const PlaylistItem = ({
       setTrack(track.id, true);
     }
   };
+
   return (
     <Wrapper className={className}>
       <TrackInfo {...track}>
@@ -78,7 +76,9 @@ const PlaylistItem = ({
           </ButtonWrapper>
         ) : null}
       </TrackInfo>
-      <TimeLabel>{humanizeTrackTime(track ? track.duration : null)}</TimeLabel>
+      <TimeLabelStyled disabled={!track}>
+        {humanizeTrackTime(track ? track.duration : null)}
+      </TimeLabelStyled>
     </Wrapper>
   );
 };
