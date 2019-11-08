@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
-import ProgressBar from '../app/common/UI/ProgressBar';
-import Loader from '../app/common/UI/Loader';
-import TimeLabel from '../app/common/UI/TimeLabel';
+import ProgressBar from '../common/UI/ProgressBar';
+import Loader from '../common/UI/Loader';
+import TimeLabel from '../common/UI/TimeLabel';
 import { humanizeTrackTime } from '../utils';
 
 const Wrapper = styled.div`
@@ -45,7 +45,7 @@ const TimelineControl = ({
     ((trackPosition / trackDuration) * 100).toFixed(1)
   );
 
-  const _setTrackPosition = nextPosition => {
+  const setTrackPositionEnchanced = nextPosition => {
     setTrackPosition((trackDuration / 100) * nextPosition);
   };
 
@@ -55,7 +55,7 @@ const TimelineControl = ({
 
   const handleSwipeEnd = nextPosition => {
     setNextTrackPosition(null);
-    _setTrackPosition(nextPosition);
+    setTrackPositionEnchanced(nextPosition);
   };
 
   return (
@@ -69,7 +69,7 @@ const TimelineControl = ({
         loading={trackIsLoading}
         disabled={disabled}
         thumbShowOnHover
-        thumbRadius={6}
+        thumbRadius={0.75}
         axis="horizontal"
         progress={progress}
         onSwipeMove={handleSwipeMove}

@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import OutsideClickHandler from 'react-outside-click-handler';
 import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay';
-import PopupOverflow from '../app/common/UI/PopupOverflow';
-import PlayerButton from '../app/common/UI/PlayerButton';
+import PopupOverflow from '../common/UI/PopupOverflow';
+import PlayerButton from '../common/UI/PlayerButton';
 import Playlist from './Playlist';
 
 const Wrapper = styled.div`

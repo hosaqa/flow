@@ -1,73 +1,17 @@
-import { useMediaQuery } from 'react-responsive';
-import { gridTheme } from '../app/theme';
-
-const humanizeTrackTime = duration => {
-  if (!isNumeric(duration)) {
-    return '--:--';
-  }
-
-  const minutes = Math.floor(duration / 60);
-  const seconds = duration % 60;
-
-  return `${minutes}:${Math.floor(seconds)
-    .toString()
-    .padStart(2, '0')}`;
-};
-
-const isNumeric = n => !Number.isNaN(parseFloat(n)) && Number.isFinite(n);
-
-const countDigits = number => `${number}`.length;
-
-const getMousePosition = (ev, ref) => {
-  const { top, left, width, height } = ref.current.getBoundingClientRect();
-
-  return {
-    top,
-    left,
-    width,
-    height,
-    mouseX: ev.clientX,
-    mouseY: ev.clientY,
-    leftPosition: (ev.clientX - left) / width,
-    topPosition: (ev.clientY - top) / height,
-  };
-};
-
-const searchArrItemByID = (arr, id) => {
-  if (!arr || typeof id === 'undefined') return false;
-
-  return arr.find(item => item.id === id);
-};
-
-const getRandomInt = (min, max) =>
-  Math.floor(Math.random() * (max - min + 1) + min);
-
-const randomiseArray = arr => {
-  const prevIndexesSequence = [...Array(arr.length).keys()];
-  const randomisedArray = [];
-
-  while (prevIndexesSequence.length > 0) {
-    const getRandomIndex = getRandomInt(1, prevIndexesSequence.length) - 1;
-    randomisedArray.push(arr[prevIndexesSequence[getRandomIndex]]);
-    prevIndexesSequence.splice(getRandomIndex, 1);
-  }
-
-  return randomisedArray;
-};
-
-const isDesktop = () => useMediaQuery({ minWidth: gridTheme.breakpoints.lg });
-
-const getViewportHeight = () =>
-  Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+import humanizeTrackTime from './humanizeTrackTime';
+import isNumeric from './isNumeric';
+import isDesktop from './isDesktop';
+import getRandomInt from './getRandomInt';
+import getViewportHeight from './getViewportHeight';
+import randomiseArray from './randomiseArray';
+import checkFetchStatus from './checkFetchStatus';
 
 export {
   humanizeTrackTime,
   isNumeric,
-  countDigits,
-  getMousePosition,
-  searchArrItemByID,
   getRandomInt,
   isDesktop,
   getViewportHeight,
   randomiseArray,
+  checkFetchStatus,
 };

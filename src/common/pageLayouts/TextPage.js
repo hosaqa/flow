@@ -14,21 +14,17 @@ export const Title = styled.div`
   font-family: 'Montserrat', sans-serif;
   font-weight: 900;
   font-style: italic;
-  font-size: 48px;
+  font-size: ${({ theme }) => theme.spacing(6)};
   line-height: 1.2;
   color: ${({ theme }) => theme.colors.fontPrimary};
   margin: 0 0 15px;
 `;
 
 export const Paragraph = styled.div`
-  font-size: 16px;
-  line-height: 24px;
   margin: 10px 0;
 `;
 
 export const ExternalLink = styled.a`
-  font-size: 16px;
-  line-height: 24px;
   color: ${({ theme }) => theme.colors.theme};
 
   &:hover {
@@ -55,8 +51,8 @@ export const MarkedListItem = styled.li`
   }
 `;
 
-export const StaticPage = ({ children }) => <Wrapper>{children}</Wrapper>;
+export const TextPage = ({ children }) => <Wrapper>{children}</Wrapper>;
 
-StaticPage.propTypes = {
+TextPage.propTypes = {
   children: PropTypes.node,
 };

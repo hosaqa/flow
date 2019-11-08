@@ -19,56 +19,44 @@ const initialState = {
   currentTrackID: null,
 };
 
+export const playerReducerMap = {
+  [PLAY_TOGGLE]: state => ({
+    ...state,
+    playingNow: !state.playingNow,
+  }),
+  [SET_CURRENT_TRACK]: (state, action) => ({
+    ...state,
+    currentTrackID: action.payload.id,
+    playingNow: action.payload.playingNow || state.playingNow, //TODO: это для того, чтоб сразу проиграть, перепискать нужно как-то
+    trackIsLoading: true,
+    fetchTrackError: null,
+  }),
+  [FETCH_TRACK_EXECUTED]: (state, action) => ({
+    ...state,
+    trackIsLoading: false,
+    fetchTrackError: action.payload.error ? action.payload.error : null,
+  }),
+  [FETCH_PLAYLIST_BEGIN]: state => ({
+    ...state,
+    playlistIsLoading: true,
+    fetchPlaylistError: null,
+  }),
+  [FETCH_PLAYLIST_SUCCESS]: (state, action) => ({
+    ...state,
+    playlist: action.payload.playlist,
+    currentTrackID: action.payload.playlist[0].id,
+    playlistIsLoading: false,
+  }),
+  [FETCH_PLAYLIST_FAILURE]: (state, action) => ({
+    fetchPlaylistError: action.payload.error,
+    playlistIsLoading: false,
+  }),
+};
+
 export function playerReducer(state = initialState, action) {
-  switch (action.type) {
-    case PLAY_TOGGLE:
-      return { ...state, playingNow: !state.playingNow };
+  const reducer = playerReducerMap[action.type];
 
-    case SET_CURRENT_TRACK: {
-      const { id, playingNow } = action.payload;
+  if (!reducer) return state;
 
-      return {
-        ...state,
-        currentTrackID: id,
-        playingNow: playingNow || state.playingNow, //TODO: это для того, чтоб сразу проиграть, перепискать нужно как-то
-        trackIsLoading: true,
-        fetchTrackError: null,
-      };
-    }
-
-    case FETCH_TRACK_EXECUTED:
-      return {
-        ...state,
-        trackIsLoading: false,
-        fetchTrackError: action.payload.error ? action.payload.error : null,
-      };
-
-    case FETCH_PLAYLIST_BEGIN:
-      return {
-        ...state,
-        playlistIsLoading: true,
-        fetchPlaylistError: null,
-      };
-
-    case FETCH_PLAYLIST_SUCCESS: {
-      const { playlist } = action.payload;
-
-      return {
-        ...state,
-        playlist: playlist,
-        currentTrackID: playlist[0].id,
-        playlistIsLoading: false,
-      };
-    }
-
-    case FETCH_PLAYLIST_FAILURE:
-      return {
-        ...state,
-        fetchPlaylistError: action.payload.error,
-        playlistIsLoading: false,
-      };
-
-    default:
-      return state;
-  }
+  return reducer(state, action);
 }

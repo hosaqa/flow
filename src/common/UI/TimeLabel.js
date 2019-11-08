@@ -6,7 +6,7 @@ const TimeLabel = styled.div`
   vertical-align: middle;
   width: ${({ theme }) => theme.spacing(4)}px;
   user-select: none;
-  font-size: 14px;
+  font-size: ${({ theme }) => theme.spacing(1.75)}px;
   transition: color ${({ theme }) => theme.transitions.short}ms;
   color: ${({ theme, disabled }) =>
     disabled ? theme.palette.action.disabled : theme.palette.text.primary};

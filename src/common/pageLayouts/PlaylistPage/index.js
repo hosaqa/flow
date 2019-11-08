@@ -27,7 +27,7 @@ const Content = styled.div`
   box-shadow: ${({ theme }) => theme.shadows.secondary};
 `;
 
-const ContentPlaylist = ({ playlist }) => (
+const PlaylistPage = ({ playlist }) => (
   <Wrapper>
     <CoverImg />
     <Content>
@@ -36,7 +36,7 @@ const ContentPlaylist = ({ playlist }) => (
   </Wrapper>
 );
 
-ContentPlaylist.propTypes = {
+PlaylistPage.propTypes = {
   playlist: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
@@ -53,4 +53,4 @@ ContentPlaylist.propTypes = {
 export default connect(
   ({ player }) => player,
   null
-)(ContentPlaylist);
+)(PlaylistPage);

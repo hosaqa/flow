@@ -6,9 +6,9 @@ import styled from '@emotion/styled/macro';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import VolumeDownIcon from '@material-ui/icons/VolumeDown';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
-import ProgressBar from '../app/common/UI/ProgressBar';
-import PlayerButton from '../app/common/UI/PlayerButton';
-import Popup from '../app/common/UI/Popup';
+import ProgressBar from '../common/UI/ProgressBar';
+import PlayerButton from '../common/UI/PlayerButton';
+import Popup from '../common/UI/Popup';
 
 const Wrapper = styled.div`
   padding: 0;

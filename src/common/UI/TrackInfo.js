@@ -47,15 +47,15 @@ const TextLine = styled.div`
 
 const Track = styled(TextLine)`
   color: ${({ theme }) => theme.palette.text.primary};
-  font-size: 14px;
-  line-height: 20px;
+  font-size: ${({ theme }) => theme.spacing(1.75)}px;
+  line-height: 1.4;
   font-weight: 700;
   min-width: ${({ theme }) => theme.spacing(10)}px;
 `;
 
 const Artist = styled(TextLine)`
-  font-size: 12px;
-  line-height: 17px;
+  font-size: ${({ theme }) => theme.spacing(1.5)}px;
+  line-height: 1.4;
   color: ${({ theme }) => theme.palette.text.secondary};
 `;
 

@@ -5,9 +5,9 @@ import styled from '@emotion/styled/macro';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
 
-import PlayerButton from '../../app/common/UI/PlayerButton';
-import TimeLabel from '../../app/common/UI/TimeLabel';
-import TrackInfo from '../../app/common/UI/TrackInfo';
+import PlayerButton from '../../common/UI/PlayerButton';
+import TimeLabel from '../../common/UI/TimeLabel';
+import TrackInfo from '../../common/UI/TrackInfo';
 
 import { humanizeTrackTime } from '../../utils';
 
@@ -17,7 +17,7 @@ const Wrapper = styled.div`
   position: relative;
 `;
 
-const ButtonWrapper = styled.div`
+const PlayerButtonStyled = styled(PlayerButton)`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,15 +26,30 @@ const ButtonWrapper = styled.div`
   top: 0;
   height: 100%;
   width: 100%;
-  background-color: ${({ theme }) => theme.palette.background.overlay};
-  transition: opacity ${({ theme }) => theme.transitions.short}ms,
-    visibility ${({ theme }) => theme.transitions.short}ms;
+  margin: 0;
+  z-index: 1;
   opacity: ${({ visible }) => (visible ? '1' : '0')};
-  visibility: ${({ visible }) => (visible ? 'visible' : 'hidden')};
 
-  ${Wrapper}:hover & {
+  &:before {
+    content: '';
+    z-index: -1;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-color: ${({ theme }) => theme.palette.background.overlay};
+    transition: opacity ${({ theme }) => theme.transitions.short}ms;
+    opacity: ${({ visible }) => (visible ? '1' : '0')};
+  }
+
+  &:hover,
+  &:focus {
     opacity: 1;
-    visibility: visible;
+
+    &:before {
+      opacity: 1;
+    }
   }
 `;
 
@@ -62,18 +77,17 @@ const PlaylistItem = ({
     <Wrapper className={className}>
       <TrackInfo {...track}>
         {track ? (
-          <ButtonWrapper visible={currentTrackID === track.id}>
-            <PlayerButton
-              onClick={handleButtonClick}
-              active={currentTrackID === track.id}
-            >
-              {playingNow && currentTrackID === track.id ? (
-                <PauseIcon />
-              ) : (
-                <PlayArrowIcon />
-              )}
-            </PlayerButton>
-          </ButtonWrapper>
+          <PlayerButtonStyled
+            visible={currentTrackID === track.id}
+            onClick={handleButtonClick}
+            activated={currentTrackID === track.id}
+          >
+            {playingNow && currentTrackID === track.id ? (
+              <PauseIcon />
+            ) : (
+              <PlayArrowIcon />
+            )}
+          </PlayerButtonStyled>
         ) : null}
       </TrackInfo>
       <TimeLabelStyled disabled={!track}>

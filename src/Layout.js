@@ -2,8 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Container } from 'styled-bootstrap-grid';
 import styled from '@emotion/styled';
-import ContentPlaylist from './ContentPlaylist';
-import PageAbout from './StaticPage/PageAbout';
+import PageAbout from './pages/About';
 
 const Wrapper = styled.div`
   margin: 100px 0;
@@ -14,13 +13,13 @@ const Inner = styled.div`
   padding: 25px;
 `;
 
-const PageContent = () => (
+const Layout = () => (
   <Wrapper>
     <Container>
       <Inner>
         <Switch>
-          <Route exact path="/" component={ContentPlaylist} />
-          <Route path="/playlist" component={ContentPlaylist} />
+          <Route exact path="/" component={1} />
+          <Route path="/playlist" component={2} />
           <Route path="/about" component={PageAbout} />
         </Switch>
       </Inner>
@@ -28,4 +27,4 @@ const PageContent = () => (
   </Wrapper>
 );
 
-export default PageContent;
+export default Layout;

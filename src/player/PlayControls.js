@@ -5,7 +5,7 @@ import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
-import PlayerButton from '../app/common/UI/PlayerButton';
+import PlayerButton from '../common/UI/PlayerButton';
 
 const ButtonsRow = styled.div`
   display: inline-flex;

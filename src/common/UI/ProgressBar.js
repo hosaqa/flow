@@ -4,10 +4,10 @@ import Swipe from 'react-easy-swipe';
 import styled from '@emotion/styled/macro';
 
 const Wrapper = styled.div`
-  height: ${({ axis, thumbRadius }) =>
-    axis === 'horizontal' ? `${thumbRadius * 2}px` : '100%'};
-  width: ${({ axis, thumbRadius }) =>
-    axis === 'vertical' ? `${thumbRadius * 2}px` : '100%'};
+  height: ${({ axis, thumbRadius, theme }) =>
+    axis === 'horizontal' ? `${theme.spacing(thumbRadius) * 2}px` : '100%'};
+  width: ${({ axis, thumbRadius, theme }) =>
+    axis === 'vertical' ? `${theme.spacing(thumbRadius) * 2}px` : '100%'};
   position: relative;
   pointer-events: ${({ isDisabled }) => (isDisabled ? 'none' : 'auto')};
 `;
@@ -46,12 +46,19 @@ const FilledSpace = styled.div`
 
 const Thumb = styled.div`
   position: absolute;
-  right: ${({ thumbRadius }) =>
-    thumbRadius ? -(thumbRadius * 2 - 4) / 2 : -2}px;
-  top: ${({ thumbRadius }) =>
-    thumbRadius ? -(thumbRadius * 2 - 4) / 2 : -2}px;
-  width: ${({ thumbRadius }) => (thumbRadius ? thumbRadius * 2 : 8)}px;
-  height: ${({ thumbRadius }) => (thumbRadius ? thumbRadius * 2 : 8)}px;
+  right: ${({ thumbRadius, theme }) =>
+    thumbRadius
+      ? -(theme.spacing(thumbRadius) * 2 - theme.spacing(0.5)) / 2
+      : theme.spacing(-0.25)}px;
+  top: ${({ thumbRadius, theme }) =>
+    thumbRadius
+      ? -(theme.spacing(thumbRadius) * 2 - theme.spacing(0.5)) / 2
+      : theme.spacing(-0.25)}px;
+
+  width: ${({ thumbRadius, theme }) =>
+    thumbRadius ? theme.spacing(thumbRadius) * 2 : theme.spacing(1)}px;
+  height: ${({ thumbRadius, theme }) =>
+    thumbRadius ? theme.spacing(thumbRadius) * 2 : theme.spacing(1)}px;
   border-radius: 50%;
   background-color: ${({ theme }) => theme.palette.white};
   box-shadow: ${({ theme }) => theme.shadows.around};
@@ -75,7 +82,7 @@ const ProgressBar = ({
   progress,
   loading,
   disabled,
-  thumbRadius = 4,
+  thumbRadius = 0.5,
   thumbShowOnHover,
   onSwipeStart = () => {},
   onSwipeMove = () => {},

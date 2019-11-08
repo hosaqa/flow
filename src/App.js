@@ -8,9 +8,9 @@ import { BrowserRouter } from 'react-router-dom';
 import { store } from './store';
 import { SkeletonTheme } from 'react-loading-skeleton';
 import Header from './common/Header';
-import Player from '../player/Player';
-import PageContent from './common/PageContent';
-import ContentPlaylist from './common/ContentPlaylist';
+import Player from './player/Player';
+import Layout from './Layout';
+
 import { lightTheme, gridTheme } from './theme';
 import { globalStyles } from './theme/globalStyles';
 
@@ -30,10 +30,11 @@ const App = () => {
             <Global styles={globalStyles} />
             <GridThemeProvider gridTheme={gridTheme}>
               <>
-                {/* <Header />
-              <PageContent>
+                <Header />
+                {/* 
+              <Layout>
                 <ContentPlaylist />
-              </PageContent> */}
+              </Layout> */}
 
                 <Player />
               </>

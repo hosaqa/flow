@@ -6,6 +6,7 @@ import {
   FETCH_PLAYLIST_SUCCESS,
   FETCH_PLAYLIST_FAILURE,
 } from './constants';
+import { checkFetchStatus } from '../utils';
 
 export const playToggle = () => ({
   type: PLAY_TOGGLE,
@@ -16,7 +17,6 @@ export const setCurrentTrack = (id, playingNow) => ({
   payload: {
     id,
     playingNow,
-    trackPosition: null,
   },
 });
 
@@ -42,13 +42,6 @@ export const fetchPlaylistFailed = error => ({
     error,
   },
 });
-
-const checkFetchStatus = response => {
-  if (!response.ok) {
-    throw response.status;
-  }
-  return response.json();
-};
 
 export const fetchPlaylist = () => {
   return dispatch => {
