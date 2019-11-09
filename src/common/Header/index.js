@@ -6,19 +6,19 @@ import { Container, Row, Col } from 'styled-bootstrap-grid';
 import logo from './logo.svg';
 
 const Wrapper = styled.header`
-  z-index: 1000;
+  position: relative;
+  height: ${({ theme }) => theme.spacing(8)}px;
+`;
+
+const Inner = styled.div`
+  z-index: 100;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  background-image: linear-gradient(
-    154deg,
-    ${({ theme }) => theme.colors.headerGradientFirst},
-    ${({ theme }) => theme.colors.headerGradientSecond},
-    ${({ theme }) => theme.colors.headerGradientThird}
-  );
-  /* background-image: linear-gradient(154deg, #ff6b6b, #ff486c, #ff1d6e); */
-  box-shadow: 0 3px 2px rgba(229, 0, 0, 0.2);
+  background: ${({ theme }) =>
+    `linear-gradient(90deg, ${theme.palette.primary.normal}, ${theme.palette.secondary})`};
+  box-shadow: 0 2px 2px rgba(229, 0, 0, 0.2);
 `;
 
 const Menu = styled.nav`
@@ -26,37 +26,39 @@ const Menu = styled.nav`
 `;
 
 const StyledLink = styled(Link)`
-  font-size: 18px;
-  color: #fff;
+  font-size: ${({ theme }) => theme.spacing(2.25)}px;
+  color: ${({ theme }) => theme.palette.white};
   text-decoration: none;
-  margin-right: 23px;
+  margin-right: ${({ theme }) => theme.spacing(3)}px;
 
   &:last-of-type {
     margin-right: 0;
   }
 `;
 
-const HeaderRow = styled(Row)`
-  height: 62px;
+const RowStyled = styled(Row)`
+  height: ${({ theme }) => theme.spacing(8)}px;
 `;
 
 const Header = () => (
   <Wrapper>
-    <Container>
-      <HeaderRow alignItems="center">
-        <Col col="4">
-          <Link to="/">
-            <img src={logo} alt="logo" />
-          </Link>
-        </Col>
-        <Col col="8">
-          <Menu>
-            <StyledLink to="/playlist">Playlist</StyledLink>
-            <StyledLink to="/about">About</StyledLink>
-          </Menu>
-        </Col>
-      </HeaderRow>
-    </Container>
+    <Inner>
+      <Container>
+        <RowStyled alignItems="center">
+          <Col col="4">
+            <Link to="/">
+              <img src={logo} alt="logo" />
+            </Link>
+          </Col>
+          <Col col="8">
+            <Menu>
+              <StyledLink to="/playlist">Playlist</StyledLink>
+              <StyledLink to="/about">About</StyledLink>
+            </Menu>
+          </Col>
+        </RowStyled>
+      </Container>
+    </Inner>
   </Wrapper>
 );
 

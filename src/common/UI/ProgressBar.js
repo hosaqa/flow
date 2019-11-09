@@ -40,7 +40,7 @@ const FilledSpace = styled.div`
   width: ${({ axis, progress, theme }) =>
     axis === 'vertical' ? `${theme.spacing(0.5)}px` : progress};
   background: ${({ theme }) =>
-    `linear-gradient(154deg, ${theme.palette.primary.normal}, ${theme.palette.secondary})`};
+    `linear-gradient(90deg, ${theme.palette.primary.normal}, ${theme.palette.secondary})`};
   border-radius: ${({ theme }) => theme.borderRadius(1)}px;
 `;
 

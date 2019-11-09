@@ -28,7 +28,6 @@ const common = {
   light: '#fff',
   main: '#ff6b6b',
 };
-
 export const lightTheme = {
   palette: {
     white: common.light,
@@ -99,3 +98,4 @@ export const lightTheme = {
         1}px)`,
   },
 };
+console.log(lightTheme.palette.primary.light);
