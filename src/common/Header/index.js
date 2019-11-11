@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import {
+  disableBodyScroll,
+  enableBodyScroll,
+  clearAllBodyScrollLocks,
+} from 'body-scroll-lock';
+import OutsideClickHandler from 'react-outside-click-handler';
 import styled from '@emotion/styled';
 import { Container } from 'styled-bootstrap-grid';
 import { ButtonDefault } from '../UI/Buttons';
@@ -113,8 +119,9 @@ const Logo = styled(Link)`
 `;
 
 const MenuButton = styled(ButtonDefault)`
+  display: block;
   position: relative;
-  height: ${({ theme }) => theme.spacing(2.25)}px;
+  height: ${({ theme }) => theme.spacing(3)}px;
   width: ${({ theme }) => theme.spacing(3)}px;
 
   &::before,
@@ -122,22 +129,26 @@ const MenuButton = styled(ButtonDefault)`
   span {
     content: '';
     display: block;
-    height: ${({ theme }) => theme.spacing(0.25)}px;
-    width: ${({ theme }) => theme.spacing(3)}px;
+    height: 0;
+    width: 100%;
+    border-bottom: ${({ theme }) =>
+      `${theme.spacing(0.25)}px solid ${theme.palette.white}`};
     background-color: ${({ theme }) => theme.palette.white};
     position: absolute;
     left: 0;
   }
 
   &:before {
-    top: ${({ menuIsOpen }) => (menuIsOpen ? '50%' : '0')};
+    top: ${({ menuIsOpen, theme }) =>
+      menuIsOpen ? '50%' : `${theme.spacing(0.5)}px`};
     transform: ${({ menuIsOpen }) =>
       menuIsOpen ? 'rotate(45deg) translateY(-50%)' : 'none'};
   }
 
   &:after {
     top: ${({ menuIsOpen }) => (menuIsOpen ? '50%' : 'auto')};
-    bottom: ${({ menuIsOpen }) => (menuIsOpen ? 'auto' : '0')};
+    bottom: ${({ menuIsOpen, theme }) =>
+      menuIsOpen ? 'auto' : `${theme.spacing(0.5)}px`};
     transform: ${({ menuIsOpen }) =>
       menuIsOpen ? 'rotate(-45deg) translateY(-50%)' : 'none'};
   }
@@ -149,7 +160,16 @@ const MenuButton = styled(ButtonDefault)`
 
 const Header = () => {
   const [menuIsOpen, setMenuVisibility] = useState(false);
-  const toggleMenu = () => setMenuVisibility(!menuIsOpen);
+
+  const toggleMenu = () => {
+    if (!menuIsOpen) {
+      enableBodyScroll();
+      setMenuVisibility(true);
+    } else {
+      disableBodyScroll();
+      setMenuVisibility(false);
+    }
+  };
 
   return (
     <Wrapper>

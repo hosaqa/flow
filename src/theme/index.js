@@ -98,4 +98,3 @@ export const lightTheme = {
         1}px)`,
   },
 };
-console.log(lightTheme.palette.primary.light);
