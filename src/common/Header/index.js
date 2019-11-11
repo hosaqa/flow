@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { Container, Row, Col } from 'styled-bootstrap-grid';
+import { Container } from 'styled-bootstrap-grid';
 import { ButtonDefault } from '../UI/Buttons';
+import { mediaUpLG } from '../../utils/mediaQueries';
 
 import logo from './logo.svg';
 
@@ -10,7 +11,7 @@ const Wrapper = styled.header`
   position: relative;
   height: ${({ theme }) => theme.spacing(6)}px;
 
-  ${({ theme }) => theme.mediaQueries.up('md')} {
+  ${({ theme }) => theme.mediaQueries.up('lg')} {
     height: ${({ theme }) => theme.spacing(8)}px;
   }
 `;
@@ -37,23 +38,78 @@ const Content = styled.div`
 `;
 
 const Menu = styled.nav`
-  text-align: right;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+
+  ${({ theme }) => theme.mediaQueries.up('lg')} {
+    overflow: visible;
+    text-align: right;
+    position: relative;
+    top: auto;
+    left: auto;
+    width: auto;
+  }
+`;
+
+const MenuList = styled.ul`
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  transform: ${({ menuIsOpen }) =>
+    menuIsOpen ? 'translateY(0)' : 'translateY(-110%)'};
+  transition: ${({ theme }) => theme.transitions.default}ms;
+
+  ${({ theme }) => theme.mediaQueries.up('lg')} {
+    transition: none;
+    transform: translateY(0);
+  }
+`;
+
+const MenuItem = styled.li`
+  border-bottom: 1px solid ${({ theme }) => theme.palette.border.primary};
+
+  ${({ theme }) => theme.mediaQueries.up('lg')} {
+    border-bottom: 0;
+    display: inline-block;
+    margin-right: ${({ theme }) => theme.spacing(3)}px;
+  }
+
+  &:last-of-type {
+    ${({ theme }) => theme.mediaQueries.up('lg')} {
+      margin-right: 0;
+    }
+  }
 `;
 
 const StyledLink = styled(Link)`
-  font-size: ${({ theme }) => theme.spacing(2.25)}px;
-  color: ${({ theme }) => theme.palette.white};
   text-decoration: none;
-  margin-right: ${({ theme }) => theme.spacing(3)}px;
+  display: block;
+  padding: ${({ theme }) => `${theme.spacing(1.5)}px ${theme.spacing(2)}px`};
+  color: ${({ theme }) => theme.palette.text.primary};
+  background-color: ${({ theme }) => theme.palette.background.primary};
 
-  &:last-of-type {
-    margin-right: 0;
+  ${({ theme }) => theme.mediaQueries.up('lg')} {
+    display: inline-block;
+    padding: 0;
+    color: ${({ theme }) => theme.palette.white};
+    background-color: transparent;
+
+    font-size: ${({ theme }) => theme.spacing(2.25)}px;
+    color: ${({ theme }) => theme.palette.white};
   }
 `;
 
 const Logo = styled(Link)`
   display: block;
-  width: ${({ theme }) => theme.spacing(10)}px;
+  flex-shrink: 0;
+  width: ${({ theme }) => theme.spacing(9)}px;
+
+  ${({ theme }) => theme.mediaQueries.up('lg')} {
+    width: ${({ theme }) => theme.spacing(18)}px;
+  }
 `;
 
 const MenuButton = styled(ButtonDefault)`
@@ -74,33 +130,55 @@ const MenuButton = styled(ButtonDefault)`
   }
 
   &:before {
-    top: 0;
+    top: ${({ menuIsOpen }) => (menuIsOpen ? '50%' : '0')};
+    transform: ${({ menuIsOpen }) =>
+      menuIsOpen ? 'rotate(45deg) translateY(-50%)' : 'none'};
   }
 
   &:after {
-    bottom: 0;
+    top: ${({ menuIsOpen }) => (menuIsOpen ? '50%' : 'auto')};
+    bottom: ${({ menuIsOpen }) => (menuIsOpen ? 'auto' : '0')};
+    transform: ${({ menuIsOpen }) =>
+      menuIsOpen ? 'rotate(-45deg) translateY(-50%)' : 'none'};
+  }
+
+  span {
+    visibility: ${({ menuIsOpen }) => (menuIsOpen ? 'hidden' : 'visible')};
   }
 `;
 
-const Header = () => (
-  <Wrapper>
-    <Inner>
-      <Container>
-        <Content>
-          <Logo to="/">
-            <img src={logo} alt="Flow Music Streaming App" />
-          </Logo>
-          <Menu>
-            <StyledLink to="/playlist">Playlist</StyledLink>
-            <StyledLink to="/about">About</StyledLink>
-          </Menu>
-          <MenuButton>
-            <span></span>
-          </MenuButton>
-        </Content>
-      </Container>
-    </Inner>
-  </Wrapper>
-);
+const Header = () => {
+  const [menuIsOpen, setMenuVisibility] = useState(false);
+  const toggleMenu = () => setMenuVisibility(!menuIsOpen);
+
+  return (
+    <Wrapper>
+      <Inner>
+        <Container>
+          <Content>
+            <Logo to="/">
+              <img src={logo} alt="Flow Music Streaming App" />
+            </Logo>
+            <Menu>
+              <MenuList menuIsOpen={menuIsOpen}>
+                <MenuItem>
+                  <StyledLink to="/playlist">Playlist</StyledLink>
+                </MenuItem>
+                <MenuItem>
+                  <StyledLink to="/about">About</StyledLink>
+                </MenuItem>
+              </MenuList>
+            </Menu>
+            {!mediaUpLG() && (
+              <MenuButton menuIsOpen={menuIsOpen} onClick={toggleMenu}>
+                <span></span>
+              </MenuButton>
+            )}
+          </Content>
+        </Container>
+      </Inner>
+    </Wrapper>
+  );
+};
 
 export default Header;

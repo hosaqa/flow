@@ -21,7 +21,8 @@ import {
   fetchTrackResult,
   fetchPlaylist,
 } from './actions';
-import { isDesktop, isNumeric, randomiseArray } from '../utils';
+import { isNumeric, randomiseArray } from '../utils';
+import { mediaUpLG } from '../utils/mediaQueries';
 
 const Wrapper = styled.section`
   position: fixed;
@@ -225,7 +226,7 @@ const Player = ({
   return (
     <OutsideClickHandler
       onOutsideClick={() => setAdditionalControlsVisibility(false)}
-      disabled={isDesktop() || !additionalControlsIsVisible || queneIsVisible}
+      disabled={mediaUpLG() || !additionalControlsIsVisible || queneIsVisible}
     >
       <Swipe
         onSwipeUp={() => {
