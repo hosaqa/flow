@@ -123,34 +123,34 @@ const MenuButton = styled(ButtonDefault)`
   position: relative;
   height: ${({ theme }) => theme.spacing(3)}px;
   width: ${({ theme }) => theme.spacing(3)}px;
+  transform: ${({ menuIsOpen }) => (menuIsOpen ? 'rotate(225deg)' : 'none')};
 
   &::before,
   &::after,
   span {
     content: '';
     display: block;
-    height: 0;
+    height: ${({ theme }) => theme.spacing(0.25)}px;
     width: 100%;
-    border-bottom: ${({ theme }) =>
-      `${theme.spacing(0.25)}px solid ${theme.palette.white}`};
     background-color: ${({ theme }) => theme.palette.white};
     position: absolute;
     left: 0;
   }
 
+  span {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
   &:before {
     top: ${({ menuIsOpen, theme }) =>
-      menuIsOpen ? '50%' : `${theme.spacing(0.5)}px`};
-    transform: ${({ menuIsOpen }) =>
-      menuIsOpen ? 'rotate(45deg) translateY(-50%)' : 'none'};
+      menuIsOpen ? 'auto' : `${theme.spacing(0.5)}px`};
+    transform: ${({ menuIsOpen }) => (menuIsOpen ? 'rotate(-90deg)' : 'none')};
   }
 
   &:after {
-    top: ${({ menuIsOpen }) => (menuIsOpen ? '50%' : 'auto')};
     bottom: ${({ menuIsOpen, theme }) =>
       menuIsOpen ? 'auto' : `${theme.spacing(0.5)}px`};
-    transform: ${({ menuIsOpen }) =>
-      menuIsOpen ? 'rotate(-45deg) translateY(-50%)' : 'none'};
   }
 
   span {
@@ -172,32 +172,39 @@ const Header = () => {
   };
 
   return (
-    <Wrapper>
-      <Inner>
-        <Container>
-          <Content>
-            <Logo to="/">
-              <img src={logo} alt="Flow Music Streaming App" />
-            </Logo>
-            <Menu>
-              <MenuList menuIsOpen={menuIsOpen}>
-                <MenuItem>
-                  <StyledLink to="/playlist">Playlist</StyledLink>
-                </MenuItem>
-                <MenuItem>
-                  <StyledLink to="/about">About</StyledLink>
-                </MenuItem>
-              </MenuList>
-            </Menu>
-            {!mediaUpLG() && (
-              <MenuButton menuIsOpen={menuIsOpen} onClick={toggleMenu}>
-                <span></span>
-              </MenuButton>
-            )}
-          </Content>
-        </Container>
-      </Inner>
-    </Wrapper>
+    <OutsideClickHandler
+      onOutsideClick={() => {
+        toggleMenu();
+      }}
+      disabled={!menuIsOpen}
+    >
+      <Wrapper>
+        <Inner>
+          <Container>
+            <Content>
+              <Logo to="/">
+                <img src={logo} alt="Flow Music Streaming App" />
+              </Logo>
+              <Menu>
+                <MenuList menuIsOpen={menuIsOpen}>
+                  <MenuItem>
+                    <StyledLink to="/playlist">Playlist</StyledLink>
+                  </MenuItem>
+                  <MenuItem>
+                    <StyledLink to="/about">About</StyledLink>
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+              {!mediaUpLG() && (
+                <MenuButton menuIsOpen={menuIsOpen} onClick={toggleMenu}>
+                  <span></span>
+                </MenuButton>
+              )}
+            </Content>
+          </Container>
+        </Inner>
+      </Wrapper>
+    </OutsideClickHandler>
   );
 };
 
