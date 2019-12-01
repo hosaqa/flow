@@ -188,10 +188,10 @@ const Header = () => {
               <Menu>
                 <MenuList menuIsOpen={menuIsOpen}>
                   <MenuItem>
-                    <StyledLink to="/playlist">Playlist</StyledLink>
+                    <StyledLink to="/playlist">playlist</StyledLink>
                   </MenuItem>
                   <MenuItem>
-                    <StyledLink to="/about">About</StyledLink>
+                    <StyledLink to="/about">about</StyledLink>
                   </MenuItem>
                 </MenuList>
               </Menu>

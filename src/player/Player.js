@@ -15,12 +15,7 @@ import PlayControls from './PlayControls';
 import TimelineControl from './TimelineControl';
 import VolumeControl from './VolumeControl';
 import PlayerQueue from './PlayerQueue';
-import {
-  playToggle,
-  setCurrentTrack,
-  fetchTrackResult,
-  fetchPlaylist,
-} from './actions';
+import { playToggle, setCurrentTrack, fetchPlaylist } from './actions';
 import { isNumeric, randomiseArray } from '../utils';
 import { mediaUpLG } from '../utils/mediaQueries';
 
@@ -120,15 +115,15 @@ const CurrentTrackInfo = styled(TrackInfo)`
 `;
 
 const Player = ({
-  trackIsLoading,
   playingNow,
   playlist,
   currentTrackID,
   playToggle,
   fetchPlaylist,
   setCurrentTrack,
-  fetchTrackResult,
 }) => {
+  const [trackIsLoading, setTrackLoading] = useState(true);
+
   const [trackPosition, setTrackPosition] = useState(0);
   const [volume, setVolume] = useState(1);
   const [muted, setMute] = useState(false);
@@ -153,6 +148,10 @@ const Player = ({
   useEffect(() => {
     setTrackPosition(0);
   }, [playlist]);
+
+  useEffect(() => {
+    setTrackLoading(true);
+  }, [currentTrackID]);
 
   const currentPlaylist = playlist
     ? playlistShuffled
@@ -221,6 +220,12 @@ const Player = ({
     setAdditionalControlsVisibility(true);
   };
 
+  const handleTrackLoad = () => setTrackLoading(false);
+  const handleTrackErrorLoad = () => {
+    setTrackLoading(false);
+    console.log('Loading error');
+  };
+
   const interfaceDisabled = !currentPlaylist;
 
   return (
@@ -249,8 +254,8 @@ const Player = ({
               playing={playingNow}
               onPlay={setSeekPos}
               onEnd={handleOnEnd}
-              onLoad={fetchTrackResult}
-              onLoadError={() => fetchTrackResult('Loading error')}
+              onLoad={handleTrackLoad}
+              onLoadError={handleTrackErrorLoad}
               volume={volume}
               mute={muted}
             />
@@ -310,7 +315,6 @@ const Player = ({
 };
 
 Player.propTypes = {
-  trackIsLoading: PropTypes.bool,
   playingNow: PropTypes.bool,
   repeating: PropTypes.bool,
   playlist: PropTypes.array, // TODO: описание типов!
@@ -319,7 +323,6 @@ Player.propTypes = {
   playToggle: PropTypes.func,
   fetchPlaylist: PropTypes.func,
   setCurrentTrack: PropTypes.func,
-  fetchTrackResult: PropTypes.func,
 };
 
 export default connect(
@@ -328,6 +331,5 @@ export default connect(
     playToggle,
     fetchPlaylist,
     setCurrentTrack,
-    fetchTrackResult,
   }
 )(Player);

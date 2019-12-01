@@ -75,7 +75,7 @@ const TimelineControl = ({
         onSwipeMove={handleSwipeMove}
         onSwipeEnd={handleSwipeEnd}
       />
-      {trackIsLoading && <LoaderStyled size={0.5} />}
+      {!disabled && trackIsLoading && <LoaderStyled size={0.5} />}
       <TimeLabel disabled={disabled}>
         {humanizeTrackTime(trackDuration)}
       </TimeLabel>

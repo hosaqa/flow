@@ -1,11 +1,10 @@
 import {
   PLAY_TOGGLE,
   SET_CURRENT_TRACK,
-  FETCH_TRACK_EXECUTED,
   FETCH_PLAYLIST_BEGIN,
   FETCH_PLAYLIST_SUCCESS,
   FETCH_PLAYLIST_FAILURE,
-} from './constants';
+} from './actionTypes';
 import { checkFetchStatus } from '../utils';
 
 export const playToggle = () => ({
@@ -17,13 +16,6 @@ export const setCurrentTrack = (id, playingNow) => ({
   payload: {
     id,
     playingNow,
-  },
-});
-
-export const fetchTrackResult = error => ({
-  type: FETCH_TRACK_EXECUTED,
-  payload: {
-    error,
   },
 });
 

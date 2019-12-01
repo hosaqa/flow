@@ -1,19 +1,15 @@
 import {
   PLAY_TOGGLE,
   SET_CURRENT_TRACK,
-  FETCH_TRACK_EXECUTED,
   FETCH_PLAYLIST_BEGIN,
   FETCH_PLAYLIST_SUCCESS,
   FETCH_PLAYLIST_FAILURE,
-} from './constants';
+} from './actionTypes';
 
 const initialState = {
   playlistIsLoading: false,
   fetchPlaylistError: null,
   playlist: null,
-
-  trackIsLoading: false,
-  fetchTrackError: null,
 
   playingNow: false,
   currentTrackID: null,
@@ -28,13 +24,6 @@ export const playerReducerMap = {
     ...state,
     currentTrackID: action.payload.id,
     playingNow: action.payload.playingNow || state.playingNow, //TODO: это для того, чтоб сразу проиграть, перепискать нужно как-то
-    trackIsLoading: true,
-    fetchTrackError: null,
-  }),
-  [FETCH_TRACK_EXECUTED]: (state, action) => ({
-    ...state,
-    trackIsLoading: false,
-    fetchTrackError: action.payload.error ? action.payload.error : null,
   }),
   [FETCH_PLAYLIST_BEGIN]: state => ({
     ...state,
