@@ -5,7 +5,7 @@ import {
   FETCH_PLAYLIST_SUCCESS,
   FETCH_PLAYLIST_FAILURE,
 } from './actionTypes';
-import { checkFetchStatus } from '../utils';
+import { checkFetchStatus } from '../../../utils';
 
 export const playToggle = () => ({
   type: PLAY_TOGGLE,

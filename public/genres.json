@@ -1,10 +1,14 @@
 [
   {
-    "name": "Techno",
-    "img": "/img/genres/techno.jpg" 
+    "name": "Hip-hop",
+    "img": "/img/genres/hip_hop.jpg"
   },
   {
     "name": "Techno",
-    "img": "/img/genres/techno.jpg" 
+    "img": "/img/genres/techno.jpg"
+  },
+  {
+    "name": "Rock",
+    "img": "/img/genres/rock.jpg"
   }
 ]

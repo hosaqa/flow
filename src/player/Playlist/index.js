@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from '@emotion/styled';
 import PlaylistItem from './PlaylistItem';
-import { playToggle, setCurrentTrack } from '../actions';
+import { playToggle, setCurrentTrack } from '../../store/ducks/player/actions';
 
 const PlaylistItemStyled = styled(PlaylistItem)`
   &:not(:last-child) {

@@ -9,13 +9,18 @@ import styled from '@emotion/styled';
 import { Container } from 'styled-bootstrap-grid';
 import RepeatIcon from '@material-ui/icons/Repeat';
 import ShuffleIcon from '@material-ui/icons/Shuffle';
+
 import TrackInfo from '../common/UI/TrackInfo';
 import PlayerButton from '../common/UI/PlayerButton';
 import PlayControls from './PlayControls';
 import TimelineControl from './TimelineControl';
 import VolumeControl from './VolumeControl';
 import PlayerQueue from './PlayerQueue';
-import { playToggle, setCurrentTrack, fetchPlaylist } from './actions';
+import {
+  playToggle,
+  setCurrentTrack,
+  fetchPlaylist,
+} from '../store/ducks/player/actions';
 import { isNumeric, randomiseArray } from '../utils';
 import { mediaUpLG } from '../utils/mediaQueries';
 
