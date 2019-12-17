@@ -33,7 +33,7 @@ export const playerReducerMap = {
   [FETCH_PLAYLIST_SUCCESS]: (state, action) => ({
     ...state,
     playlist: action.payload.playlist,
-    currentTrackID: action.payload.playlist[0].id,
+    currentTrackID: action.payload.playlist[0]._id,
     playlistIsLoading: false,
   }),
   [FETCH_PLAYLIST_FAILURE]: (state, action) => ({
@@ -42,10 +42,10 @@ export const playerReducerMap = {
   }),
 };
 
-export function playerReducer(state = initialState, action) {
+export const playerReducer = (state = initialState, action) => {
   const reducer = playerReducerMap[action.type];
 
   if (!reducer) return state;
 
   return reducer(state, action);
-}
+};

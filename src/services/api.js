@@ -1,16 +1,30 @@
+import { handleResponse, createStringParams } from './utils';
+
 class APIService {
   constructor() {
-    this.host = 'localhost:8000';
+    this.host = 'http://localhost:8000';
   }
 
-  getTracks = (limit, genre, artist) => {
-    const limitParam = limit ? `limit=${limit}` : '';
-    const genreParam = genre ? `genre=${genre}` : '';
-    const artistParam = genre ? `artist=${artist}` : '';
+  getTracks = async (options = {}) => {
+    const { limit, genre, artist } = options;
 
-    let endPoint = `${this.host}tracks`;
-    endPoint;
+    const stringParams = createStringParams({
+      limit,
+      genre,
+      artist,
+    });
+
+    const endPoint = `${this.host}/tracks${stringParams}`;
+
+    try {
+      const response = await fetch(endPoint);
+      const data = await handleResponse(response);
+
+      return data;
+    } catch (error) {
+      return error;
+    }
   };
 }
 
-export default APIService();
+export default new APIService();

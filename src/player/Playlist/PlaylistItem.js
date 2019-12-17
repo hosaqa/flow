@@ -66,10 +66,10 @@ const PlaylistItem = ({
   playingNow,
 }) => {
   const handleButtonClick = () => {
-    if (currentTrackID === track.id) {
+    if (currentTrackID === track._id) {
       playToggle();
     } else {
-      setTrack(track.id, true);
+      setTrack(track._id, true);
     }
   };
 
@@ -78,11 +78,11 @@ const PlaylistItem = ({
       <TrackInfo {...track}>
         {track ? (
           <PlayerButtonStyled
-            visible={currentTrackID === track.id}
+            visible={currentTrackID === track._id}
             onClick={handleButtonClick}
-            activated={currentTrackID === track.id}
+            activated={currentTrackID === track._id}
           >
-            {playingNow && currentTrackID === track.id ? (
+            {playingNow && currentTrackID === track._id ? (
               <PauseIcon />
             ) : (
               <PlayArrowIcon />
@@ -100,12 +100,14 @@ const PlaylistItem = ({
 PlaylistItem.propTypes = {
   className: PropTypes.string,
   track: PropTypes.shape({
-    id: PropTypes.string,
-    artist: PropTypes.string,
+    _id: PropTypes.string,
+    artist: {
+      _id: PropTypes.string,
+      name: PropTypes.string,
+      img: PropTypes.string,
+    },
     trackname: PropTypes.string,
-    album: PropTypes.string,
     src: PropTypes.string,
-    img: PropTypes.string,
     duration: PropTypes.number,
   }),
   currentTrackID: PropTypes.string,

@@ -10,4 +10,15 @@ const handleResponse = response => {
   });
 };
 
-export { handleResponse };
+const createStringParams = paramsObj => {
+  const esc = encodeURIComponent;
+
+  let q = Object.keys(paramsObj)
+    .filter(paramItem => !!paramsObj[paramItem])
+    .map(paramItem => `${esc(paramItem)}=${esc(paramsObj[paramItem])}`)
+    .join('&');
+
+  return q ? `?${q}` : '';
+};
+
+export { handleResponse, createStringParams };

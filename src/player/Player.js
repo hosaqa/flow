@@ -23,6 +23,7 @@ import {
 } from '../store/ducks/player/actions';
 import { isNumeric, randomiseArray } from '../utils';
 import { mediaUpLG } from '../utils/mediaQueries';
+import APIService from '../services/api';
 
 const Wrapper = styled.section`
   position: fixed;
@@ -165,7 +166,7 @@ const Player = ({
     : null;
 
   const currentTrack = currentPlaylist
-    ? currentPlaylist.find(track => track.id === currentTrackID)
+    ? currentPlaylist.find(track => track._id === currentTrackID)
     : null;
   const currentTrackIndex = currentTrack
     ? currentPlaylist.indexOf(currentTrack)

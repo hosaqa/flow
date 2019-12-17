@@ -3,7 +3,6 @@ import isNumeric from './isNumeric';
 import getRandomInt from './getRandomInt';
 import getViewportHeight from './getViewportHeight';
 import randomiseArray from './randomiseArray';
-import checkFetchStatus from './checkFetchStatus';
 
 export {
   humanizeTrackTime,
@@ -11,5 +10,4 @@ export {
   getRandomInt,
   getViewportHeight,
   randomiseArray,
-  checkFetchStatus,
 };

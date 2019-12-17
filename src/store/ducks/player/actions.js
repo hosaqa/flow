@@ -5,7 +5,7 @@ import {
   FETCH_PLAYLIST_SUCCESS,
   FETCH_PLAYLIST_FAILURE,
 } from './actionTypes';
-import { checkFetchStatus } from '../../../utils';
+import APIService from '../../../services/api';
 
 export const playToggle = () => ({
   type: PLAY_TOGGLE,
@@ -35,17 +35,14 @@ export const fetchPlaylistFailed = error => ({
   },
 });
 
-export const fetchPlaylist = () => {
-  return dispatch => {
-    dispatch(fetchPlaylistBegin());
+export const fetchPlaylist = () => async dispatch => {
+  dispatch(fetchPlaylistBegin());
 
-    fetch('/data.json')
-      .then(checkFetchStatus)
-      .then(playlist => {
-        dispatch(fetchPlaylistSuccess(playlist));
-      })
-      .catch(error => {
-        dispatch(fetchPlaylistFailed(error));
-      });
-  };
+  try {
+    const tracksData = await APIService.getTracks();
+
+    dispatch(fetchPlaylistSuccess(tracksData));
+  } catch (error) {
+    dispatch(fetchPlaylistFailed(error));
+  }
 };

@@ -41,7 +41,7 @@ const Playlist = ({
           track={track}
           currentTrackID={currentTrackID}
           playingNow={playingNow}
-          key={track.id}
+          key={track._id}
         />
       ))}
     </>
@@ -50,12 +50,14 @@ const Playlist = ({
 
 const playlistProp = PropTypes.arrayOf(
   PropTypes.shape({
-    id: PropTypes.string,
-    artist: PropTypes.string,
+    _id: PropTypes.string,
+    artist: {
+      _id: PropTypes.string,
+      name: PropTypes.string,
+      img: PropTypes.string,
+    },
     trackname: PropTypes.string,
-    album: PropTypes.string,
     src: PropTypes.string,
-    img: PropTypes.string,
     duration: PropTypes.number,
   })
 );

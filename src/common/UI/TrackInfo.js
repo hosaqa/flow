@@ -59,13 +59,13 @@ const Artist = styled(TextLine)`
   color: ${({ theme }) => theme.palette.text.secondary};
 `;
 
-const TrackInfo = ({ children, className, trackname, artist, img }) => (
+const TrackInfo = ({ children, className, trackname, artist }) => (
   <Wrapper className={className}>
     <ArtCover>
       {!trackname ? (
         <Skeleton />
-      ) : img ? (
-        <img src={img} alt={`${artist} - ${trackname}`} />
+      ) : artist.img ? (
+        <img src={artist.img} alt={`${artist.name} - ${trackname}`} />
       ) : (
         <ArtCoverDefault>
           <MusicNote />
@@ -75,7 +75,7 @@ const TrackInfo = ({ children, className, trackname, artist, img }) => (
     </ArtCover>
     <Text>
       <Track>{!trackname ? <Skeleton /> : trackname}</Track>
-      <Artist>{!artist ? <Skeleton /> : artist}</Artist>
+      <Artist>{!artist ? <Skeleton /> : artist.name}</Artist>
     </Text>
   </Wrapper>
 );
@@ -84,8 +84,10 @@ TrackInfo.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
   trackname: PropTypes.string,
-  artist: PropTypes.string,
-  img: PropTypes.string,
+  artist: PropTypes.shape({
+    name: PropTypes.string,
+    img: PropTypes.string,
+  }),
 };
 
 export default TrackInfo;
