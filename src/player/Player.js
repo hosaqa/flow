@@ -185,7 +185,7 @@ const Player = ({
   let playerRAF = null;
 
   useEffect(() => {
-    fetchPlaylist();
+    // fetchPlaylist();
   }, []);
 
   const setSeek = rewindTo => {

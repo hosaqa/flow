@@ -18,9 +18,9 @@ class APIService {
 
     try {
       const response = await fetch(endPoint);
-      const data = await handleResponse(response);
+      const trackData = await handleResponse(response);
 
-      return data;
+      return trackData;
     } catch (error) {
       return error;
     }
