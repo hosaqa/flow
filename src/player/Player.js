@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import ReactHowler from 'react-howler';
 import Swipe from 'react-easy-swipe';
 import OutsideClickHandler from 'react-outside-click-handler';
+import { useMediaQuery } from 'react-responsive';
 import raf from 'raf'; // requestAnimationFrame polyfill
 import styled from '@emotion/styled';
 import { Container } from 'styled-bootstrap-grid';
@@ -16,14 +17,11 @@ import PlayControls from './PlayControls';
 import TimelineControl from './TimelineControl';
 import VolumeControl from './VolumeControl';
 import PlayerQueue from './PlayerQueue';
-import {
-  playToggle,
-  setCurrentTrack,
-  fetchPlaylist,
-} from '../store/ducks/player/actions';
+import { playToggle, setCurrentTrack } from '../store/ducks/player/actions';
+
 import { isNumeric, randomiseArray } from '../utils';
 import { mediaUpLG } from '../utils/mediaQueries';
-import APIService from '../services/api';
+import { gridTheme } from '../theme';
 
 const Wrapper = styled.section`
   position: fixed;
@@ -159,6 +157,8 @@ const Player = ({
     setTrackLoading(true);
   }, [currentTrackID]);
 
+  const isDesktop = useMediaQuery({ minWidth: gridTheme.breakpoints.lg });
+
   const currentPlaylist = playlist
     ? playlistShuffled
       ? playlistShuffled
@@ -237,7 +237,7 @@ const Player = ({
   return (
     <OutsideClickHandler
       onOutsideClick={() => setAdditionalControlsVisibility(false)}
-      disabled={mediaUpLG() || !additionalControlsIsVisible || queneIsVisible}
+      disabled={isDesktop || !additionalControlsIsVisible || queneIsVisible}
     >
       <Swipe
         onSwipeUp={() => {
@@ -331,11 +331,8 @@ Player.propTypes = {
   setCurrentTrack: PropTypes.func,
 };
 
-export default connect(
-  ({ player }) => ({ ...player }),
-  {
-    playToggle,
-    fetchPlaylist,
-    setCurrentTrack,
-  }
-)(Player);
+export default connect(({ player }) => ({ ...player }), {
+  playToggle,
+  fetchPlaylist,
+  setCurrentTrack,
+})(Player);

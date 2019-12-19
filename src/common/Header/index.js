@@ -5,11 +5,13 @@ import {
   enableBodyScroll,
   clearAllBodyScrollLocks,
 } from 'body-scroll-lock';
+import { useMediaQuery } from 'react-responsive';
 import OutsideClickHandler from 'react-outside-click-handler';
 import styled from '@emotion/styled';
 import { Container } from 'styled-bootstrap-grid';
 import { ButtonDefault } from '../UI/Buttons';
 import { mediaUpLG } from '../../utils/mediaQueries';
+import { gridTheme } from '../../theme';
 
 import logo from './logo.svg';
 
@@ -161,6 +163,8 @@ const MenuButton = styled(ButtonDefault)`
 const Header = () => {
   const [menuIsOpen, setMenuVisibility] = useState(false);
 
+  const isDesktop = useMediaQuery({ minWidth: gridTheme.breakpoints.lg });
+
   const toggleMenu = () => {
     if (!menuIsOpen) {
       enableBodyScroll();
@@ -195,7 +199,7 @@ const Header = () => {
                   </MenuItem>
                 </MenuList>
               </Menu>
-              {!mediaUpLG() && (
+              {!isDesktop && (
                 <MenuButton menuIsOpen={menuIsOpen} onClick={toggleMenu}>
                   <span></span>
                 </MenuButton>

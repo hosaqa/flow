@@ -6,26 +6,36 @@ export const FETCH_PLAYLIST_SUCCESS = 'FETCH_PLAYLIST_SUCCESS';
 export const FETCH_PLAYLIST_FAILURE = 'FETCH_PLAYLIST_FAILURE';
 
 // action creators
-export const fetchPlaylistBegin = options => ({
+export const fetchPlaylistBegin = ({ location, options }) => ({
   type: FETCH_PLAYLIST_BEGIN,
   payload: {
+    location,
     options,
   },
 });
 
-export const fetchPlaylistSuccess = (ID, tracksData) => ({
-  type: FETCH_PLAYLIST_BEGIN,
+export const fetchPlaylistSuccess = ({ location, ID, items }) => ({
+  type: FETCH_PLAYLIST_SUCCESS,
   payload: {
+    location,
     ID,
-    tracksData,
+    items,
   },
 });
 
-export const fetchPlaylist = (options = {}) => {
+export const fetchPlaylistFailure = ({ location, error }) => ({
+  type: FETCH_PLAYLIST_SUCCESS,
+  payload: {
+    location,
+    error,
+  },
+});
+
+export const fetchPlaylist = ({ location, options = {} }) => {
   const { limit, genre, artist } = options;
 
   return async dispatch => {
-    dispatch(fetchPlaylistBegin());
+    dispatch(fetchPlaylistBegin({ location, options }));
 
     try {
       const playlist = await APIService.getTracks({
@@ -34,31 +44,56 @@ export const fetchPlaylist = (options = {}) => {
         artist,
       });
 
-      FETCH_PLAYLIST_SUCCESS({
-        ID: playlist.ID,
-        tracksData: playlist.data,
-      });
+      dispatch(
+        fetchPlaylistSuccess({
+          location,
+          ID: playlist.ID,
+          items: playlist.items,
+        })
+      );
     } catch (error) {
-      console.log(error);
+      dispatch(fetchPlaylistFailure({ location, error }));
     }
   };
 };
 
 // reducer
 const initialState = {
-  playlists: null,
+  inPlayerLocation: null,
+  inPageLocation: null,
 };
 
 const playlistsReducerMap = {
   [FETCH_PLAYLIST_BEGIN]: (state, action) => {
     return {
       ...state,
-      playlists: [
-        ...state.playlists,
-        {
-          ID: action.payload.ID,
-        },
-      ],
+      [action.payload.location]: {
+        ...state[action.payload.location],
+        options: action.payload.options,
+        isLoading: true,
+        fetchError: null,
+      },
+    };
+  },
+  [FETCH_PLAYLIST_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      [action.payload.location]: {
+        ...state[action.payload.location],
+        ID: action.payload.ID,
+        items: action.payload.items,
+        isLoading: false,
+      },
+    };
+  },
+  [FETCH_PLAYLIST_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      [action.payload.location]: {
+        ...state[action.payload.location],
+        fetchError: action.payload.error,
+        isLoading: false,
+      },
     };
   },
 };
