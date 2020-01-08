@@ -22,7 +22,7 @@ const PageAbout = () => (
       <ExternalLink href="https://github.com/xhosaka/flow" target="_blank">
         Github
       </ExternalLink>
-      ,{' '}
+      ,
       <ExternalLink
         href="https://www.figma.com/file/gzkNkaDIEGVbrIQW8QIMr48B/Flow-UI-kit-v1.0?node-id=338%3A177"
         target="_blank"

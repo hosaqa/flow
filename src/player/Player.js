@@ -17,7 +17,8 @@ import PlayControls from './PlayControls';
 import TimelineControl from './TimelineControl';
 import VolumeControl from './VolumeControl';
 import PlayerQueue from './PlayerQueue';
-import { playToggle, setCurrentTrack } from '../store/ducks/player/actions';
+import { playToggle, setCurrentTrackID } from '../store/ducks/player';
+import { fetchPlaylist, getPlaylistByID } from '../store/ducks/playlists';
 
 import { isNumeric, randomiseArray } from '../utils';
 import { mediaUpLG } from '../utils/mediaQueries';
@@ -122,10 +123,14 @@ const Player = ({
   playingNow,
   playlist,
   currentTrackID,
+  currentPlaylistID,
   playToggle,
   fetchPlaylist,
-  setCurrentTrack,
+  setCurrentTrackID,
 }) => {
+  const playlist = useSelector(getPlaylistByID(playlistID)) || {};
+  const { isLoading, items } = playlist;
+
   const [trackIsLoading, setTrackLoading] = useState(true);
 
   const [trackPosition, setTrackPosition] = useState(0);
@@ -137,7 +142,7 @@ const Player = ({
   const toggleShuffle = () => {
     playlistShuffled
       ? setPlaylistShuffled(null)
-      : setPlaylistShuffled(randomiseArray(playlist));
+      : setPlaylistShuffled(randomiseArray(items));
   };
 
   const [
@@ -150,8 +155,9 @@ const Player = ({
   const playerRef = useRef(null);
 
   useEffect(() => {
+    //TODO: WTF???
     setTrackPosition(0);
-  }, [playlist]);
+  }, [playlist.items]);
 
   useEffect(() => {
     setTrackLoading(true);
@@ -159,10 +165,10 @@ const Player = ({
 
   const isDesktop = useMediaQuery({ minWidth: gridTheme.breakpoints.lg });
 
-  const currentPlaylist = playlist
+  const currentPlaylist = items
     ? playlistShuffled
       ? playlistShuffled
-      : playlist
+      : items
     : null;
 
   const currentTrack = currentPlaylist
@@ -185,7 +191,10 @@ const Player = ({
   let playerRAF = null;
 
   useEffect(() => {
-    // fetchPlaylist();
+    // fetchPlaylist({
+    //   type: 'artist',
+    //   ID: '5cec3aae4569f05f070ed329',
+    // });
   }, []);
 
   const setSeek = rewindTo => {
@@ -217,7 +226,7 @@ const Player = ({
 
         clearRAF();
       } else {
-        setCurrentTrack(nextTrackID);
+        setCurrentTrackID(nextTrackID);
       }
     }
   };
@@ -274,7 +283,7 @@ const Player = ({
                 playingNow={playingNow}
                 prevTrackID={prevTrackID}
                 nextTrackID={nextTrackID}
-                setCurrentTrack={setCurrentTrack}
+                setCurrentTrackID={setCurrentTrackID}
                 playToggle={playToggle}
               />
               <TimelineControlStyled
@@ -328,11 +337,11 @@ Player.propTypes = {
 
   playToggle: PropTypes.func,
   fetchPlaylist: PropTypes.func,
-  setCurrentTrack: PropTypes.func,
+  setCurrentTrackID: PropTypes.func,
 };
 
 export default connect(({ player }) => ({ ...player }), {
   playToggle,
   fetchPlaylist,
-  setCurrentTrack,
+  setCurrentTrackID,
 })(Player);

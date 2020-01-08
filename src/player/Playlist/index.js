@@ -1,9 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from '@emotion/styled';
 import PlaylistItem from './PlaylistItem';
-import { playToggle, setCurrentTrack } from '../../store/ducks/player/actions';
+import {
+  playerSelector,
+  playToggle,
+  setCurrentTrackID,
+  setCurrentPlaylistID,
+} from '../../store/ducks/player';
+import { getPlaylistByID } from '../../store/ducks/playlists';
 
 const PlaylistItemStyled = styled(PlaylistItem)`
   &:not(:last-child) {
@@ -11,17 +17,27 @@ const PlaylistItemStyled = styled(PlaylistItem)`
   }
 `;
 
-const Playlist = ({
-  currentTrackID,
-  playlist,
-  playlistNowPlaying,
-  playToggle,
-  playingNow,
-  setCurrentTrack,
-}) => {
-  const currentPlaylist = playlist || playlistNowPlaying;
+const Playlist = ({ playlistID }) => {
+  const dispatch = useDispatch();
 
-  if (!currentPlaylist)
+  const player = useSelector(state => playerSelector(state)) || {};
+
+  const { playingNow, currentTrackID } = player;
+
+  const playlist = useSelector(getPlaylistByID(playlistID)) || {};
+  const { isLoading, items } = playlist;
+
+  const setTrack = () => {
+    dispatch(setCurrentPlaylistID(playlistID));
+    dispatch(setCurrentTrackID(currentTrackID));
+  };
+
+  //TODO: rename func
+  const toogle = () => dispatch(playToggle());
+
+  if (!isLoading && !items) return null;
+
+  if (isLoading)
     return (
       <>
         <PlaylistItemStyled />
@@ -34,10 +50,10 @@ const Playlist = ({
     );
   return (
     <>
-      {currentPlaylist.map(track => (
+      {items.map(track => (
         <PlaylistItemStyled
-          playToggle={playToggle}
-          setTrack={setCurrentTrack}
+          playToggle={toogle}
+          setTrack={setTrack}
           track={track}
           currentTrackID={currentTrackID}
           playingNow={playingNow}
@@ -48,34 +64,26 @@ const Playlist = ({
   );
 };
 
-const playlistProp = PropTypes.arrayOf(
-  PropTypes.shape({
-    _id: PropTypes.string,
-    artist: {
-      _id: PropTypes.string,
-      name: PropTypes.string,
-      img: PropTypes.string,
-    },
-    trackname: PropTypes.string,
-    src: PropTypes.string,
-    duration: PropTypes.number,
-  })
-);
+// const playlistProp = PropTypes.arrayOf(
+//   PropTypes.shape({
+//     _id: PropTypes.string,
+//     artist: {
+//       _id: PropTypes.string,
+//       name: PropTypes.string,
+//       img: PropTypes.string,
+//     },
+//     trackname: PropTypes.string,
+//     src: PropTypes.string,
+//     duration: PropTypes.number,
+//   })
+// );
 
 Playlist.propTypes = {
-  playlist: playlistProp,
-  playlistNowPlaying: playlistProp,
+  playlistID: PropTypes.string,
   currentTrackID: PropTypes.string,
   playToggle: PropTypes.func,
-  setCurrentTrack: PropTypes.func,
+  setCurrentTrackID: PropTypes.func,
   playingNow: PropTypes.bool,
 };
 
-export default connect(
-  ({ player }) => ({
-    playlistNowPlaying: player.playlist,
-    currentTrackID: player.currentTrackID,
-    playingNow: player.playingNow,
-  }),
-  { playToggle, setCurrentTrack }
-)(Playlist);
+export default Playlist;

@@ -15,23 +15,23 @@ const CoverImg = styled.div`
   height: 280px;
   margin: 0 20px 0 0;
   flex-shrink: 0;
-  background: ${({ theme }) => theme.colors.contentPreload} url(${coverImg})
-    no-repeat center / 197px;
+  background: ${({ theme }) => theme.palette.background.secondary}
+    url(${coverImg}) no-repeat center / 197px;
   box-shadow: ${({ theme }) => theme.shadows.secondary};
 `;
 
 const Content = styled.div`
-  background-color: ${({ theme }) => theme.colors.contentPreload};
+  background-color: ${({ theme }) => theme.palette.background.secondary};
   padding: 15px 20px;
   flex-grow: 1;
   box-shadow: ${({ theme }) => theme.shadows.secondary};
 `;
 
-const PlaylistPage = ({ playlist }) => (
+const PlaylistPage = ({ playlistID }) => (
   <Wrapper>
     <CoverImg />
     <Content>
-      <Playlist nonDefaultPlaylist={playlist} />
+      <Playlist playlistID={playlistID} />
     </Content>
   </Wrapper>
 );
@@ -50,7 +50,4 @@ PlaylistPage.propTypes = {
   ),
 };
 
-export default connect(
-  ({ player }) => player,
-  null
-)(PlaylistPage);
+export default PlaylistPage;
