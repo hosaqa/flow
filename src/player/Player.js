@@ -323,7 +323,12 @@ const Player = ({
                 setMute={setMuteMemoized}
               />
 
-              <Quene />
+              <Quene
+                disabled={interfaceDisabled}
+                playlistID={currentPlaylistID}
+                isOpen={queneIsVisible}
+                setVisibility={setQueneVisibility}
+              />
             </Row>
           </Container>
         </Wrapper>
