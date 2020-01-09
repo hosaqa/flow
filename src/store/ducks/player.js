@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import { createReducer } from '../utils';
 
 //action types
+export const PLAY = 'PLAY';
 export const PLAY_TOGGLE = 'PLAY_TOGGLE';
 export const SET_CURRENT_TRACK_ID = 'SET_CURRENT_TRACK_ID';
 
@@ -12,15 +13,18 @@ export const FETCH_PLAYLIST_SUCCESS = 'FETCH_PLAYLIST_SUCCESS';
 export const FETCH_PLAYLIST_FAILURE = 'FETCH_PLAYLIST_FAILURE';
 
 //action creators
+export const play = () => ({
+  type: PLAY,
+});
+
 export const playToggle = () => ({
   type: PLAY_TOGGLE,
 });
 
-export const setCurrentTrackID = ({ ID, playingNow }) => ({
+export const setCurrentTrackID = ID => ({
   type: SET_CURRENT_TRACK_ID,
   payload: {
     ID,
-    playingNow,
   },
 });
 
@@ -39,6 +43,10 @@ const initialState = {
 };
 
 export const playerReducerMap = {
+  [PLAY]: state => ({
+    ...state,
+    playingNow: true,
+  }),
   [PLAY_TOGGLE]: state => ({
     ...state,
     playingNow: !state.playingNow,
@@ -57,5 +65,5 @@ export const playerReducerMap = {
 export const playerReducer = createReducer(initialState, playerReducerMap);
 
 //selectors
-export const playerSelector = state => state.player;
+export const getPlayerState = state => state.player;
 export const getPlayingNow = state => state.player.playingNow;

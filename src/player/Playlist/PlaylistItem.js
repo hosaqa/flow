@@ -61,17 +61,10 @@ const PlaylistItem = ({
   className,
   track,
   currentTrackID,
-  playToggle,
   setTrack,
   playingNow,
 }) => {
-  const handleButtonClick = () => {
-    if (currentTrackID === track._id) {
-      playToggle();
-    } else {
-      setTrack(track._id, true);
-    }
-  };
+  const handleButtonClick = () => setTrack(track._id);
 
   return (
     <Wrapper className={className}>
@@ -97,21 +90,27 @@ const PlaylistItem = ({
   );
 };
 
+const trackProp = PropTypes.shape({
+  _id: PropTypes.string,
+  artist: PropTypes.shape({
+    _id: PropTypes.string,
+    name: PropTypes.string,
+    img: PropTypes.string,
+  }),
+  trackname: PropTypes.string,
+  src: PropTypes.string,
+  duration: PropTypes.number,
+  genre: PropTypes.shape({
+    _id: PropTypes.string,
+    name: PropTypes.string,
+    img: PropTypes.string,
+  }),
+});
+
 PlaylistItem.propTypes = {
   className: PropTypes.string,
-  track: PropTypes.shape({
-    _id: PropTypes.string,
-    artist: {
-      _id: PropTypes.string,
-      name: PropTypes.string,
-      img: PropTypes.string,
-    },
-    trackname: PropTypes.string,
-    src: PropTypes.string,
-    duration: PropTypes.number,
-  }),
+  track: trackProp,
   currentTrackID: PropTypes.string,
-  playToggle: PropTypes.func,
   setTrack: PropTypes.func,
   playingNow: PropTypes.bool,
 };

@@ -45,7 +45,7 @@ const PlayerQueue = ({
   className,
   disabled,
   isOpen,
-  playlist,
+  playlistID,
   setVisibility,
 }) => {
   const visibilityToggle = () => setVisibility(!isOpen);
@@ -69,7 +69,7 @@ const PlayerQueue = ({
         </PlayerButton>
         <PlaylistPopup isOpen={isOpen} onClickOutside={handleClick}>
           <PlaylistWrapper>
-            <Playlist playlist={playlist} />
+            <Playlist playlistID={playlistID} />
           </PlaylistWrapper>
         </PlaylistPopup>
       </OutsideClickHandler>

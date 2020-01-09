@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from '@emotion/styled';
 import PlaylistItem from './PlaylistItem';
 import {
-  playerSelector,
+  getPlayerState,
   playToggle,
+  play,
   setCurrentTrackID,
   setCurrentPlaylistID,
 } from '../../store/ducks/player';
@@ -20,20 +21,25 @@ const PlaylistItemStyled = styled(PlaylistItem)`
 const Playlist = ({ playlistID }) => {
   const dispatch = useDispatch();
 
-  const player = useSelector(state => playerSelector(state)) || {};
+  const playerState = useSelector(getPlayerState) || {};
 
-  const { playingNow, currentTrackID } = player;
+  const { playingNow, currentTrackID } = playerState;
 
-  const playlist = useSelector(getPlaylistByID(playlistID)) || {};
-  const { isLoading, items } = playlist;
+  const playlistState = useSelector(getPlaylistByID(playlistID)) || {};
+  const { isLoading, items } = playlistState;
 
-  const setTrack = () => {
-    dispatch(setCurrentPlaylistID(playlistID));
-    dispatch(setCurrentTrackID(currentTrackID));
-  };
+  const setTrack = useCallback(trackID => {
+    if (trackID === currentTrackID) {
+      dispatch(playToggle());
+    } else {
+      dispatch(setCurrentPlaylistID(playlistID));
+      dispatch(setCurrentTrackID(trackID));
 
-  //TODO: rename func
-  const toogle = () => dispatch(playToggle());
+      if (!playingNow) {
+        dispatch(play());
+      }
+    }
+  }, []);
 
   if (!isLoading && !items) return null;
 
@@ -45,14 +51,12 @@ const Playlist = ({ playlistID }) => {
         <PlaylistItemStyled />
         <PlaylistItemStyled />
         <PlaylistItemStyled />
-        <PlaylistItemStyled />
       </>
     );
   return (
     <>
       {items.map(track => (
         <PlaylistItemStyled
-          playToggle={toogle}
           setTrack={setTrack}
           track={track}
           currentTrackID={currentTrackID}
@@ -63,20 +67,6 @@ const Playlist = ({ playlistID }) => {
     </>
   );
 };
-
-// const playlistProp = PropTypes.arrayOf(
-//   PropTypes.shape({
-//     _id: PropTypes.string,
-//     artist: {
-//       _id: PropTypes.string,
-//       name: PropTypes.string,
-//       img: PropTypes.string,
-//     },
-//     trackname: PropTypes.string,
-//     src: PropTypes.string,
-//     duration: PropTypes.number,
-//   })
-// );
 
 Playlist.propTypes = {
   playlistID: PropTypes.string,

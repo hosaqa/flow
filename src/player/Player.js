@@ -1,6 +1,6 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, useSelector, useDispatch } from 'react-redux';
 import ReactHowler from 'react-howler';
 import Swipe from 'react-easy-swipe';
 import OutsideClickHandler from 'react-outside-click-handler';
@@ -121,21 +121,24 @@ const CurrentTrackInfo = styled(TrackInfo)`
 
 const Player = ({
   playingNow,
-  playlist,
   currentTrackID,
   currentPlaylistID,
   playToggle,
   fetchPlaylist,
   setCurrentTrackID,
 }) => {
-  const playlist = useSelector(getPlaylistByID(playlistID)) || {};
+  const playlist = useSelector(getPlaylistByID(currentPlaylistID)) || {};
   const { isLoading, items } = playlist;
 
   const [trackIsLoading, setTrackLoading] = useState(true);
 
   const [trackPosition, setTrackPosition] = useState(0);
+
   const [volume, setVolume] = useState(1);
+  const setVolumeMemoized = useCallback(value => setVolume(value), []);
   const [muted, setMute] = useState(false);
+  const setMuteMemoized = useCallback(value => setMute(value), []);
+
   const [repeat, setRepeat] = useState(false);
   const [playlistShuffled, setPlaylistShuffled] = useState(null);
 
@@ -174,6 +177,7 @@ const Player = ({
   const currentTrack = currentPlaylist
     ? currentPlaylist.find(track => track._id === currentTrackID)
     : null;
+
   const currentTrackIndex = currentTrack
     ? currentPlaylist.indexOf(currentTrack)
     : null;
@@ -185,8 +189,8 @@ const Player = ({
     ? currentPlaylist[currentTrackIndex + 1]
     : null;
 
-  const prevTrackID = prevTrack ? prevTrack.id : null;
-  const nextTrackID = nextTrack ? nextTrack.id : null;
+  const prevTrackID = prevTrack ? prevTrack._id : null;
+  const nextTrackID = nextTrack ? nextTrack._id : null;
 
   let playerRAF = null;
 
@@ -242,6 +246,10 @@ const Player = ({
   };
 
   const interfaceDisabled = !currentPlaylist;
+
+  if (!isLoading && !items) {
+    return null;
+  }
 
   return (
     <OutsideClickHandler
@@ -310,17 +318,12 @@ const Player = ({
               <VolumeControlStyled
                 disabled={interfaceDisabled}
                 volume={volume}
-                setVolume={setVolume}
+                setVolume={setVolumeMemoized}
                 muted={muted}
-                setMute={setMute}
+                setMute={setMuteMemoized}
               />
 
-              <Quene
-                disabled={interfaceDisabled}
-                playlist={currentPlaylist}
-                isOpen={queneIsVisible}
-                setVisibility={setQueneVisibility}
-              />
+              <Quene />
             </Row>
           </Container>
         </Wrapper>

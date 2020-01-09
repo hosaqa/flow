@@ -91,7 +91,11 @@ export const playlistsReducer = createReducer(
 
 //selectors
 export const getPlaylists = state => state.playlists;
+
 export const getPlaylistByID = ID =>
   createSelector(getPlaylists, playlists => playlists[ID]);
+
 export const getTrackByID = ({ playlistID, trackID }) =>
-  createSelector(getPlaylists, playlists => playlists[ID]);
+  createSelector(getPlaylistByID(playlistID), playlist =>
+    playlist.find(track => track._id === trackID)
+  );
