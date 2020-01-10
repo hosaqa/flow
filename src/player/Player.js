@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
-import { connect, useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import ReactHowler from 'react-howler';
 import Swipe from 'react-easy-swipe';
 import OutsideClickHandler from 'react-outside-click-handler';
@@ -17,11 +16,14 @@ import PlayControls from './PlayControls';
 import TimelineControl from './TimelineControl';
 import VolumeControl from './VolumeControl';
 import PlayerQueue from './PlayerQueue';
-import { playToggle, setCurrentTrackID } from '../store/ducks/player';
+import {
+  playToggle,
+  setCurrentTrackID,
+  getPlayerState,
+} from '../store/ducks/player';
 import { fetchPlaylist, getPlaylistByID } from '../store/ducks/playlists';
 
 import { isNumeric, randomiseArray } from '../utils';
-import { mediaUpLG } from '../utils/mediaQueries';
 import { gridTheme } from '../theme';
 
 const Wrapper = styled.section`
@@ -119,16 +121,14 @@ const CurrentTrackInfo = styled(TrackInfo)`
   }
 `;
 
-const Player = ({
-  playingNow,
-  currentTrackID,
-  currentPlaylistID,
-  playToggle,
-  fetchPlaylist,
-  setCurrentTrackID,
-}) => {
-  const playlist = useSelector(getPlaylistByID(currentPlaylistID)) || {};
-  const { isLoading, items } = playlist;
+const Player = () => {
+  const dispatch = useDispatch();
+
+  const playerState = useSelector(getPlayerState) || {};
+  const { playingNow, currentTrackID, currentPlaylistID } = playerState;
+
+  const playlistState = useSelector(getPlaylistByID(currentPlaylistID)) || {};
+  const { isLoading, items } = playlistState;
 
   const [trackIsLoading, setTrackLoading] = useState(true);
 
@@ -160,7 +160,7 @@ const Player = ({
   useEffect(() => {
     //TODO: WTF???
     setTrackPosition(0);
-  }, [playlist.items]);
+  }, [items]);
 
   useEffect(() => {
     setTrackLoading(true);
@@ -195,6 +195,7 @@ const Player = ({
   let playerRAF = null;
 
   useEffect(() => {
+    // dispatch!
     // fetchPlaylist({
     //   type: 'artist',
     //   ID: '5cec3aae4569f05f070ed329',
@@ -226,11 +227,11 @@ const Player = ({
   const handleOnEnd = () => {
     if (!playerRef.current.props.repeat) {
       if (!nextTrackID) {
-        playToggle();
+        dispatch(playToggle());
 
         clearRAF();
       } else {
-        setCurrentTrackID(nextTrackID);
+        dispatch(setCurrentTrackID(nextTrackID));
       }
     }
   };
@@ -291,8 +292,10 @@ const Player = ({
                 playingNow={playingNow}
                 prevTrackID={prevTrackID}
                 nextTrackID={nextTrackID}
-                setCurrentTrackID={setCurrentTrackID}
-                playToggle={playToggle}
+                setCurrentTrackID={nextTrackID =>
+                  dispatch(setCurrentTrackID(nextTrackID))
+                }
+                playToggle={() => dispatch(playToggle())}
               />
               <TimelineControlStyled
                 disabled={interfaceDisabled}
@@ -337,19 +340,4 @@ const Player = ({
   );
 };
 
-Player.propTypes = {
-  playingNow: PropTypes.bool,
-  repeating: PropTypes.bool,
-  playlist: PropTypes.array, // TODO: описание типов!
-  currentTrackID: PropTypes.string,
-
-  playToggle: PropTypes.func,
-  fetchPlaylist: PropTypes.func,
-  setCurrentTrackID: PropTypes.func,
-};
-
-export default connect(({ player }) => ({ ...player }), {
-  playToggle,
-  fetchPlaylist,
-  setCurrentTrackID,
-})(Player);
+export default Player;

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import styled from '@emotion/styled';
 
 import Playlist from '../../../player/Playlist';
@@ -37,17 +36,7 @@ const PlaylistPage = ({ playlistID }) => (
 );
 
 PlaylistPage.propTypes = {
-  playlist: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      artist: PropTypes.string,
-      trackname: PropTypes.string,
-      album: PropTypes.string,
-      src: PropTypes.string,
-      img: PropTypes.string,
-      duration: PropTypes.number,
-    })
-  ),
+  playlistID: PropTypes.string,
 };
 
 export default PlaylistPage;

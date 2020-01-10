@@ -20,7 +20,7 @@ const PlayControls = ({
   prevTrackID,
   nextTrackID,
   playToggle,
-  setCurrentTrack,
+  setCurrentTrackID,
 }) => (
   <div className={className}>
     <ButtonsRow
@@ -29,7 +29,7 @@ const PlayControls = ({
       }}
     >
       <PlayerButton
-        onClick={() => setCurrentTrack(prevTrackID)}
+        onClick={() => setCurrentTrackID(prevTrackID)}
         disabled={disabled || !prevTrackID}
       >
         <SkipPreviousIcon />
@@ -42,7 +42,7 @@ const PlayControls = ({
         {!playingNow ? <PlayCircleOutlineIcon /> : <PauseCircleOutlineIcon />}
       </PlayerButton>
       <PlayerButton
-        onClick={() => setCurrentTrack(nextTrackID)}
+        onClick={() => setCurrentTrackID(nextTrackID)}
         disabled={disabled || !nextTrackID}
       >
         <SkipNextIcon />
@@ -58,7 +58,7 @@ PlayControls.propTypes = {
   prevTrackID: PropTypes.string,
   nextTrackID: PropTypes.string,
   playToggle: PropTypes.func,
-  setCurrentTrack: PropTypes.func,
+  setCurrentTrackID: PropTypes.func,
 };
 
 export default PlayControls;

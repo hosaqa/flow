@@ -32,11 +32,6 @@ const App = () => {
               <>
                 <Header />
                 <Layout />
-                {/* 
-              <Layout>
-                <ContentPlaylist />
-              </Layout> */}
-
                 <Player />
               </>
             </GridThemeProvider>

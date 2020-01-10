@@ -22,24 +22,26 @@ const Playlist = ({ playlistID }) => {
   const dispatch = useDispatch();
 
   const playerState = useSelector(getPlayerState) || {};
-
   const { playingNow, currentTrackID } = playerState;
 
   const playlistState = useSelector(getPlaylistByID(playlistID)) || {};
   const { isLoading, items } = playlistState;
 
-  const setTrack = useCallback(trackID => {
-    if (trackID === currentTrackID) {
-      dispatch(playToggle());
-    } else {
-      dispatch(setCurrentPlaylistID(playlistID));
-      dispatch(setCurrentTrackID(trackID));
+  const setTrack = useCallback(
+    trackID => {
+      if (trackID === currentTrackID) {
+        dispatch(playToggle());
+      } else {
+        dispatch(setCurrentPlaylistID(playlistID));
+        dispatch(setCurrentTrackID(trackID));
 
-      if (!playingNow) {
-        dispatch(play());
+        if (!playingNow) {
+          dispatch(play());
+        }
       }
-    }
-  }, []);
+    },
+    [currentTrackID]
+  );
 
   if (!isLoading && !items) return null;
 
