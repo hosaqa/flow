@@ -18,22 +18,14 @@ class APIService {
     }
   };
 
-  getTracks = async (options = {}) => {
-    const { limit, genre, artist } = options;
-
-    const stringParams = createStringParams({
-      limit,
-      genre,
-      artist,
-    });
-
-    const endPoint = `${this.host}/tracks${stringParams}`;
+  getGenres = async () => {
+    const endPoint = `${this.host}/genres`;
 
     try {
       const response = await fetch(endPoint);
-      const tracksData = await handleResponse(response);
+      const genresData = await handleResponse(response);
 
-      return tracksData;
+      return genresData;
     } catch (error) {
       return error;
     }

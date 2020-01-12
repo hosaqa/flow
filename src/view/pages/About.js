@@ -7,7 +7,7 @@ import {
   ExternalLink,
   MarkedList,
   MarkedListItem,
-} from '../common/pageLayouts/TextPage';
+} from '../pageLayouts/TextPage';
 
 ReactGA.pageview('/about');
 

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import PlaylistPage from '../common/pageLayouts/PlaylistPage';
-import { fetchPlaylist, getPlaylistByID } from '../store/ducks/playlists';
+import PlaylistPage from '../pageLayouts/PlaylistPage';
+import { fetchPlaylist, getPlaylistByID } from '../../store/ducks/playlists';
 
 const ArtistPage = () => {
   const f = useDispatch();

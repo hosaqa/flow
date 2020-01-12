@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import OutsideClickHandler from 'react-outside-click-handler';
 import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay';
-import PopupOverflow from '../common/UI/PopupOverflow';
-import PlayerButton from '../common/UI/PlayerButton';
-import Playlist from './Playlist';
+import PopupOverflow from '../UI/PopupOverflow';
+import PlayerButton from '../UI/PlayerButton';
+import Playlist from '../Playlist';
 
 const Wrapper = styled.div`
   position: relative;
@@ -46,6 +46,7 @@ const PlayerQueue = ({
   disabled,
   isOpen,
   playlistID,
+  shuffled,
   setVisibility,
 }) => {
   const visibilityToggle = () => setVisibility(!isOpen);
@@ -69,7 +70,7 @@ const PlayerQueue = ({
         </PlayerButton>
         <PlaylistPopup isOpen={isOpen} onClickOutside={handleClick}>
           <PlaylistWrapper>
-            <Playlist playlistID={playlistID} />
+            <Playlist playlistID={playlistID} shuffled={shuffled} />
           </PlaylistWrapper>
         </PlaylistPopup>
       </OutsideClickHandler>
@@ -80,19 +81,8 @@ const PlayerQueue = ({
 PlayerQueue.propTypes = {
   disabled: PropTypes.bool,
   className: PropTypes.string,
-  playlist: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string,
-      artist: {
-        _id: PropTypes.string,
-        name: PropTypes.string,
-        img: PropTypes.string,
-      },
-      trackname: PropTypes.string,
-      src: PropTypes.string,
-      duration: PropTypes.number,
-    })
-  ),
+  playlistID: PropTypes.string,
+  shuffled: PropTypes.bool,
   isOpen: PropTypes.bool,
   setVisibility: PropTypes.func,
 };

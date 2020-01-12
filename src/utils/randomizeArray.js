@@ -1,6 +1,6 @@
 import getRandomInt from './getRandomInt';
 
-const randomiseArray = arr => {
+const randomizeArray = arr => {
   const prevIndexesSequence = [...Array(arr.length).keys()];
   const randomisedArray = [];
 
@@ -13,4 +13,4 @@ const randomiseArray = arr => {
   return randomisedArray;
 };
 
-export default randomiseArray;
+export default randomizeArray;

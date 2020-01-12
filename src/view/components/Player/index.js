@@ -10,8 +10,8 @@ import { Container } from 'styled-bootstrap-grid';
 import RepeatIcon from '@material-ui/icons/Repeat';
 import ShuffleIcon from '@material-ui/icons/Shuffle';
 
-import TrackInfo from '../common/UI/TrackInfo';
-import PlayerButton from '../common/UI/PlayerButton';
+import TrackInfo from '../UI/TrackInfo';
+import PlayerButton from '../UI/PlayerButton';
 import PlayControls from './PlayControls';
 import TimelineControl from './TimelineControl';
 import VolumeControl from './VolumeControl';
@@ -20,11 +20,11 @@ import {
   playToggle,
   setCurrentTrackID,
   getPlayerState,
-} from '../store/ducks/player';
-import { fetchPlaylist, getPlaylistByID } from '../store/ducks/playlists';
+} from '../../../store/ducks/player';
+import { fetchPlaylist, getPlaylistByID } from '../../../store/ducks/playlists';
 
-import { isNumeric, randomiseArray } from '../utils';
-import { gridTheme } from '../theme';
+import { isNumeric } from '../../../utils';
+import { gridTheme } from '../../theme';
 
 const Wrapper = styled.section`
   position: fixed;
@@ -140,13 +140,9 @@ const Player = () => {
   const setMuteMemoized = useCallback(value => setMute(value), []);
 
   const [repeat, setRepeat] = useState(false);
-  const [playlistShuffled, setPlaylistShuffled] = useState(null);
+  const [isShuffled, setShuffled] = useState(null);
 
-  const toggleShuffle = () => {
-    playlistShuffled
-      ? setPlaylistShuffled(null)
-      : setPlaylistShuffled(randomiseArray(items));
-  };
+  const toggleShuffle = () => setShuffled(!isShuffled);
 
   const [
     additionalControlsIsVisible,
@@ -168,11 +164,7 @@ const Player = () => {
 
   const isDesktop = useMediaQuery({ minWidth: gridTheme.breakpoints.lg });
 
-  const currentPlaylist = items
-    ? playlistShuffled
-      ? playlistShuffled
-      : items
-    : null;
+  const currentPlaylist = items;
 
   const currentTrack = currentPlaylist
     ? currentPlaylist.find(track => track._id === currentTrackID)
@@ -313,7 +305,7 @@ const Player = () => {
               </RepeatButton>
               <ShuffleButton
                 onClick={toggleShuffle}
-                activated={!!playlistShuffled}
+                activated={!!isShuffled}
                 disabled={interfaceDisabled}
               >
                 <ShuffleIcon />
@@ -329,6 +321,7 @@ const Player = () => {
               <Quene
                 disabled={interfaceDisabled}
                 playlistID={currentPlaylistID}
+                shuffled={isShuffled}
                 isOpen={queneIsVisible}
                 setVisibility={setQueneVisibility}
               />

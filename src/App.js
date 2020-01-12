@@ -7,12 +7,10 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from './store';
 import { SkeletonTheme } from 'react-loading-skeleton';
-import Header from './common/Header';
-import Player from './player/Player';
-import Layout from './Layout';
+import Layout from './view/Layout';
 
-import { lightTheme, gridTheme } from './theme';
-import { globalStyles } from './theme/globalStyles';
+import { lightTheme, gridTheme } from './view/theme';
+import { globalStyles } from './view/theme/globalStyles';
 
 const App = () => {
   //ReactGA.initialize('UA-92698247-2');
@@ -29,11 +27,7 @@ const App = () => {
             <BaseCSS />
             <Global styles={globalStyles} />
             <GridThemeProvider gridTheme={gridTheme}>
-              <>
-                <Header />
-                <Layout />
-                <Player />
-              </>
+              <Layout />
             </GridThemeProvider>
           </SkeletonTheme>
         </ThemeProvider>

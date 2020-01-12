@@ -5,11 +5,11 @@ import styled from '@emotion/styled/macro';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
 
-import PlayerButton from '../../common/UI/PlayerButton';
-import TimeLabel from '../../common/UI/TimeLabel';
-import TrackInfo from '../../common/UI/TrackInfo';
+import PlayerButton from '../UI/PlayerButton';
+import TimeLabel from '../UI/TimeLabel';
+import TrackInfo from '../UI/TrackInfo';
 
-import { humanizeTrackTime } from '../../utils';
+import { humanizeTrackTime } from '../../../utils';
 
 const Wrapper = styled.div`
   display: flex;

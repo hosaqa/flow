@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 
-import Playlist from '../../../player/Playlist';
+import Playlist from '../../components/Playlist';
 import coverImg from './cover.svg';
 
 const Wrapper = styled.div`

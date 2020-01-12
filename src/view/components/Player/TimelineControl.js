@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
-import ProgressBar from '../common/UI/ProgressBar';
-import Loader from '../common/UI/Loader';
-import TimeLabel from '../common/UI/TimeLabel';
-import { humanizeTrackTime } from '../utils';
+import ProgressBar from '../UI/ProgressBar';
+import Loader from '../UI/Loader';
+import TimeLabel from '../UI/TimeLabel';
+import { humanizeTrackTime } from '../../../utils';
 
 const Wrapper = styled.div`
   display: flex;

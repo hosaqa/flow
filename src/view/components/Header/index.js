@@ -1,16 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  disableBodyScroll,
-  enableBodyScroll,
-  clearAllBodyScrollLocks,
-} from 'body-scroll-lock';
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import { useMediaQuery } from 'react-responsive';
 import OutsideClickHandler from 'react-outside-click-handler';
 import styled from '@emotion/styled';
 import { Container } from 'styled-bootstrap-grid';
 import { ButtonDefault } from '../UI/Buttons';
-import { mediaUpLG } from '../../utils/mediaQueries';
 import { gridTheme } from '../../theme';
 
 import logo from './logo.svg';
@@ -124,7 +119,7 @@ const MenuButton = styled(ButtonDefault)`
   display: block;
   position: relative;
   height: ${({ theme }) => theme.spacing(3)}px;
-  width: ${({ theme }) => theme.spacing(3)}px;
+  width: ${({ theme }) => theme.spacing(3.5)}px;
   transform: ${({ menuIsOpen }) => (menuIsOpen ? 'rotate(225deg)' : 'none')};
 
   &::before,
@@ -140,8 +135,7 @@ const MenuButton = styled(ButtonDefault)`
   }
 
   span {
-    top: 50%;
-    transform: translateY(-50%);
+    top: ${({ theme }) => `${theme.spacing(1.5)}px`};
   }
 
   &:before {
@@ -151,8 +145,8 @@ const MenuButton = styled(ButtonDefault)`
   }
 
   &:after {
-    bottom: ${({ menuIsOpen, theme }) =>
-      menuIsOpen ? 'auto' : `${theme.spacing(0.5)}px`};
+    top: ${({ menuIsOpen, theme }) =>
+      menuIsOpen ? 'auto' : `${theme.spacing(2.5)}px`};
   }
 
   span {
@@ -176,12 +170,7 @@ const Header = () => {
   };
 
   return (
-    <OutsideClickHandler
-      onOutsideClick={() => {
-        toggleMenu();
-      }}
-      disabled={!menuIsOpen}
-    >
+    <OutsideClickHandler onOutsideClick={toggleMenu} disabled={!menuIsOpen}>
       <Wrapper>
         <Inner>
           <Container>
@@ -189,10 +178,10 @@ const Header = () => {
               <Logo to="/">
                 <img src={logo} alt="Flow Music Streaming App" />
               </Logo>
-              <Menu>
+              <Menu aria-label="navigation list" id="header-nav">
                 <MenuList menuIsOpen={menuIsOpen}>
                   <MenuItem>
-                    <StyledLink to="/playlist">playlist</StyledLink>
+                    <StyledLink to="/genres">genres</StyledLink>
                   </MenuItem>
                   <MenuItem>
                     <StyledLink to="/about">about</StyledLink>
@@ -200,7 +189,14 @@ const Header = () => {
                 </MenuList>
               </Menu>
               {!isDesktop && (
-                <MenuButton menuIsOpen={menuIsOpen} onClick={toggleMenu}>
+                <MenuButton
+                  menuIsOpen={menuIsOpen}
+                  onClick={toggleMenu}
+                  aria-label="toogle menu"
+                  aria-haspopup="true"
+                  aria-controls="header-nav"
+                  aria-expanded={menuIsOpen}
+                >
                   <span></span>
                 </MenuButton>
               )}

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from '@emotion/styled';
@@ -9,8 +9,9 @@ import {
   play,
   setCurrentTrackID,
   setCurrentPlaylistID,
-} from '../../store/ducks/player';
-import { getPlaylistByID } from '../../store/ducks/playlists';
+} from '../../../store/ducks/player';
+import { getPlaylistByID } from '../../../store/ducks/playlists';
+import { randomizeArray } from '../../../utils';
 
 const PlaylistItemStyled = styled(PlaylistItem)`
   &:not(:last-child) {
@@ -18,14 +19,21 @@ const PlaylistItemStyled = styled(PlaylistItem)`
   }
 `;
 
-const Playlist = ({ playlistID }) => {
+const Playlist = ({ playlistID, shuffled }) => {
+  const [shuffledPlaylist, setShuffledPlaylist] = useState(null);
+
   const dispatch = useDispatch();
 
   const playerState = useSelector(getPlayerState) || {};
   const { playingNow, currentTrackID } = playerState;
 
   const playlistState = useSelector(getPlaylistByID(playlistID)) || {};
+
   const { isLoading, items } = playlistState;
+
+  useEffect(() => {
+    items && setShuffledPlaylist(randomizeArray(items));
+  }, [shuffled]);
 
   const setTrack = useCallback(
     trackID => {
@@ -55,9 +63,12 @@ const Playlist = ({ playlistID }) => {
         <PlaylistItemStyled />
       </>
     );
+
+  const tracksList = shuffled ? shuffledPlaylist : items;
+
   return (
     <>
-      {items.map(track => (
+      {tracksList.map(track => (
         <PlaylistItemStyled
           setTrack={setTrack}
           track={track}
@@ -72,10 +83,7 @@ const Playlist = ({ playlistID }) => {
 
 Playlist.propTypes = {
   playlistID: PropTypes.string,
-  currentTrackID: PropTypes.string,
-  playToggle: PropTypes.func,
-  setCurrentTrackID: PropTypes.func,
-  playingNow: PropTypes.bool,
+  shuffled: PropTypes.bool,
 };
 
 export default Playlist;
