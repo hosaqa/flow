@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import APIService from '../../services/api';
 
 const GenresListPage = () => {
@@ -41,7 +42,7 @@ const GenresListPage = () => {
                 margin: '15px 0 0',
               }}
             >
-              {item.name}
+              <Link to={`/playlist/genre/${item._id}`}>{item.name}</Link>
             </div>
           </div>
         ))}

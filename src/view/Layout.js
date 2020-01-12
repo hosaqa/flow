@@ -7,6 +7,7 @@ import Header from './components/Header';
 import Player from './components/Player';
 import PageAbout from './pages/About';
 import Artist from './pages/Artist';
+import PlaylistPage from './pages/PlaylistPage';
 import GenresListPage from './pages/GenresList';
 
 const Wrapper = styled.div`
@@ -26,6 +27,7 @@ const Layout = () => (
         <Inner>
           <Switch>
             <Route exact path="/" component={Artist} />
+            <Route path="/playlist/:type/:id" component={PlaylistPage} />
             <Route path="/genres" component={GenresListPage} />
             <Route path="/about" component={PageAbout} />
           </Switch>

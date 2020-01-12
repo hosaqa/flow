@@ -4,8 +4,8 @@ import { ThemeProvider } from 'emotion-theming';
 import { Global } from '@emotion/core';
 import { GridThemeProvider, BaseCSS } from 'styled-bootstrap-grid';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
-import { store } from './store';
+import { ConnectedRouter } from 'connected-react-router';
+import { store, history } from './store';
 import { SkeletonTheme } from 'react-loading-skeleton';
 import Layout from './view/Layout';
 
@@ -18,7 +18,7 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <BrowserRouter>
+      <ConnectedRouter history={history}>
         <ThemeProvider theme={lightTheme}>
           <SkeletonTheme
             color={lightTheme.palette.skeleton.primary}
@@ -31,7 +31,7 @@ const App = () => {
             </GridThemeProvider>
           </SkeletonTheme>
         </ThemeProvider>
-      </BrowserRouter>
+      </ConnectedRouter>
     </Provider>
   );
 };
