@@ -51,8 +51,8 @@ export const MarkedListItem = styled.li`
   }
 `;
 
-export const TextPage = ({ children }) => <Wrapper>{children}</Wrapper>;
+export const TextPageLayout = ({ children }) => <Wrapper>{children}</Wrapper>;
 
-TextPage.propTypes = {
+TextPageLayout.propTypes = {
   children: PropTypes.node,
 };

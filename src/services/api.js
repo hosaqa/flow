@@ -14,7 +14,7 @@ class APIService {
 
       return tracksData;
     } catch (error) {
-      return error;
+      throw new Error(error);
     }
   };
 

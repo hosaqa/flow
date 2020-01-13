@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-//import Skeleton from 'react-loading-skeleton';
+import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
+
 import MusicNote from '@material-ui/icons/MusicNote';
 import Skeleton from './Skeleton';
 
@@ -59,32 +60,53 @@ const Artist = styled(TextLine)`
   color: ${({ theme }) => theme.palette.text.secondary};
 `;
 
-const TrackInfo = ({ children, className, trackname, artist }) => (
-  <Wrapper className={className}>
-    <ArtCover>
-      {!trackname ? (
-        <Skeleton />
-      ) : artist.img ? (
-        <img src={artist.img} alt={`${artist.name} - ${trackname}`} />
-      ) : (
-        <ArtCoverDefault>
-          <MusicNote />
-        </ArtCoverDefault>
-      )}
-      {children}
-    </ArtCover>
-    <Text>
-      <Track>{!trackname ? <Skeleton /> : trackname}</Track>
-      <Artist>{!artist ? <Skeleton /> : artist.name}</Artist>
-    </Text>
-  </Wrapper>
-);
+const ArtistLink = styled(Link)`
+  color: inherit;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const TrackInfo = ({ children, className, trackname, artist }) => {
+  return (
+    <Wrapper className={className}>
+      <ArtCover>
+        {!trackname ? (
+          <Skeleton />
+        ) : artist.img ? (
+          <img src={artist.img} alt={`${artist.name} - ${trackname}`} />
+        ) : (
+          <ArtCoverDefault>
+            <MusicNote />
+          </ArtCoverDefault>
+        )}
+        {children}
+      </ArtCover>
+      <Text>
+        <Track>{!trackname ? <Skeleton /> : trackname}</Track>
+
+        <Artist>
+          {!artist ? (
+            <Skeleton />
+          ) : (
+            <ArtistLink to={`/playlist/artist/${artist._id}`}>
+              {artist.name}
+            </ArtistLink>
+          )}
+        </Artist>
+      </Text>
+    </Wrapper>
+  );
+};
 
 TrackInfo.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
   trackname: PropTypes.string,
   artist: PropTypes.shape({
+    _id: PropTypes.string,
     name: PropTypes.string,
     img: PropTypes.string,
   }),

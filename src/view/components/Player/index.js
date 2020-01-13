@@ -144,6 +144,10 @@ const Player = () => {
 
   const toggleShuffle = () => setShuffled(!isShuffled);
 
+  useEffect(() => {
+    setShuffled(false);
+  }, [currentPlaylistID]);
+
   const [
     additionalControlsIsVisible,
     setAdditionalControlsVisibility,

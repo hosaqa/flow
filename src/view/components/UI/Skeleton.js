@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Skeleton from 'react-loading-skeleton';
 import styled from '@emotion/styled';
 
@@ -9,10 +10,14 @@ const SkeletonStyled = styled.span`
   }
 `;
 
-const SkeletonEnchanced = () => (
-  <SkeletonStyled>
+const SkeletonEnchanced = ({ className }) => (
+  <SkeletonStyled className={className}>
     <Skeleton />
   </SkeletonStyled>
 );
+
+SkeletonEnchanced.propTypes = {
+  className: PropTypes.string,
+};
 
 export default SkeletonEnchanced;

@@ -41,6 +41,7 @@ export const fetchPlaylist = (options = {}) => {
     try {
       const requestPlaylist = await APIService.getPlaylist(`${type}/${ID}`);
       const { uri, playlistData } = requestPlaylist;
+
       dispatch(
         fetchPlaylistSuccess({
           ID,
@@ -49,7 +50,7 @@ export const fetchPlaylist = (options = {}) => {
         })
       );
     } catch (error) {
-      dispatch(fetchPlaylistFailure({ ID, error }));
+      dispatch(fetchPlaylistFailure({ ID, error: String(error) }));
     }
   };
 };

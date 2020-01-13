@@ -1,18 +1,18 @@
 import React from 'react';
 import ReactGA from 'react-ga';
 import {
-  TextPage,
+  TextPageLayout,
   Title,
   Paragraph,
   ExternalLink,
   MarkedList,
   MarkedListItem,
-} from '../pageLayouts/TextPage';
+} from '../pageLayouts/TextPageLayout';
 
 ReactGA.pageview('/about');
 
 const PageAbout = () => (
-  <TextPage>
+  <TextPageLayout>
     <Title>About</Title>
     <Paragraph>
       This is my pet project, web application for music streaming.
@@ -55,7 +55,7 @@ const PageAbout = () => (
         linkedin
       </ExternalLink>
     </Paragraph>
-  </TextPage>
+  </TextPageLayout>
 );
 
 export default PageAbout;

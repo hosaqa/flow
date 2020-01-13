@@ -1,6 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import styled from '@emotion/styled';
+import { Row, Col } from 'styled-bootstrap-grid';
 import APIService from '../../services/api';
+
+const GenreWrapper = styled.div`
+  margin: 0 0 ${({ theme }) => theme.spacing(2)}px;
+
+  ${({ theme }) => theme.mediaQueries.up('md')} {
+    margin: 0;
+  }
+`;
+
+const GenreLink = styled(Link)`
+  color: ${({ theme }) => theme.palette.text.primary};
+  text-decoration: none;
+  font-size: ${({ theme }) => theme.spacing(2)}px;
+  font-weight: 700;
+
+  ${({ theme }) => theme.mediaQueries.up('md')} {
+    font-size: ${({ theme }) => theme.spacing(3)}px;
+  }
+`;
+
+const GenreImage = styled.img`
+  max-width: 100%;
+  display: block;
+  margin: 0 0 ${({ theme }) => theme.spacing(1)}px;
+
+  ${({ theme }) => theme.mediaQueries.up('md')} {
+    margin: 0 0 ${({ theme }) => theme.spacing(1.5)}px;
+  }
+`;
 
 const GenresListPage = () => {
   const [genres, setGenres] = useState(null);
@@ -26,27 +57,24 @@ const GenresListPage = () => {
   }, []);
 
   return (
-    <div>
+    <Row>
       {genres &&
         genres.length &&
-        genres.map(item => (
-          <div
-            style={{ display: 'inline-block', marginRight: '16px' }}
-            key={item._id}
-          >
-            <img width="200" height="200" alt={item.name} src={item.img} />
-            <div
-              style={{
-                fontSize: '24px',
-                fontWeight: '700',
-                margin: '15px 0 0',
-              }}
-            >
-              <Link to={`/playlist/genre/${item._id}`}>{item.name}</Link>
-            </div>
-          </div>
-        ))}
-    </div>
+        genres.map(item => {
+          const linkTo = `/playlist/genre/${item._id}`;
+
+          return (
+            <Col sm="6" md="3" key={item._id}>
+              <GenreWrapper>
+                <Link to={linkTo}>
+                  <GenreImage alt={item.name} src={item.img} />
+                </Link>
+                <GenreLink to={linkTo}>{item.name}</GenreLink>
+              </GenreWrapper>
+            </Col>
+          );
+        })}
+    </Row>
   );
 };
 
