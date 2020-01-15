@@ -28,6 +28,7 @@
     "react-draggable": "^4.2.0",
     "react-easy-swipe": "^0.0.18",
     "react-ga": "^2.5.7",
+    "react-helmet": "^5.2.1",
     "react-howler": "^3.7.4",
     "react-loading-skeleton": "^1.2.0",
     "react-motion": "^0.5.2",

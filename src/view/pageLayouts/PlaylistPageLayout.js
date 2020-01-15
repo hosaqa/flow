@@ -46,6 +46,11 @@ const ArtCoverWrapper = styled.div`
   }
 `;
 
+const ArtCoverImage = styled.img`
+  width: 100%;
+  display: block;
+`;
+
 const ArtCoverDefault = styled.div`
   background-color: ${({ theme }) => theme.palette.background.secondary};
   display: flex;
@@ -88,7 +93,7 @@ const PlaylistPageLayout = ({ playlistID, artCoverSrc }) => {
         ) : (
           <>
             {artCoverSrc ? (
-              <img src={artCoverSrc} />
+              <ArtCoverImage src={artCoverSrc} />
             ) : (
               <ArtCoverDefault>
                 <svg
