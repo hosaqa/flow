@@ -1,4 +1,4 @@
-import { handleResponse, createStringParams } from './utils';
+import { handleResponse } from './utils';
 
 class APIService {
   constructor() {
@@ -27,7 +27,7 @@ class APIService {
 
       return genresData;
     } catch (error) {
-      return error;
+      throw new Error(error);
     }
   };
 }

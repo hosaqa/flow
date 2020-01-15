@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { Row, Col } from 'styled-bootstrap-grid';
-import APIService from '../../services/api';
+import SkeletonRectangle from '../components/UI/SkeletonRectangle';
+import Skeleton from '../components/UI/Skeleton';
+import { TitleSmall } from '../components/UI/Typography';
+import { getGenresState, fetchGenres } from '../../store/ducks/genres';
 
 const GenreWrapper = styled.div`
   margin: 0 0 ${({ theme }) => theme.spacing(2)}px;
@@ -13,67 +17,73 @@ const GenreWrapper = styled.div`
 `;
 
 const GenreLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+`;
+
+const GenreName = styled(TitleSmall)`
+  display: inline-block;
   color: ${({ theme }) => theme.palette.text.primary};
   text-decoration: none;
-  font-size: ${({ theme }) => theme.spacing(2)}px;
   font-weight: 700;
+  min-width: 70%;
+  margin-bottom: 0;
 
   ${({ theme }) => theme.mediaQueries.up('md')} {
-    font-size: ${({ theme }) => theme.spacing(3)}px;
+    margin-bottom: 0;
   }
 `;
 
 const GenreImage = styled.img`
   max-width: 100%;
   display: block;
-  margin: 0 0 ${({ theme }) => theme.spacing(1)}px;
-
-  ${({ theme }) => theme.mediaQueries.up('md')} {
-    margin: 0 0 ${({ theme }) => theme.spacing(1.5)}px;
-  }
 `;
 
 const GenresListPage = () => {
-  const [genres, setGenres] = useState(null);
-  const [isLoading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const NUMBER_OF_SKELETONS = 4;
+  const skeletonGenresArr = [...new Array(NUMBER_OF_SKELETONS)];
+
+  const genresState = useSelector(getGenresState);
+  const { isLoading, genresList, fetchError } = genresState || {};
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      setError(false);
-
-      try {
-        const data = await APIService.getGenres();
-        setGenres(data);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    dispatch(fetchGenres());
   }, []);
+
+  if (!isLoading && !genresList && !fetchError) return null;
+
+  if (fetchError) return <div>{fetchError}</div>;
 
   return (
     <Row>
-      {genres &&
-        genres.length &&
-        genres.map(item => {
-          const linkTo = `/playlist/genre/${item._id}`;
+      {(genresList || skeletonGenresArr).map((genreItem, index) => {
+        const { _id, name, img } = genreItem || {};
 
-          return (
-            <Col sm="6" md="3" key={item._id}>
-              <GenreWrapper>
+        const linkTo = `/playlist/genre/${_id}`;
+
+        return (
+          <Col sm="6" md="3" key={_id || index}>
+            <GenreWrapper>
+              {img ? (
                 <Link to={linkTo}>
-                  <GenreImage alt={item.name} src={item.img} />
+                  <GenreImage alt={name} src={img} />
                 </Link>
-                <GenreLink to={linkTo}>{item.name}</GenreLink>
-              </GenreWrapper>
-            </Col>
-          );
-        })}
+              ) : (
+                <SkeletonRectangle />
+              )}
+              <GenreName>
+                {!name ? (
+                  <Skeleton />
+                ) : (
+                  <GenreLink to={linkTo}>{name}</GenreLink>
+                )}
+              </GenreName>
+            </GenreWrapper>
+          </Col>
+        );
+      })}
     </Row>
   );
 };

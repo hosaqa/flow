@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import styled from '@emotion/styled';
 import { useTheme } from 'emotion-theming';
-import { css } from 'emotion';
-
 import { getPlaylistByID } from '../../store/ducks/playlists';
 import Playlist from '../components/Playlist';
 import Skeleton from '../components/UI/Skeleton';
+import SkeletonRectangle from '../components/UI/SkeletonRectangle';
+import { TitleLarge, TitleMedium } from '../components/UI/Typography';
 
 const Wrapper = styled.main`
   ${({ theme }) => theme.mediaQueries.up('md')} {
@@ -44,6 +44,13 @@ const ArtCoverWrapper = styled.div`
   ${({ theme }) => theme.mediaQueries.up('lg')} {
     max-width: ${({ theme }) => theme.spacing(35)}px;
   }
+`;
+
+const ArtCoverDefault = styled.div`
+  background-color: ${({ theme }) => theme.palette.background.secondary};
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:before {
     content: '';
@@ -52,27 +59,22 @@ const ArtCoverWrapper = styled.div`
   }
 `;
 
-const ArtCoverDefault = styled.div`
-  background-color: ${({ theme }) => theme.palette.background.secondary};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
+const Title = styled(TitleMedium.withComponent('h1'))`
+  display: inline-block;
+  min-width: ${({ theme }) => theme.spacing(26)}px;
+  margin: 0 0 ${({ theme }) => theme.spacing(1)}px;
 
-const ArtCoverBody = css`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  max-width: 100%;
+  ${({ theme }) => theme.mediaQueries.up('md')} {
+    margin: 0 0 ${({ theme }) => theme.spacing(2)}px;
+    min-width: ${({ theme }) => theme.spacing(30)}px;
+  }
 `;
 
 const PlaylistPageLayout = ({ playlistID, artCoverSrc }) => {
   const theme = useTheme();
 
   const playlistState = useSelector(getPlaylistByID(playlistID)) || {};
-  const { isLoading, items, fetchError } = playlistState;
+  const { isLoading, title, items, fetchError } = playlistState;
 
   if (!isLoading && !items && !fetchError) return null;
 
@@ -82,13 +84,13 @@ const PlaylistPageLayout = ({ playlistID, artCoverSrc }) => {
     <Wrapper>
       <ArtCoverWrapper>
         {isLoading ? (
-          <Skeleton className={ArtCoverBody} />
+          <SkeletonRectangle />
         ) : (
           <>
             {artCoverSrc ? (
-              <img className={ArtCoverBody} src={artCoverSrc} />
+              <img src={artCoverSrc} />
             ) : (
-              <ArtCoverDefault className={ArtCoverBody}>
+              <ArtCoverDefault>
                 <svg
                   width="75%"
                   height="75%"
@@ -113,6 +115,9 @@ const PlaylistPageLayout = ({ playlistID, artCoverSrc }) => {
         )}
       </ArtCoverWrapper>
       <PlaylistWrapper>
+        <Title className={TitleLarge}>
+          {isLoading ? <Skeleton /> : <span>{title}</span>}
+        </Title>
         <Playlist playlistID={playlistID} />
       </PlaylistWrapper>
     </Wrapper>

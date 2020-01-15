@@ -5,6 +5,7 @@ import styled from '@emotion/styled';
 
 import MusicNote from '@material-ui/icons/MusicNote';
 import Skeleton from './Skeleton';
+import SkeletonRectangle from './SkeletonRectangle';
 
 const Wrapper = styled.div`
   display: flex;
@@ -74,7 +75,7 @@ const TrackInfo = ({ children, className, trackname, artist }) => {
     <Wrapper className={className}>
       <ArtCover>
         {!trackname ? (
-          <Skeleton />
+          <SkeletonRectangle />
         ) : artist.img ? (
           <img src={artist.img} alt={`${artist.name} - ${trackname}`} />
         ) : (

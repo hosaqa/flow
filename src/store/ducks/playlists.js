@@ -16,10 +16,12 @@ export const fetchPlaylistBegin = ({ type, ID }) => ({
   },
 });
 
-export const fetchPlaylistSuccess = ({ ID, playlistData }) => ({
+export const fetchPlaylistSuccess = ({ ID, uri, title, playlistData }) => ({
   type: FETCH_PLAYLIST_SUCCESS,
   payload: {
     ID,
+    uri,
+    title,
     playlistData,
   },
 });
@@ -40,12 +42,13 @@ export const fetchPlaylist = (options = {}) => {
 
     try {
       const requestPlaylist = await APIService.getPlaylist(`${type}/${ID}`);
-      const { uri, playlistData } = requestPlaylist;
+      const { uri, title, playlistData } = requestPlaylist;
 
       dispatch(
         fetchPlaylistSuccess({
           ID,
           uri,
+          title,
           playlistData,
         })
       );
@@ -62,6 +65,7 @@ const playlistsReducerMap = {
     ...state,
     [action.payload.ID]: {
       ...state[action.payload.ID],
+      title: null,
       isLoading: true,
       fetchError: null,
     },
@@ -71,6 +75,7 @@ const playlistsReducerMap = {
     [action.payload.ID]: {
       ...state[action.payload.ID],
       uri: action.payload.uri,
+      title: action.payload.title,
       items: action.payload.playlistData,
       isLoading: false,
     },
