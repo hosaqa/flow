@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, memo } from 'react';
 import PropTypes from 'prop-types';
 import { isMobile } from 'react-device-detect';
 import OutsideClickHandler from 'react-outside-click-handler';
@@ -165,4 +165,4 @@ VolumeControl.propTypes = {
   setMute: PropTypes.func,
 };
 
-export default VolumeControl;
+export default memo(VolumeControl);

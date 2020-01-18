@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
@@ -21,35 +21,45 @@ const PlayControls = ({
   nextTrackID,
   playToggle,
   setCurrentTrackID,
-}) => (
-  <div className={className}>
-    <ButtonsRow
-      onClick={event => {
-        event.stopPropagation();
-      }}
-    >
-      <PlayerButton
-        onClick={() => setCurrentTrackID(prevTrackID)}
-        disabled={disabled || !prevTrackID}
-      >
-        <SkipPreviousIcon />
-      </PlayerButton>
-      <PlayerButton
-        onClick={() => playToggle()}
-        iconSize={'large'}
-        disabled={disabled}
-      >
-        {!playingNow ? <PlayCircleOutlineIcon /> : <PauseCircleOutlineIcon />}
-      </PlayerButton>
-      <PlayerButton
-        onClick={() => setCurrentTrackID(nextTrackID)}
-        disabled={disabled || !nextTrackID}
-      >
-        <SkipNextIcon />
-      </PlayerButton>
-    </ButtonsRow>
-  </div>
-);
+}) => {
+  const handleClickRow = useCallback(event => {
+    event.stopPropagation();
+  }, []);
+
+  const playPrevTrack = useCallback(() => {
+    setCurrentTrackID(prevTrackID);
+  }, [prevTrackID, setCurrentTrackID]);
+
+  const playNextTrack = useCallback(() => {
+    setCurrentTrackID(nextTrackID);
+  }, [nextTrackID, setCurrentTrackID]);
+
+  return (
+    <div className={className}>
+      <ButtonsRow onClick={handleClickRow}>
+        <PlayerButton
+          onClick={playPrevTrack}
+          disabled={disabled || !prevTrackID}
+        >
+          <SkipPreviousIcon />
+        </PlayerButton>
+        <PlayerButton
+          onClick={playToggle}
+          iconSize={'large'}
+          disabled={disabled}
+        >
+          {!playingNow ? <PlayCircleOutlineIcon /> : <PauseCircleOutlineIcon />}
+        </PlayerButton>
+        <PlayerButton
+          onClick={playNextTrack}
+          disabled={disabled || !nextTrackID}
+        >
+          <SkipNextIcon />
+        </PlayerButton>
+      </ButtonsRow>
+    </div>
+  );
+};
 
 PlayControls.propTypes = {
   className: PropTypes.string,
@@ -61,4 +71,4 @@ PlayControls.propTypes = {
   setCurrentTrackID: PropTypes.func,
 };
 
-export default PlayControls;
+export default memo(PlayControls);

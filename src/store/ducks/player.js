@@ -1,4 +1,3 @@
-import { createSelector } from 'reselect';
 import { createReducer } from '../utils';
 
 //action types
@@ -54,7 +53,6 @@ export const playerReducerMap = {
   [SET_CURRENT_TRACK_ID]: (state, action) => ({
     ...state,
     currentTrackID: action.payload.ID,
-    playingNow: action.payload.playingNow || state.playingNow, //TODO: это для того, чтоб сразу проиграть, перепискать нужно как-то
   }),
   [SET_CURRENT_PLAYLIST_ID]: (state, action) => ({
     ...state,
@@ -65,5 +63,6 @@ export const playerReducerMap = {
 export const playerReducer = createReducer(initialState, playerReducerMap);
 
 //selectors
+export const getCurrentTrackID = state => state.player.currentTrackID;
 export const getPlayerState = state => state.player;
 export const getPlayingNow = state => state.player.playingNow;

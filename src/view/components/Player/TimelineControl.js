@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { memo, useState, useEffect, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import raf from 'raf'; // requestAnimationFrame polyfill
 import styled from '@emotion/styled';
 import ProgressBar from '../UI/ProgressBar';
 import Loader from '../UI/Loader';
 import TimeLabel from '../UI/TimeLabel';
 import { humanizeTrackTime } from '../../../utils';
+import { isNumeric } from '../../../utils';
 
 const Wrapper = styled.div`
   display: flex;
@@ -17,9 +19,6 @@ const ProgressBarStyled = styled(ProgressBar)`
   width: 100%;
   display: flex;
   align-items: center;
-
-  ${({ theme }) => theme.mediaQueries.up('lg')} {
-  }
 `;
 
 const LoaderStyled = styled(Loader)`
@@ -32,31 +31,74 @@ const LoaderStyled = styled(Loader)`
 const TimelineControl = ({
   className,
   disabled,
-  trackPosition,
+  playingNow,
+  currentTrackID,
   trackIsLoading,
-  currentTrack,
-  setTrackPosition,
+  trackDuration,
+  playerInstance,
 }) => {
   const [nextTrackPosition, setNextTrackPosition] = useState(null);
+  const [trackPosition, setTrackPosition] = useState(0);
 
-  const trackDuration = currentTrack ? currentTrack.duration : null;
+  let playerRAF = useRef(null);
+
+  const setSeek = useCallback(
+    rewindTo => {
+      setTrackPosition(rewindTo);
+
+      playerInstance.seek(rewindTo);
+    },
+    [playerInstance]
+  );
+
+  const clearRAF = () => {
+    raf.cancel(playerRAF.current);
+  };
+
+  useEffect(() => {
+    const setSeekPos = playingNow => {
+      let trackPosition = playerInstance.seek();
+      trackPosition = isNumeric(trackPosition) ? trackPosition : 0;
+
+      setTrackPosition(trackPosition);
+
+      if (playingNow) playerRAF.current = raf(() => setSeekPos(playingNow));
+    };
+
+    if (typeof playerInstance.seek === 'function') {
+      if (playingNow) {
+        setSeekPos(playingNow);
+      } else {
+        clearRAF();
+      }
+    }
+  }, [playingNow, playerInstance]);
+
+  useEffect(() => {
+    setTrackPosition(0);
+  }, [currentTrackID]);
+
+  useEffect(() => () => clearRAF(), []);
 
   const progress = parseFloat(
     ((trackPosition / trackDuration) * 100).toFixed(1)
   );
 
-  const setTrackPositionEnchanced = nextPosition => {
-    setTrackPosition((trackDuration / 100) * nextPosition);
-  };
+  const handleSwipeMove = useCallback(
+    nextPosition => {
+      setNextTrackPosition((trackDuration / 100) * nextPosition);
+    },
+    [trackDuration]
+  );
 
-  const handleSwipeMove = nextPosition => {
-    setNextTrackPosition((trackDuration / 100) * nextPosition);
-  };
+  const handleSwipeEnd = useCallback(
+    nextPosition => {
+      setNextTrackPosition(null);
 
-  const handleSwipeEnd = nextPosition => {
-    setNextTrackPosition(null);
-    setTrackPositionEnchanced(nextPosition);
-  };
+      setSeek((trackDuration / 100) * nextPosition);
+    },
+    [trackDuration, setSeek]
+  );
 
   return (
     <Wrapper className={className}>
@@ -85,21 +127,15 @@ const TimelineControl = ({
 
 TimelineControl.propTypes = {
   className: PropTypes.string,
+  playingNow: PropTypes.bool,
+  currentTrackID: PropTypes.string,
   disabled: PropTypes.bool,
   trackIsLoading: PropTypes.bool,
-  currentTrack: PropTypes.shape({
-    _id: PropTypes.string,
-    artist: {
-      _id: PropTypes.string,
-      name: PropTypes.string,
-      img: PropTypes.string,
-    },
-    trackname: PropTypes.string,
-    src: PropTypes.string,
-    duration: PropTypes.number,
-  }),
+  trackDuration: PropTypes.number,
   trackPosition: PropTypes.number,
-  setTrackPosition: PropTypes.func,
+  playerInstance: PropTypes.shape({
+    seek: PropTypes.func,
+  }),
 };
 
-export default TimelineControl;
+export default memo(TimelineControl);

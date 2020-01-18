@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import OutsideClickHandler from 'react-outside-click-handler';
@@ -49,16 +49,18 @@ const PlayerQueue = ({
   shuffled,
   setVisibility,
 }) => {
-  const visibilityToggle = () => setVisibility(!isOpen);
+  const handleClick = useCallback(() => {
+    setVisibility(!isOpen);
+  }, [isOpen, setVisibility]);
 
-  const handleClick = () => {
-    visibilityToggle();
-  };
+  const handleOutsideClick = useCallback(() => {
+    setVisibility(false);
+  }, [setVisibility]);
 
   return (
     <Wrapper className={className}>
       <OutsideClickHandler
-        onOutsideClick={() => setVisibility(false)}
+        onOutsideClick={handleOutsideClick}
         disabled={!isOpen}
       >
         <PlayerButton
@@ -87,4 +89,4 @@ PlayerQueue.propTypes = {
   setVisibility: PropTypes.func,
 };
 
-export default PlayerQueue;
+export default memo(PlayerQueue);

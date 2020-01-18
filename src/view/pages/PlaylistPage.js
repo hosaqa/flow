@@ -27,7 +27,7 @@ const PlaylistPage = ({ match }) => {
         })
       );
     }
-  }, [type, id, items]);
+  }, [type, id, items, dispatch]);
 
   return (
     <>

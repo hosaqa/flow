@@ -52,7 +52,7 @@ const GenresListPage = () => {
 
   useEffect(() => {
     if (!genresList) dispatch(fetchGenres());
-  }, [genresList]);
+  }, [genresList, dispatch]);
 
   if (!isLoading && !genresList && !fetchError) return null;
 

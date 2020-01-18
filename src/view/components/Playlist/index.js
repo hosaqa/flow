@@ -33,7 +33,7 @@ const Playlist = ({ playlistID, shuffled }) => {
 
   useEffect(() => {
     items && setShuffledPlaylist(randomizeArray(items));
-  }, [shuffled]);
+  }, [shuffled, items]);
 
   const setTrack = useCallback(
     trackID => {
@@ -48,7 +48,7 @@ const Playlist = ({ playlistID, shuffled }) => {
         }
       }
     },
-    [currentTrackID]
+    [currentTrackID, playingNow, playlistID, dispatch]
   );
 
   if (!isLoading && !items) return null;

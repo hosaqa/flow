@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactGA from 'react-ga';
+//import ReactGA from 'react-ga';
 import { ThemeProvider } from 'emotion-theming';
 import { Global } from '@emotion/core';
 import { GridThemeProvider, BaseCSS } from 'styled-bootstrap-grid';

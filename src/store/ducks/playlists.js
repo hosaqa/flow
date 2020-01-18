@@ -102,6 +102,6 @@ export const getPlaylistByID = ID =>
   createSelector(getPlaylists, playlists => playlists[ID]);
 
 export const getTrackByID = ({ playlistID, trackID }) =>
-  createSelector(getPlaylistByID(playlistID), playlist =>
-    playlist.find(track => track._id === trackID)
-  );
+  createSelector(getPlaylistByID(playlistID), playlist => {
+    if (playlist) return playlist.items.find(track => track._id === trackID);
+  });

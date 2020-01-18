@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { memo, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Swipe from 'react-easy-swipe';
 import styled from '@emotion/styled/macro';
@@ -204,4 +204,4 @@ ProgressBar.propTypes = {
   onSwipeEnd: PropTypes.func,
 };
 
-export default ProgressBar;
+export default memo(ProgressBar);

@@ -4,12 +4,12 @@ import ReactHowler from 'react-howler';
 import Swipe from 'react-easy-swipe';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { useMediaQuery } from 'react-responsive';
-import raf from 'raf'; // requestAnimationFrame polyfill
 import styled from '@emotion/styled';
 import { Container } from 'styled-bootstrap-grid';
 import RepeatIcon from '@material-ui/icons/Repeat';
 import ShuffleIcon from '@material-ui/icons/Shuffle';
 
+import { useLocalStorage } from '../../hooks';
 import TrackInfo from '../UI/TrackInfo';
 import PlayerButton from '../UI/PlayerButton';
 import PlayControls from './PlayControls';
@@ -21,12 +21,12 @@ import {
   setCurrentTrackID,
   getPlayerState,
 } from '../../../store/ducks/player';
-import { fetchPlaylist, getPlaylistByID } from '../../../store/ducks/playlists';
+import { getPlaylistByID, getTrackByID } from '../../../store/ducks/playlists';
 
-import { isNumeric } from '../../../utils';
 import { gridTheme } from '../../theme';
 
 const Wrapper = styled.section`
+  z-index: 1000;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -132,17 +132,24 @@ const Player = () => {
 
   const [trackIsLoading, setTrackLoading] = useState(true);
 
-  const [trackPosition, setTrackPosition] = useState(0);
+  const [volume, setVolume] = useLocalStorage({
+    key: 'volume',
+    initialState: 1,
+  });
+  const setVolumeMemoized = useCallback(value => setVolume(value), [setVolume]);
 
-  const [volume, setVolume] = useState(1);
-  const setVolumeMemoized = useCallback(value => setVolume(value), []);
-  const [muted, setMute] = useState(false);
-  const setMuteMemoized = useCallback(value => setMute(value), []);
+  const [muted, setMute] = useLocalStorage({
+    key: 'muted',
+    initialState: false,
+  });
+  const setMuteMemoized = useCallback(value => setMute(value), [setMute]);
 
   const [repeat, setRepeat] = useState(false);
   const [isShuffled, setShuffled] = useState(null);
 
-  const toggleShuffle = () => setShuffled(!isShuffled);
+  const toggleShuffle = useCallback(() => setShuffled(!isShuffled), [
+    isShuffled,
+  ]);
 
   useEffect(() => {
     setShuffled(false);
@@ -158,11 +165,6 @@ const Player = () => {
   const playerRef = useRef(null);
 
   useEffect(() => {
-    //TODO: WTF???
-    setTrackPosition(0);
-  }, [items]);
-
-  useEffect(() => {
     setTrackLoading(true);
   }, [currentTrackID]);
 
@@ -170,9 +172,9 @@ const Player = () => {
 
   const currentPlaylist = items;
 
-  const currentTrack = currentPlaylist
-    ? currentPlaylist.find(track => track._id === currentTrackID)
-    : null;
+  const currentTrack = useSelector(
+    getTrackByID({ playlistID: currentPlaylistID, trackID: currentTrackID })
+  );
 
   const currentTrackIndex = currentTrack
     ? currentPlaylist.indexOf(currentTrack)
@@ -188,7 +190,14 @@ const Player = () => {
   const prevTrackID = prevTrack ? prevTrack._id : null;
   const nextTrackID = nextTrack ? nextTrack._id : null;
 
-  let playerRAF = null;
+  const setCurrentTrackIDMemoized = useCallback(
+    nextTrackID => dispatch(setCurrentTrackID(nextTrackID)),
+    [dispatch]
+  );
+
+  const playToggleMemoized = useCallback(() => {
+    dispatch(playToggle());
+  }, [dispatch]);
 
   useEffect(() => {
     // dispatch!
@@ -198,49 +207,42 @@ const Player = () => {
     // });
   }, []);
 
-  const setSeek = rewindTo => {
-    setTrackPosition(rewindTo);
-    playerRef.current.seek(rewindTo);
-  };
-
-  const setSeekPos = () => {
-    let trackPosition = playerRef.current.seek();
-    trackPosition = isNumeric(trackPosition) ? trackPosition : 0;
-
-    setTrackPosition(trackPosition);
-
-    playerRAF = raf(() => setSeekPos());
-  };
-
-  const clearRAF = () => {
-    raf.cancel(playerRAF);
-  };
-
-  const repeatToggle = () => {
+  const repeatToggle = useCallback(() => {
     setRepeat(!repeat);
-  };
+  }, [repeat]);
 
-  const handleOnEnd = () => {
+  const handleOnEnd = useCallback(() => {
     if (!playerRef.current.props.repeat) {
       if (!nextTrackID) {
         dispatch(playToggle());
-
-        clearRAF();
       } else {
         dispatch(setCurrentTrackID(nextTrackID));
       }
     }
-  };
+  }, [dispatch, nextTrackID]);
 
-  const handleSwipeUp = () => {
+  const handleSwipeUp = useCallback(() => {
     setAdditionalControlsVisibility(true);
-  };
+  }, []);
 
-  const handleTrackLoad = () => setTrackLoading(false);
-  const handleTrackErrorLoad = () => {
+  const handleSwipeDown = useCallback(() => {
+    if (!queneIsVisible) setAdditionalControlsVisibility(false);
+  }, [queneIsVisible]);
+
+  const handleClickWrapper = useCallback(() => {
+    setAdditionalControlsVisibility(true);
+  }, []);
+
+  const handleOutsideClick = useCallback(() => {
+    setAdditionalControlsVisibility(false);
+  }, []);
+
+  const handleTrackLoad = useCallback(() => setTrackLoading(false), []);
+
+  const handleTrackErrorLoad = useCallback(() => {
     setTrackLoading(false);
     console.log('Loading error');
-  };
+  }, []);
 
   const interfaceDisabled = !currentPlaylist;
 
@@ -248,22 +250,17 @@ const Player = () => {
     return null;
   }
 
+  const playerInstance = (playerRef || {}).current || {};
+
   return (
     <OutsideClickHandler
-      onOutsideClick={() => setAdditionalControlsVisibility(false)}
+      onOutsideClick={handleOutsideClick}
       disabled={isDesktop || !additionalControlsIsVisible || queneIsVisible}
     >
-      <Swipe
-        onSwipeUp={() => {
-          handleSwipeUp();
-        }}
-        onSwipeDown={() => {
-          if (!queneIsVisible) setAdditionalControlsVisibility(false);
-        }}
-      >
+      <Swipe onSwipeUp={handleSwipeUp} onSwipeDown={handleSwipeDown}>
         <Wrapper
           additionalControlsIsVisible={additionalControlsIsVisible}
-          onClick={() => setAdditionalControlsVisibility(true)}
+          onClick={handleClickWrapper}
         >
           {!interfaceDisabled && (
             <ReactHowler
@@ -272,7 +269,6 @@ const Player = () => {
               repeat={repeat}
               src={currentTrack.src}
               playing={playingNow}
-              onPlay={setSeekPos}
               onEnd={handleOnEnd}
               onLoad={handleTrackLoad}
               onLoadError={handleTrackErrorLoad}
@@ -288,17 +284,16 @@ const Player = () => {
                 playingNow={playingNow}
                 prevTrackID={prevTrackID}
                 nextTrackID={nextTrackID}
-                setCurrentTrackID={nextTrackID =>
-                  dispatch(setCurrentTrackID(nextTrackID))
-                }
-                playToggle={() => dispatch(playToggle())}
+                setCurrentTrackID={setCurrentTrackIDMemoized}
+                playToggle={playToggleMemoized}
               />
               <TimelineControlStyled
                 disabled={interfaceDisabled}
                 trackIsLoading={trackIsLoading}
-                currentTrack={currentTrack}
-                trackPosition={trackPosition}
-                setTrackPosition={setSeek}
+                trackDuration={(currentTrack || {}).duration}
+                playerInstance={playerInstance}
+                playingNow={playingNow}
+                currentTrackID={currentTrackID}
               />
               <RepeatButton
                 onClick={repeatToggle}
@@ -321,7 +316,6 @@ const Player = () => {
                 muted={muted}
                 setMute={setMuteMemoized}
               />
-
               <Quene
                 disabled={interfaceDisabled}
                 playlistID={currentPlaylistID}
