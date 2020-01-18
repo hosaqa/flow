@@ -1,15 +1,21 @@
+import appConfig from '../../appConfig';
 import { createReducer } from '../utils';
 
+//constants
+export const moduleName = 'player';
+const prefix = `${appConfig.appName}/${moduleName}`;
+export const playingNowState = 'playingNow';
+
 //action types
-export const PLAY = 'PLAY';
-export const PLAY_TOGGLE = 'PLAY_TOGGLE';
-export const SET_CURRENT_TRACK_ID = 'SET_CURRENT_TRACK_ID';
+export const PLAY = `${prefix}/PLAY`;
+export const PLAY_TOGGLE = `${prefix}/PLAY_TOGGLE`;
+export const SET_CURRENT_TRACK_ID = `${prefix}/SET_CURRENT_TRACK_ID`;
 
-export const SET_CURRENT_PLAYLIST_ID = 'SET_CURRENT_PLAYLIST_ID';
+export const SET_CURRENT_PLAYLIST = `${prefix}/SET_CURRENT_PLAYLIST`;
 
-export const FETCH_PLAYLIST_BEGIN = 'FETCH_PLAYLIST_BEGIN';
-export const FETCH_PLAYLIST_SUCCESS = 'FETCH_PLAYLIST_SUCCESS';
-export const FETCH_PLAYLIST_FAILURE = 'FETCH_PLAYLIST_FAILURE';
+export const FETCH_PLAYLIST_BEGIN = `${prefix}/FETCH_PLAYLIST_BEGIN`;
+export const FETCH_PLAYLIST_SUCCESS = `${prefix}/FETCH_PLAYLIST_SUCCESS`;
+export const FETCH_PLAYLIST_FAILURE = `${prefix}/FETCH_PLAYLIST_FAILURE`;
 
 //action creators
 export const play = () => ({
@@ -27,17 +33,19 @@ export const setCurrentTrackID = ID => ({
   },
 });
 
-export const setCurrentPlaylistID = ID => ({
-  type: SET_CURRENT_PLAYLIST_ID,
+export const setCurrentPlaylist = ({ ID, type }) => ({
+  type: SET_CURRENT_PLAYLIST,
   payload: {
     ID,
+    type,
   },
 });
 
 //reducer
 const initialState = {
   currentPlaylistID: null,
-  playingNow: false,
+  currentPlaylistType: null,
+  [playingNowState]: false,
   currentTrackID: null,
 };
 
@@ -54,15 +62,16 @@ export const playerReducerMap = {
     ...state,
     currentTrackID: action.payload.ID,
   }),
-  [SET_CURRENT_PLAYLIST_ID]: (state, action) => ({
+  [SET_CURRENT_PLAYLIST]: (state, action) => ({
     ...state,
     currentPlaylistID: action.payload.ID,
+    currentPlaylistType: action.payload.type,
   }),
 };
 
 export const playerReducer = createReducer(initialState, playerReducerMap);
 
 //selectors
-export const getCurrentTrackID = state => state.player.currentTrackID;
-export const getPlayerState = state => state.player;
-export const getPlayingNow = state => state.player.playingNow;
+export const getCurrentTrackID = state => state[moduleName].currentTrackID;
+export const getPlayerState = state => state[moduleName];
+export const getPlayingNow = state => state[moduleName].playingNow;

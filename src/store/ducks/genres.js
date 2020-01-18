@@ -1,10 +1,15 @@
-import APIService from '../../services/api';
+import appConfig from '../../appConfig';
 import { createReducer } from '../utils';
+import APIService from '../../services/api';
+
+//constants
+export const moduleName = 'genres';
+const prefix = `${appConfig.appName}/${moduleName}`;
 
 // action types
-export const FETCH_GENRES_BEGIN = 'FETCH_GENRES_BEGIN';
-export const FETCH_GENRES_SUCCESS = 'FETCH_GENRES_SUCCESS';
-export const FETCH_GENRES_FAILURE = 'FETCH_GENRES_FAILURE';
+export const FETCH_GENRES_BEGIN = `${prefix}/FETCH_GENRES_BEGIN`;
+export const FETCH_GENRES_SUCCESS = `${prefix}/FETCH_GENRES_SUCCESS`;
+export const FETCH_GENRES_FAILURE = `${prefix}/FETCH_GENRES_FAILURE`;
 
 // action creators
 export const fetchGenresBegin = () => ({
@@ -66,4 +71,4 @@ const genresReducerMap = {
 export const genresReducer = createReducer(initialState, genresReducerMap);
 
 //selectors
-export const getGenresState = state => state.genres;
+export const getGenresState = state => state[moduleName];

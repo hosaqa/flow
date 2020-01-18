@@ -21,8 +21,11 @@ import {
   setCurrentTrackID,
   getPlayerState,
 } from '../../../store/ducks/player';
-import { getPlaylistByID, getTrackByID } from '../../../store/ducks/playlists';
-
+import {
+  fetchPlaylist,
+  getPlaylistByID,
+  getTrackByID,
+} from '../../../store/ducks/playlists';
 import { gridTheme } from '../../theme';
 
 const Wrapper = styled.section`
@@ -125,7 +128,12 @@ const Player = () => {
   const dispatch = useDispatch();
 
   const playerState = useSelector(getPlayerState) || {};
-  const { playingNow, currentTrackID, currentPlaylistID } = playerState;
+  const {
+    playingNow,
+    currentTrackID,
+    currentPlaylistID,
+    currentPlaylistType,
+  } = playerState;
 
   const playlistState = useSelector(getPlaylistByID(currentPlaylistID)) || {};
   const { isLoading, items } = playlistState;
@@ -200,12 +208,14 @@ const Player = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    // dispatch!
-    // fetchPlaylist({
-    //   type: 'artist',
-    //   ID: '5cec3aae4569f05f070ed329',
-    // });
-  }, []);
+    if (currentPlaylistType && currentPlaylistID && !isLoading && !items)
+      dispatch(
+        fetchPlaylist({
+          type: currentPlaylistType,
+          ID: currentPlaylistID,
+        })
+      );
+  }, [dispatch, currentPlaylistType, currentPlaylistID, isLoading, items]);
 
   const repeatToggle = useCallback(() => {
     setRepeat(!repeat);

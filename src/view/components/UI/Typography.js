@@ -33,4 +33,16 @@ const TitleSmall = styled.div`
   }
 `;
 
-export { TitleLarge, TitleMedium, TitleSmall };
+const Paragraph = styled.div`
+  margin: ${({ theme }) => `${theme.spacing(1.5)}px 0`};
+`;
+
+const ExternalLink = styled.a`
+  color: ${({ theme }) => theme.palette.primary.normal};
+
+  &:hover {
+    text-decoration: none;
+  }
+`;
+
+export { TitleLarge, TitleMedium, TitleSmall, Paragraph, ExternalLink };

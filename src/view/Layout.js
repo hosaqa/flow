@@ -4,9 +4,9 @@ import { Container } from 'styled-bootstrap-grid';
 import styled from '@emotion/styled';
 import Header from './components/Header';
 import Player from './components/Player';
-import PageAbout from './pages/About';
-import PlaylistPage from './pages/PlaylistPage';
-import GenresListPage from './pages/GenresList';
+import PageAbout from './routes/About';
+import PlaylistPage from './routes/PlaylistPage';
+import GenresListPage from './routes/GenresList';
 
 const Wrapper = styled.div`
   margin: ${({ theme }) => theme.spacing(2)}px 0 0;

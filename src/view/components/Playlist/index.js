@@ -8,7 +8,7 @@ import {
   playToggle,
   play,
   setCurrentTrackID,
-  setCurrentPlaylistID,
+  setCurrentPlaylist,
 } from '../../../store/ducks/player';
 import { getPlaylistByID } from '../../../store/ducks/playlists';
 import { randomizeArray } from '../../../utils';
@@ -29,7 +29,7 @@ const Playlist = ({ playlistID, shuffled }) => {
 
   const playlistState = useSelector(getPlaylistByID(playlistID)) || {};
 
-  const { isLoading, items } = playlistState;
+  const { isLoading, items, type } = playlistState;
 
   useEffect(() => {
     items && setShuffledPlaylist(randomizeArray(items));
@@ -40,7 +40,7 @@ const Playlist = ({ playlistID, shuffled }) => {
       if (trackID === currentTrackID) {
         dispatch(playToggle());
       } else {
-        dispatch(setCurrentPlaylistID(playlistID));
+        dispatch(setCurrentPlaylist({ ID: playlistID, type }));
         dispatch(setCurrentTrackID(trackID));
 
         if (!playingNow) {
@@ -48,7 +48,7 @@ const Playlist = ({ playlistID, shuffled }) => {
         }
       }
     },
-    [currentTrackID, playingNow, playlistID, dispatch]
+    [currentTrackID, playingNow, playlistID, type, dispatch]
   );
 
   if (!isLoading && !items) return null;

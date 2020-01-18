@@ -1,11 +1,16 @@
 import { createSelector } from 'reselect';
-import APIService from '../../services/api';
+import appConfig from '../../appConfig';
 import { createReducer } from '../utils';
+import APIService from '../../services/api';
+
+//constants
+export const moduleName = 'playlists';
+const prefix = `${appConfig.appName}/${moduleName}`;
 
 // action types
-export const FETCH_PLAYLIST_BEGIN = 'FETCH_PLAYLIST_BEGIN';
-export const FETCH_PLAYLIST_SUCCESS = 'FETCH_PLAYLIST_SUCCESS';
-export const FETCH_PLAYLIST_FAILURE = 'FETCH_PLAYLIST_FAILURE';
+export const FETCH_PLAYLIST_BEGIN = `${prefix}/FETCH_PLAYLIST_BEGIN`;
+export const FETCH_PLAYLIST_SUCCESS = `${prefix}/FETCH_PLAYLIST_SUCCESS`;
+export const FETCH_PLAYLIST_FAILURE = `${prefix}/FETCH_PLAYLIST_FAILURE`;
 
 // action creators
 export const fetchPlaylistBegin = ({ type, ID }) => ({
@@ -65,6 +70,7 @@ const playlistsReducerMap = {
     ...state,
     [action.payload.ID]: {
       ...state[action.payload.ID],
+      type: action.payload.type,
       title: null,
       isLoading: true,
       fetchError: null,
@@ -96,12 +102,13 @@ export const playlistsReducer = createReducer(
 );
 
 //selectors
-export const getPlaylists = state => state.playlists;
+export const getPlaylists = state => state[moduleName];
 
 export const getPlaylistByID = ID =>
   createSelector(getPlaylists, playlists => playlists[ID]);
 
 export const getTrackByID = ({ playlistID, trackID }) =>
   createSelector(getPlaylistByID(playlistID), playlist => {
-    if (playlist) return playlist.items.find(track => track._id === trackID);
+    if (playlist && playlist.items)
+      return playlist.items.find(track => track._id === trackID);
   });
