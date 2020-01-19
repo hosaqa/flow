@@ -8,7 +8,7 @@ import styled from '@emotion/styled';
 import { Container } from 'styled-bootstrap-grid';
 import RepeatIcon from '@material-ui/icons/Repeat';
 import ShuffleIcon from '@material-ui/icons/Shuffle';
-
+import useNotifications from '../Notifications/useNotifications';
 import { useLocalStorage } from '../../hooks';
 import TrackInfo from '../UI/TrackInfo';
 import PlayerButton from '../UI/PlayerButton';
@@ -125,6 +125,7 @@ const CurrentTrackInfo = styled(TrackInfo)`
 `;
 
 const Player = () => {
+  const notifications = useNotifications();
   const dispatch = useDispatch();
 
   const playerState = useSelector(getPlayerState) || {};
@@ -219,6 +220,10 @@ const Player = () => {
 
   const repeatToggle = useCallback(() => {
     setRepeat(!repeat);
+    notifications.showNotification({
+      text: 'gggggggggggggggoooooooo',
+      variant: 'success',
+    });
   }, [repeat]);
 
   const handleOnEnd = useCallback(() => {

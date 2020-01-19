@@ -9,6 +9,7 @@ import { ConnectedRouter } from 'connected-react-router';
 import { store, persistor, history } from './store';
 import { SkeletonTheme } from 'react-loading-skeleton';
 import Layout from './view/Layout';
+import NotificationsProvider from './view/components/Notifications/NotificationsProvider';
 
 import { lightTheme, gridTheme } from './view/theme';
 import { globalStyles } from './view/theme/globalStyles';
@@ -29,7 +30,9 @@ const App = () => {
               <BaseCSS />
               <Global styles={globalStyles} />
               <GridThemeProvider gridTheme={gridTheme}>
-                <Layout />
+                <NotificationsProvider>
+                  <Layout />
+                </NotificationsProvider>
               </GridThemeProvider>
             </SkeletonTheme>
           </ThemeProvider>
