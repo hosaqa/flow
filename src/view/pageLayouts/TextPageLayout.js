@@ -12,6 +12,14 @@ const Wrapper = styled.div`
   ${({ theme }) => theme.mediaQueries.up('md')} {
     width: ${({ theme }) => `${theme.spacing(60)}px`};
   }
+
+  & > *:first-of-type {
+    margin-top: 0;
+  }
+
+  & > *:last-of-type {
+    margin-bottom: 0;
+  }
 `;
 
 export const TextPageLayout = ({ children }) => <Wrapper>{children}</Wrapper>;

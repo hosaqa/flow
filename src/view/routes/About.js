@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactGA from 'react-ga';
+import { Helmet } from 'react-helmet';
 import {
   TitleLarge,
   Paragraph,
   ExternalLink,
 } from '../components/UI/Typography';
+import appConfig from '../../appConfig';
 import { MarkedList, MarkedListItem } from '../components/UI/Lists';
 import TextPageLayout from '../pageLayouts/TextPageLayout';
 
@@ -12,6 +14,9 @@ ReactGA.pageview('/about');
 
 const PageAbout = () => (
   <TextPageLayout>
+    <Helmet>
+      <title>About | {appConfig.appName}</title>
+    </Helmet>
     <TitleLarge>About</TitleLarge>
     <Paragraph>
       This is my pet project, web application for music streaming.
