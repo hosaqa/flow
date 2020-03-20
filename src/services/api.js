@@ -1,8 +1,9 @@
+import config from '../appConfig';
 import { handleResponse } from './utils';
 
 class APIService {
   constructor() {
-    this.host = 'http://localhost:8000'; //TODO import from config!!
+    this.host = config.API; //TODO import from config!!
   }
 
   getPlaylist = async uri => {
