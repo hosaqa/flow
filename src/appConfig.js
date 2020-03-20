@@ -1,4 +1,4 @@
 export default {
   appName: 'Flow',
-  API: 'http://flow-rest-api.herokuapp.com',
+  API: 'https://flow-rest-api.herokuapp.com',
 };
