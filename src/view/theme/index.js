@@ -85,9 +85,7 @@ export const lightTheme = {
     short: 150,
     default: 250,
   },
-  spacing: increment => {
-    return `${GRID_UNIT * increment}`;
-  },
+  spacing: increment => GRID_UNIT * increment,
   borderRadius: increment => `${BORDER_RADIUS_COEFFICIENT * increment}`,
   breakpoints: gridTheme.breakpoints,
   mediaQueries: {

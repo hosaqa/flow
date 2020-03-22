@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import { Container } from 'styled-bootstrap-grid';
 import styled from '@emotion/styled';
 import Header from './components/Header';
@@ -36,6 +36,7 @@ const Layout = () => (
             <Route path="/genres" component={GenresListPage} />
             <Route path="/playlist/:type/:id" component={PlaylistPage} />
             <Route path="/about" component={PageAbout} />
+            <Redirect to="/" />
           </Switch>
         </Inner>
       </Container>

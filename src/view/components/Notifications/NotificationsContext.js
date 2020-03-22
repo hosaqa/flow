@@ -1,5 +1,5 @@
 import { createContext } from 'react';
 
-const NotificationsContext = createContext('yes');
+const NotificationsContext = createContext(null);
 
 export default NotificationsContext;

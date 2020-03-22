@@ -218,13 +218,22 @@ const Player = () => {
       );
   }, [dispatch, currentPlaylistType, currentPlaylistID, isLoading, items]);
 
-  const repeatToggle = useCallback(() => {
-    setRepeat(!repeat);
+  // const repeatToggle = useCallback(() => {
+  //   setRepeat(!repeat);
+  //   notifications.showNotification({
+  //     text: `message N ${Math.random()}`,
+  //     variant: 'success',
+  //     timeout: 3000,
+  //   });
+  // }, [repeat, notifications]);
+
+  const repeatToggle = () => {
     notifications.showNotification({
-      text: 'gggggggggggggggoooooooo',
+      text: `message N ${Math.random()}`,
       variant: 'success',
+      timeout: 3000,
     });
-  }, [repeat]);
+  };
 
   const handleOnEnd = useCallback(() => {
     if (!playerRef.current.props.repeat) {
