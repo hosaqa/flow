@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import { v4 as uuidv4 } from 'uuid';
@@ -7,6 +7,7 @@ import NotificationStack from './NotificationStack';
 
 const NotificationsProvider = ({ children, maxStack = 3 }) => {
   const [notificationsState, setNotificationsState] = useState([]);
+  const timeoutList = useRef([]);
 
   const showNotification = ({ text, variant, timeout }) => {
     const notificationsCount = notificationsState.length;
@@ -24,22 +25,29 @@ const NotificationsProvider = ({ children, maxStack = 3 }) => {
   };
 
   const hideNotification = (ID, timeout) => {
-    const h = () => {
+    const hide = () => {
       const notification = notificationsState.find(
         notificationItem => notificationItem.ID === ID
       );
+
       const notificationIndex = notificationsState.indexOf(notification);
 
       const nextNotificationsState = [...notificationsState];
       nextNotificationsState.splice(notificationIndex, 1);
 
       setNotificationsState(nextNotificationsState);
+
+      if (timeoutList.current[ID])
+        timeoutList.current.splice(notificationIndex, 1);
     };
 
-    if (timeout) {
-      setTimeout(h, timeout);
+    if (timeout && 1 === 2) {
+      if (!timeoutList.current[ID]) {
+        let t = setTimeout(hide, timeout);
+        timeoutList.current.push(t);
+      }
     } else {
-      h();
+      hide();
     }
   };
 

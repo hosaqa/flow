@@ -61,10 +61,8 @@ const NotificationItem = ({
   index,
   hideNotification,
 }) => {
-  const t = useRef(0);
   const itemRef = useRef(null);
   const [bottomMargin, setBottomMargin] = useState(0);
-  //console.log('bottomMargin', bottomMargin, ID);
   const handleClick = () => hideNotification(ID);
 
   useLayoutEffect(() => {
@@ -77,11 +75,7 @@ const NotificationItem = ({
   }, [index]);
 
   useEffect(() => {
-    if (timeout) {
-      hideNotification(ID, timeout);
-
-      //return () => clearTimeout(timer);
-    }
+    if (timeout && 1 === 2) hideNotification(ID, timeout);
   }, []);
 
   return (
@@ -98,7 +92,10 @@ const NotificationItem = ({
 };
 
 const NotificationStack = ({ notificationsList, hideNotification }) => {
-  console.log('notificationsList', notificationsList);
+  console.log('object', notificationsList);
+  // if (notificationsList.length   === 1) {
+  //   debugger;
+  // }
   return notificationsList.map((notificationItem, index) => {
     const { ID, text, variant, timeout } = notificationItem;
     return (
