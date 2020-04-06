@@ -12,7 +12,9 @@ class APIService {
     try {
       const response = await fetch(endPoint);
       const tracksData = await handleResponse(response);
-
+      // tracksData.playlistData.forEach(i => {
+      //   i.src = `${i.src}`a;
+      // });
       return tracksData;
     } catch (error) {
       throw new Error(error);

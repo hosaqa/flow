@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, memo } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import { v4 as uuidv4 } from 'uuid';
@@ -25,29 +25,30 @@ const NotificationsProvider = ({ children, maxStack = 3 }) => {
   };
 
   const hideNotification = (ID, timeout) => {
-    const hide = () => {
-      const notification = notificationsState.find(
-        notificationItem => notificationItem.ID === ID
-      );
+    const removeNotification = () => {
+      setNotificationsState(notificationsState => {
+        const notification = notificationsState.find(
+          notificationItem => notificationItem.ID === ID
+        );
 
-      const notificationIndex = notificationsState.indexOf(notification);
+        const notificationIndex = notificationsState.indexOf(notification);
 
-      const nextNotificationsState = [...notificationsState];
-      nextNotificationsState.splice(notificationIndex, 1);
+        const nextNotificationsState = [...notificationsState];
+        nextNotificationsState.splice(notificationIndex, 1);
 
-      setNotificationsState(nextNotificationsState);
+        if (timeoutList.current[ID])
+          timeoutList.current.splice(notificationIndex, 1);
 
-      if (timeoutList.current[ID])
-        timeoutList.current.splice(notificationIndex, 1);
+        return nextNotificationsState;
+      });
     };
 
-    if (timeout && 1 === 2) {
+    if (timeout) {
       if (!timeoutList.current[ID]) {
-        let t = setTimeout(hide, timeout);
-        timeoutList.current.push(t);
+        timeoutList.current[ID] = setTimeout(removeNotification, timeout);
       }
     } else {
-      hide();
+      removeNotification();
     }
   };
 
@@ -71,4 +72,4 @@ NotificationsProvider.propTypes = {
   maxStack: PropTypes.number,
 };
 
-export default NotificationsProvider;
+export default memo(NotificationsProvider);

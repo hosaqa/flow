@@ -218,22 +218,9 @@ const Player = () => {
       );
   }, [dispatch, currentPlaylistType, currentPlaylistID, isLoading, items]);
 
-  // const repeatToggle = useCallback(() => {
-  //   setRepeat(!repeat);
-  //   notifications.showNotification({
-  //     text: `message N ${Math.random()}`,
-  //     variant: 'success',
-  //     timeout: 3000,
-  //   });
-  // }, [repeat, notifications]);
-
-  const repeatToggle = () => {
-    notifications.showNotification({
-      text: `message N ${Math.random()}`,
-      variant: 'success',
-      timeout: 3000,
-    });
-  };
+  const repeatToggle = useCallback(() => {
+    setRepeat(!repeat);
+  }, [repeat]);
 
   const handleOnEnd = useCallback(() => {
     if (!playerRef.current.props.repeat) {
@@ -265,7 +252,11 @@ const Player = () => {
 
   const handleTrackErrorLoad = useCallback(() => {
     setTrackLoading(false);
-    console.log('Loading error');
+
+    notifications.showNotification({
+      text: `Failed to load track.`,
+      variant: 'error',
+    });
   }, []);
 
   const interfaceDisabled = !currentPlaylist;

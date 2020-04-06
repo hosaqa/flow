@@ -27,6 +27,10 @@ const common = {
   dark: '#000',
   light: '#fff',
   main: '#ff6b6b',
+  success: '#5dff5d',
+  error: '#ff3a3a',
+  warning: '#fcff3a',
+  info: '#3a77ff',
 };
 export const lightTheme = {
   palette: {
@@ -34,6 +38,7 @@ export const lightTheme = {
     text: {
       primary: common.dark,
       secondary: '#878787',
+      light: common.light,
     },
     primary: {
       translucent: tinycolor(common.main)
@@ -68,6 +73,12 @@ export const lightTheme = {
     skeleton: {
       primary: '#dedede',
       secondary: '#efefef',
+    },
+    status: {
+      success: common.success,
+      error: common.error,
+      warning: common.warning,
+      info: common.info,
     },
   },
   shadows: {
