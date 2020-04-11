@@ -1,7 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import styled from '@emotion/styled';
+import styled from 'view/theme';
 import NotificationItem from './NotificationItem';
+import { INotification, hideNotificationOpts } from './Notifications.interface';
+
+interface INotificationStack {
+  notificationsList: Array<INotification>;
+  hideNotification({}: hideNotificationOpts): void;
+}
 
 const NotificationList = styled.div`
   display: flex;
@@ -14,9 +19,12 @@ const NotificationList = styled.div`
   bottom: ${({ theme }) => theme.spacing(3)}px;
 `;
 
-const NotificationStack = ({ notificationsList, hideNotification }) => (
+const NotificationStack: React.FC<INotificationStack> = ({
+  notificationsList,
+  hideNotification,
+}) => (
   <NotificationList>
-    {notificationsList.map((notificationItem, index) => {
+    {notificationsList.map(notificationItem => {
       const { ID, text, variant, timeout } = notificationItem;
 
       return (
@@ -26,25 +34,11 @@ const NotificationStack = ({ notificationsList, hideNotification }) => (
           message={text}
           variant={variant}
           timeout={timeout}
-          index={index}
           hideNotification={hideNotification}
-          role="alert"
         />
       );
     })}
   </NotificationList>
 );
-
-NotificationStack.propTypes = {
-  notificationsList: PropTypes.arrayOf(
-    PropTypes.shape({
-      ID: PropTypes.string.isRequired,
-      text: PropTypes.string.isRequired,
-      variant: PropTypes.string,
-      timeout: PropTypes.number,
-    })
-  ),
-  hideNotification: PropTypes.func.isRequired,
-};
 
 export default NotificationStack;

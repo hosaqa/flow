@@ -1,7 +1,25 @@
-import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import styled from '@emotion/styled';
+import React, { useEffect, useCallback } from 'react';
+import styled, { Theme } from 'view/theme';
 import { keyframes } from '@emotion/core';
+import {
+  ID,
+  message,
+  variant,
+  timeout,
+  hideNotificationOpts,
+} from './Notifications.interface';
+
+interface INotificationItem {
+  ID: ID;
+  message: message;
+  variant?: variant;
+  timeout?: timeout;
+  hideNotification({}: hideNotificationOpts): void;
+}
+
+type NotificationStyledProps = {
+  variant: variant;
+};
 
 const bounce = keyframes`
   0% {
@@ -109,9 +127,10 @@ const bounce = keyframes`
   }
 `;
 
-const getNotificationColor = (theme, variant) => theme.palette.status[variant];
+const getNotificationColor = (theme: Theme, variant: variant) =>
+  theme.palette.status[variant];
 
-const NotificationStyled = styled.div`
+const NotificationStyled = styled.div<NotificationStyledProps>`
   display: inline-flex;
   margin-top: ${({ theme }) => theme.spacing(1.5)}px;
   padding: ${({ theme }) => theme.spacing(2)}px;
@@ -123,34 +142,26 @@ const NotificationStyled = styled.div`
   animation: ${bounce} 1s linear both;
 `;
 
-const NotificationItem = ({
+const NotificationItem: React.FC<INotificationItem> = ({
   ID,
   message,
   variant = 'success',
   timeout,
-  index,
   hideNotification,
 }) => {
-  const handleClick = () => hideNotification(ID);
+  const handleClick = useCallback(() => {
+    hideNotification({ ID });
+  }, [hideNotification]);
 
   useEffect(() => {
-    if (timeout) hideNotification(ID, timeout);
+    if (timeout) hideNotification({ ID, timeout });
   }, []);
 
   return (
-    <NotificationStyled variant={variant} index={index} onClick={handleClick}>
+    <NotificationStyled role="alert" variant={variant} onClick={handleClick}>
       {message}
     </NotificationStyled>
   );
-};
-
-NotificationItem.propTypes = {
-  ID: PropTypes.string.isRequired,
-  message: PropTypes.string.isRequired,
-  variant: PropTypes.string,
-  timeout: PropTypes.number,
-  index: PropTypes.number.isRequired,
-  hideNotification: PropTypes.func.isRequired,
 };
 
 export default NotificationItem;

@@ -1,7 +1,10 @@
 import tinycolor from 'tinycolor2';
+import styled, { CreateStyled } from '@emotion/styled';
 
 const GRID_UNIT = 8;
 const BORDER_RADIUS_COEFFICIENT = 2;
+
+type breakpoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 export const gridTheme = {
   breakpoints: {
@@ -32,6 +35,7 @@ const common = {
   warning: '#fcff3a',
   info: '#3a77ff',
 };
+
 export const lightTheme = {
   palette: {
     white: common.light,
@@ -96,14 +100,19 @@ export const lightTheme = {
     short: 150,
     default: 250,
   },
-  spacing: increment => GRID_UNIT * increment,
-  borderRadius: increment => `${BORDER_RADIUS_COEFFICIENT * increment}`,
+  spacing: (increment: number) => GRID_UNIT * increment,
+  borderRadius: (increment: number) =>
+    `${BORDER_RADIUS_COEFFICIENT * increment}`,
   breakpoints: gridTheme.breakpoints,
   mediaQueries: {
-    up: breakpoint =>
+    up: (breakpoint: breakpoint) =>
       `@media screen and (min-width: ${gridTheme.breakpoints[breakpoint]}px)`,
-    down: breakpoint =>
+    down: (breakpoint: breakpoint) =>
       `@media screen and (max-width: ${gridTheme.breakpoints[breakpoint] -
         1}px)`,
   },
 };
+
+export type Theme = typeof lightTheme;
+
+export default styled as CreateStyled<Theme>;
